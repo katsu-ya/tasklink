@@ -2,7 +2,7 @@ class TasksController < ApplicationController
     before_action :authenticate_user!
 
     def index
-      @tasks = Task.includes(:user).order(created_at: :desc)
+      @tasks = current_user.tasks.order(created_at: :desc)
     end
 
     def new
