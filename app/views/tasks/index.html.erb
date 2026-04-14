@@ -6,6 +6,6 @@
   <div>
     <h2><%= task.title %></h2>
     <p><%= task.description %></p>
-    <small><%= task.user&.email %></small>
+    <small><%= task.created_at.strftime("%Y-%m-%d") %></small>
   </div>
 <% end %>
