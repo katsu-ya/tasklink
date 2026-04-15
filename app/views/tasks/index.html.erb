@@ -1,17 +1,48 @@
-<h1>タスク一覧</h1>
+<h1 class="mb-4">タスク一覧</h1>
 
-<%= link_to "新規作成", new_task_path %>
+<%= link_to "＋ 新規作成", new_task_path, class: "btn btn-primary mb-3" %>
 
-<% @tasks.each do |task| %>
-  <div>
-    <h2><%= task.title %></h2>
-    <p><%= task.description %></p>
-    <small><%= task.created_at.strftime("%Y-%m-%d") %></small>
+<div class="row">
+  <% @tasks.each do |task| %>
+    <div class="col-md-4">
+      <div class="card mb-3 shadow-sm">
 
-    <%= link_to "編集", edit_task_path(task) %>
+        <div class="card-body">
+          <h5 class="card-title"><%= task.title %></h5>
+          <p class="card-text"><%= task.description %></p>
 
-    <%= button_to "削除", task_path(task), method: :delete, data: { confirm: "本当に削除しますか？" } %>
+          <p>
 
-  </div>
-<% end %>
+
+            <p>
+              <span class="badge
+                <%= case task.status
+                when "todo" then "bg-secondary"
+                when "doing" then "bg-primary"
+                when "done" then "bg-success"
+                end %>">
+              <%= case task.status
+                when "todo" then "未着手"
+                when "doing" then "作業中"
+                when "done" then "完了"
+                end %>
+                </span>
+            </p>
+
+          </p>
+
+          <div class="d-flex gap-2">
+
+            <%= link_to "編集", edit_task_path(task), class: "btn btn-sm btn-outline-primary" %>
+
+            <%= button_to "削除", task_path(task),
+                  method: :delete,
+                  data: { confirm: "削除しますか？" },
+                  class: "btn btn-sm btn-outline-danger" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
 
