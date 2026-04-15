@@ -13,8 +13,10 @@
   </div>
 
   <div>
-    <%= f.label :status, "ステータス" %><br>
-    <%= f.select :status, [["未着手", 0], ["作業中", 1], ["完了", 2]] %>
+    <%= f.select :status,
+      [["未着手", "todo"], ["作業中", "doing"], ["完了", "done"]],
+      class: "form-select"
+    %>
   </div>
 
   <div>
