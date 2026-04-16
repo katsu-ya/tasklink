@@ -1,24 +1,32 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# TaskLink（タスク管理アプリ）
 
-Things you may want to cover:
+## 📌 概要
+タスクの作成・編集・削除・検索ができるシンプルなタスク管理アプリです。
 
-* Ruby version
+## 🛠 使用技術
+- Ruby on Rails 8
+- PostgreSQL
+- Bootstrap
 
-* System dependencies
+## ✨ 機能一覧
+- ユーザー登録 / ログイン（Devise）
+- タスク投稿機能（CRUD）
+- ステータス管理（未着手 / 作業中 / 完了）
+- タイトル検索機能
+- タスク一覧表示（カードUI）
 
-* Configuration
+## 💡 工夫した点
+- enumを使ったステータス管理
+- N+1問題を防ぐために includes を使用
+- Bootstrapで見た目を改善
+- 検索後にリセットできるUIを実装
 
-* Database creation
+## 📷 画面イメージ
+（スクショ貼ると評価UP）
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## 🚀 今後の課題
+- ページネーション機能
+- チーム機能の強化
+- UIのさらなる改善
