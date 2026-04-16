@@ -2,6 +2,20 @@
 
 <%= link_to "＋ 新規作成", new_task_path, class: "btn btn-primary mb-3" %>
 
+<div class="d-flex gap-2 mb-3">
+  <!-- 検索フォーム -->
+  <%= form_with url: tasks_path, method: :get, local: true do |f| %>
+    <div class="input-group">
+      <%= f.text_field :keyword, placeholder: "タイトル検索", class: "form-control" %>
+      <button class="btn btn-outline-secondary">検索</button>
+    </div>
+  <% end %>
+
+  <% if params[:keyword].present? %>
+    <%= link_to "全て表示", tasks_path, class: "btn btn-outline-secondary" %>
+  <% end %>
+</div>
+
 <div class="row">
   <% @tasks.each do |task| %>
     <div class="col-md-4">
@@ -12,7 +26,6 @@
           <p class="card-text"><%= task.description %></p>
 
           <p>
-
 
             <p>
               <span class="badge

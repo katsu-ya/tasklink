@@ -2,7 +2,13 @@ class TasksController < ApplicationController
     before_action :authenticate_user!
 
     def index
-      @tasks = current_user.tasks.order(created_at: :desc)
+      @tasks = current_user.tasks
+
+      if params[:keyword].present?
+        @tasks = @tasks.where("title LIKE ?", "%#{params[:keyword]}%")
+      end
+
+      @tasks = @tasks.order(created_at: :desc)
     end
 
     def new
