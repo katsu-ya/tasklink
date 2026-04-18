@@ -1,4 +1,10 @@
-<h1 class="mb-4">タスク一覧</h1>
+<h1 class="mb-4">
+  <% if params[:keyword].present? %>
+ 「<%= params[:keyword] %>」の検索結果
+  <% else %>
+    タスク一覧
+  <% end %>
+</h1>
 
 <%= link_to "＋ 新規作成", new_task_path, class: "btn btn-primary mb-3" %>
 
@@ -15,6 +21,22 @@
     <%= link_to "全て表示", tasks_path, class: "btn btn-outline-secondary" %>
   <% end %>
 </div>
+
+<% if @tasks.any? %>
+  <div class="row">
+    <% @tasks.each do |task| %>
+      <!-- タスク表示 -->
+    <% end %>
+  </div>
+<% else %>
+  <div class="text-center mt-5">
+    <% if params[:keyword].present? %>
+      <p>該当するタスクがありません</p>
+    <% else %>
+      <p>タスクがまだありません</p>
+    <% end %>
+  </div>
+<% end %>
 
 <div class="row">
   <% @tasks.each do |task| %>
@@ -35,9 +57,9 @@
                 when "done" then "bg-success"
                 end %>">
               <%= case task.status
-                when "todo" then "未着手"
-                when "doing" then "作業中"
-                when "done" then "完了"
+                when "todo" then "📝 未着手"
+                when "doing" then "🔥 作業中"
+                when "done" then "✅ 完了"
                 end %>
                 </span>
             </p>
@@ -50,7 +72,7 @@
 
             <%= button_to "削除", task_path(task),
                   method: :delete,
-                  data: { confirm: "削除しますか？" },
+                  data: { turbo_confirm: "削除しますか？" },
                   class: "btn btn-sm btn-outline-danger" %>
           </div>
         </div>
