@@ -36,13 +36,26 @@
       </div>
     <% end %>
 
+    <% if user_signed_in? %>
+      <p>ログイン中: <%= current_user.email %></p>
+      <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+    <% else %>
+      <%= link_to "ログイン", new_user_session_path %>
+      <%= link_to "新規登録", new_user_registration_path %>
+    <% end %>
+
     <% if alert %>
       <div class="alert alert-danger text-center">
         <%= alert %>
       </div>
     <% end %>
 
-    <%= yield %>
+      <body class="bg-gray-100">
+        <div class="max-w-2xl mx-auto mt-10 bg-white p-6 rounded shadow">
+          <%= yield %>
+        </div>
+      </body>
+ 
     <div class="container mt-4">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
