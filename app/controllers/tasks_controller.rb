@@ -16,11 +16,12 @@ class TasksController < ApplicationController
     end
 
     def create
-      @task = current_user.tasks.build(task_params)
+      @task = current_user.tasks.new(task_params)
+
       if @task.save
-        redirect_to root_path, notice: "作成しました"
+       redirect_to tasks_path, notice: "投稿しました"
       else
-        render :new
+       render :new, status: :unprocessable_entity
       end
     end
 
