@@ -3,6 +3,7 @@
   <head>
     <title><%= content_for(:title) || "Tasklink" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="turbo-cache-control" content="no-cache">
 
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -22,19 +23,21 @@
       <span class="navbar-brand">TaskLink</span>
     </div>
   </nav>
+  
+ <!-- フラッシュ -->
+<div class="fixed top-20 right-5 z-[9999] space-y-2">
+  <% flash.each do |type, message| %>
+  <div class="flash-message fixed top-5 right-5 z-[9999]
+              px-4 py-2 rounded shadow text-white
+              <%= type.to_s == "notice" ? "bg-green-500" : "bg-red-500" %>">
+    <%= message %>
+  </div>
+<% end %>
+</div>
 
-  <!-- フラッシュ -->
-  <% if notice %>
-    <div class="alert alert-success text-center mt-2">
-      <%= notice %>
-    </div>
-  <% end %>
 
-  <% if alert %>
-    <div class="alert alert-danger text-center mt-2">
-      <%= alert %>
-    </div>
-  <% end %>
+
+
 
   <!-- メイン -->
   <div class="max-w-2xl mx-auto mt-4 bg-white p-6 rounded shadow">

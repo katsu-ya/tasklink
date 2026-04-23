@@ -3,23 +3,21 @@
 console.log("JS読み込まれた");
 
 document.addEventListener("turbo:load", () => {
-  console.log("turbo:load発火");
+  const flash = document.querySelector(".flash-message");
 
-  const flashes = document.querySelectorAll('.flash');
+  if (flash) {
+    setTimeout(() => {
+      flash.style.transition = "opacity 0.5s";
+      flash.style.opacity = "0";
+    }, 3000);
 
-  if (flashes.length === 0) return;
-
-  setTimeout(() => {
-    flashes.forEach(el => {
-      el.style.transition = "opacity 0.5s";
-      el.style.opacity = "0";
-
-      setTimeout(() => {
-        el.remove();
-      }, 500);
-    });
-  }, 3000);
+    setTimeout(() => {
+      flash.remove();
+    }, 3500);
+  }
 });
+
+
 
 import "@hotwired/turbo-rails"
 import "controllers"
