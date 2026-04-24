@@ -1,0 +1,40 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+
+  <div class="w-full max-w-sm bg-white p-6 rounded-lg shadow">
+
+    <!-- タイトル -->
+    <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">
+      ログイン
+    </h2>
+
+    <%= form_with model: resource, url: session_path(resource_name), local: true do |f| %>
+
+      <!-- メール -->
+      <div class="mb-4">
+        <%= f.label :email, "メールアドレス", class: "block text-sm text-gray-600 mb-1" %>
+        <%= f.email_field :email,
+              class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" %>
+      </div>
+
+      <!-- パスワード -->
+      <div class="mb-5">
+        <%= f.label :password, "パスワード", class: "block text-sm text-gray-600 mb-1" %>
+        <%= f.password_field :password,
+              class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" %>
+      </div>
+
+      <!-- ボタン -->
+      <%= f.submit "ログイン",
+            class: "w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded transition" %>
+
+    <% end %>
+
+    <!-- 下リンク -->
+    <div class="text-center mt-4 text-sm">
+      <%= link_to "新規登録はこちら",
+          new_user_registration_path,
+          class: "text-blue-500 hover:underline" %>
+    </div>
+
+  </div>
+</div>
