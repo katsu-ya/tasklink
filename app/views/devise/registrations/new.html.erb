@@ -1,0 +1,75 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+
+  <div class="w-full max-w-sm bg-white p-6 rounded-lg shadow">
+
+    <!-- タイトル -->
+    <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">
+      新規登録
+    </h2>
+
+    <% if resource.errors.any? %>
+      <div class="bg-red-100 text-red-700 p-2 rounded mb-4 text-sm">
+        <%= resource.errors.full_messages.join(", ") %>
+      </div>
+    <% end %>
+
+    <%= form_with model: resource, url: registration_path(resource_name), local: true do |f| %>
+
+      <!-- メール -->
+      <div class="mb-4">
+        <%= f.label :email, "メールアドレス", class: "block text-sm text-gray-600 mb-1" %>
+        <%= f.email_field :email,
+              class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" %>
+      </div>
+
+
+      <!-- アイコン -->
+      <div class="mb-6 relative">
+  <%= f.label :password, "パスワード", class: "block text-sm mb-1" %>
+
+
+  <!-- パスワード -->
+  <%= f.password_field :password,
+        id: "password_field",
+        class: "w-full border rounded px-3 py-2 pr-10" %>
+
+  <!-- アイコン -->
+  <span id="toggle_password"
+        class="absolute right-3 top-9 cursor-pointer text-gray-500">
+    👁
+  </span>
+</div>
+
+      <!-- 確認用 -->
+      <div class="mb-5 relative">
+  <%= f.label :password_confirmation, "パスワード（確認）", class: "block text-sm mb-1" %>
+
+  <%= f.password_field :password_confirmation,
+        id: "password_confirmation_field",
+        class: "w-full border rounded px-3 py-2 pr-10" %>
+
+  <!-- アイコン -->
+  <span id="toggle_password_confirmation"
+        class="absolute right-3 top-9 cursor-pointer text-gray-500">
+    👁
+  </span>
+</div>
+
+
+
+
+      <!-- ボタン -->
+      <%= f.submit "登録する",
+            class: "w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded transition" %>
+
+    <% end %>
+
+    <!-- 下リンク -->
+    <div class="text-center mt-4 text-sm">
+      <%= link_to "ログインはこちら",
+          new_user_session_path,
+          class: "text-blue-500 hover:underline" %>
+    </div>
+
+  </div>
+</div>
