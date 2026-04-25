@@ -30,24 +30,28 @@ document.addEventListener("turbo:load", () => {
   }
 });
 
+
+
 document.addEventListener("turbo:load", () => {
 
   function setupToggle(fieldId, toggleId) {
     const field = document.getElementById(fieldId);
     const toggle = document.getElementById(toggleId);
 
-    if (!field || !toggle) {
-      console.log("見つからない:", fieldId, toggleId);
-      return;
-    }
+    if (!field || !toggle) return;
+
+    const eyeOpen = toggle.querySelector("#eye_open");
+    const eyeClosed = toggle.querySelector("#eye_closed");
 
     toggle.addEventListener("click", () => {
       if (field.type === "password") {
         field.type = "text";
-        toggle.textContent = "🙈";
+        eyeOpen.classList.add("hidden");
+        eyeClosed.classList.remove("hidden");
       } else {
         field.type = "password";
-        toggle.textContent = "👁";
+        eyeOpen.classList.remove("hidden");
+        eyeClosed.classList.add("hidden");
       }
     });
   }
