@@ -8,7 +8,7 @@ class TasksController < ApplicationController
         @tasks = @tasks.where("title LIKE ?", "%#{params[:keyword]}%")
       end
 
-      @tasks = @tasks.order(created_at: :desc).page(params[:page]).per(5)
+      @tasks = @tasks.order(created_at: :desc).page(params[:page]).per(6)
     end
 
     def new
