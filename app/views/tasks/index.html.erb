@@ -19,7 +19,7 @@
       <%= f.text_field :keyword,
           placeholder: "タイトル検索",
           class: "border rounded px-3 py-2 w-full" %>
-      <button class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+      <button class="bg-gray-400 text-white px-4 py-2 rounded whitespace-nowrap">
         検索
       </button>
     <% end %>
@@ -32,10 +32,21 @@
 
   <!-- タスク一覧 -->
   <% if @tasks.any? %>
-    <div class="grid grid-cols-2 gap-6">
+    <div class="grid grid-cols-3 gap-6">
 
       <% @tasks.each do |task| %>
-        <div class="bg-white p-4 rounded-xl shadow-md hover:shadow-xl transition">
+         <div class="bg-white p-4 rounded-xl shadow-md hover:shadow-xl transition
+              <%= 'opacity-50 line-through' if task.completed %>">
+
+         <div class="flex items-center mb-2">
+          <%= form_with model: task, local: true do |f| %>
+          <%= f.check_box :completed,
+              checked: task.completed,
+              class: "w-5 h-5",
+              onchange: "this.form.submit()" %>
+          <% end %>
+        </div>
+
 
       <!-- 左側（タイトル・説明） -->
         <div>
@@ -46,7 +57,7 @@
         </div>
 
         <!-- 右側（ステータス・ボタン） -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 whitespace-nowrap">
 
           <!-- ステータス -->
           <span class="px-2 py-1 text-sm rounded
@@ -56,20 +67,20 @@
             when "done" then "bg-green-300"
             end %>">
           <%= case task.status
-            when "todo" then "📝"
-            when "doing" then "🔥"
-            when "done" then "✅"
+            when "todo" then "📝 未着手"
+            when "doing" then "🔥 作業中"
+            when "done" then "✅ 完了"
             end %>
           </span>
 
       <!-- ボタン -->
-      <%= link_to "編集", edit_task_path(task),
-          class: "text-sm px-3 py-1 border rounded hover:bg-gray-100" %>
+      <%= link_to "✏️ 編集", edit_task_path(task),
+          class: "text-sm px-3 py-1 border rounded hover:bg-gray-100 whitespace-nowrap" %>
 
-      <%= button_to "削除", task_path(task),
+      <%= button_to "🗑 削除", task_path(task),
             method: :delete,
             data: { turbo_confirm: "削除しますか？" },
-            class: "text-sm px-3 py-1 border border-red-400 text-red-500 rounded hover:bg-red-100" %>
+            class: "text-sm px-3 py-1 border border-red-400 text-red-500 rounded hover:bg-red-100 whitespace-nowrap" %>
        </div>
 
      </div>
