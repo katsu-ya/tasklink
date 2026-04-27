@@ -8,7 +8,8 @@ class TasksController < ApplicationController
         @tasks = @tasks.where("title LIKE ?", "%#{params[:keyword]}%")
       end
 
-      @tasks = @tasks.order(created_at: :desc).page(params[:page]).per(6)
+      @tasks = @tasks.order(completed: :asc, created_at: :desc)
+                 .page(params[:page]).per(6)
     end
 
     def new
@@ -30,9 +31,10 @@ class TasksController < ApplicationController
     end
 
     def update
-      @task = current_user.tasks.find(params[:id])
+      @task = Task.find(params[:id])
+
       if @task.update(task_params)
-        redirect_to root_path, notice: "更新しました"
+        redirect_to tasks_path, notice: "更新しました"
       else
         render :edit
       end
@@ -47,6 +49,6 @@ class TasksController < ApplicationController
     private
 
     def task_params
-      params.require(:task).permit(:title, :description, :status, :team_id)
+      params.require(:task).permit(:title, :description, :status, :team_id, :completed)
     end
 end
