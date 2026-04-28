@@ -4,12 +4,45 @@ class TasksController < ApplicationController
     def index
       @tasks = current_user.tasks
 
-      if params[:keyword].present?
-        @tasks = @tasks.where("title LIKE ?", "%#{params[:keyword]}%")
+       # 🔽 フィルター
+      case params[:status]
+      when "todo"
+        @tasks = @tasks.where(completed: false)
+      when "done"
+        @tasks = @tasks.where(completed: true)
+      else
+      # すべて（何もしない）
       end
 
+
+      # 🔍 検索
+      if params[:keyword].present?
+        keyword = "%#{params[:keyword]}%"
+
+        base = current_user.tasks
+
+        text_search = base.where(
+          "title LIKE :kw OR description LIKE :kw",
+          kw: keyword
+        )
+
+        status_search = case params[:keyword]
+                  when "作業中"
+                    base.where(status: "doing")
+                  when "未着手"
+                    base.where(status: "todo")
+                  else
+                    base.none
+                  end
+
+        @tasks = text_search.or(status_search)
+      end
+      
+
+      # 🔽 並び替え + ページネーション
       @tasks = @tasks.order(completed: :asc, created_at: :desc)
                  .page(params[:page]).per(6)
+      
     end
 
     def new
