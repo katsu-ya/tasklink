@@ -63,15 +63,28 @@ class TasksController < ApplicationController
       @task = current_user.tasks.find(params[:id])
     end
 
-    def update
-      @task = Task.find(params[:id])
 
-      if @task.update(task_params)
-        redirect_to tasks_path, notice: "更新しました"
-      else
-        render :edit
-      end
+
+    def update
+  @task = current_user.tasks.find(params[:id])
+
+  if @task.update(task_params)
+    respond_to do |format|
+      format.html { redirect_to tasks_path, notice: "更新しました" }
+      format.turbo_stream
     end
+  else
+    respond_to do |format|
+      format.html { render :edit }
+      format.turbo_stream
+    end
+  end
+end
+
+
+
+
+
 
     def destroy
       @task = current_user.tasks.find(params[:id])
