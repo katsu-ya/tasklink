@@ -1,32 +1,16 @@
-<div id="task_<%= task.id %>" 
-            
-
-            class="bg-white p-4 rounded-xl shadow-md h-full flex flex-col justify-between
-transition-all duration-300
-<%= 'opacity-50 line-through' if task.completed %>">
+    <div id="task_<%= task.id %>"
+     data-id="<%= task.id %>"
+    
+    
 
 
-         <div class="flex items-center mb-2">
+         class="bg-white p-4 rounded-xl shadow-md h-full flex flex-col justify-between
+           transition-all duration-300        
+           <%= 'opacity-50 line-through' if task.status == "done" %>">
 
+           <div class="flex items-center mb-2">
 
-          <%= form_with model: task, url: task_path(task), method: :patch do |f| %>
-
-
-
-          <% if task.completed %>
-            <%= f.hidden_field :completed, value: false %>
-            <%= f.submit "✔ 完了済み",
-              class: "bg-green-100 text-green-600 px-2 py-0.5 rounded transition",
-              style: "font-size: 13px;"  %>
-          <% else %>
-            <%= f.hidden_field :completed, value: true %>
-
-            <%= f.submit "✔ 完了にする",
-  class: "bg-gray-100 hover:bg-gray-200 active:scale-95 text-gray-700 px-2 py-0.5 rounded transition",
-  style: "font-size: 13px;" %>
-
-
-          <% end %>
+             <%= form_with model: task, url: task_path(task), method: :patch do |f| %>
 
         <% end %>
     
@@ -35,7 +19,9 @@ transition-all duration-300
 
       <!-- 左側（タイトル・説明） -->
         <div>
-          <h2 class="!text-base !font-semibold text-gray-800"><%= task.title %></h2>
+          <h2 class="!text-base !font-semibold text-gray-800 <%= 'line-through text-gray-400' if task.status == 'done' %>">
+            <%= task.title %>
+          </h2>
           <p class="text-gray-600 text-sm"><%= task.description %></p>
           <p class="text-xs text-gray-400 mb-2">
              作成日: <%= task.created_at.strftime("%Y/%m/%d") %></p>
@@ -46,7 +32,7 @@ transition-all duration-300
         <div class="flex items-center gap-3 whitespace-nowrap mt-3">
 
           <!-- ステータス -->
-          <span class="px-2 py-1 text-xs rounded
+          <span class="px-2 py-1 text-sm rounded
             <%= case task.status
             when "todo" then "bg-gray-300"
             when "doing" then "bg-blue-300"
@@ -60,18 +46,13 @@ transition-all duration-300
           </span>
 
           <%
-  next_status =
-    case task.status
-    when "todo" then "doing"
-    when "doing" then "done"
-    when "done" then "todo"
-    end
-%>
-
-
-
-
-
+            next_status =
+            case task.status
+            when "todo" then "doing"
+            when "doing" then "done"
+            when "done" then "todo"
+            end
+          %>
 
       <!-- ボタン -->
   <%= form_with model: task do |f| %>
@@ -81,12 +62,6 @@ transition-all duration-300
       class: "bg-blue-100 text-blue-600 px-2 py-0.5 rounded text-xs active:scale-95 transition" %>
   <% end %>
 
-
-
-
-
-
-
       <!-- 編集 -->
   <%= link_to edit_task_path(task), class: "hover:text-blue-500 transition" do %>
     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,8 +69,6 @@ transition-all duration-300
         d="M11 5h2M12 20h9M16.5 3.5a2.1 2.1 0 113 3L7 19l-4 1 1-4 12.5-12.5z"/>
     </svg>
   <% end %>
-
-
 
       <!-- 削除 -->
     <%= link_to task_path(task),
@@ -106,4 +79,4 @@ transition-all duration-300
 
      </div>
 
-     </div>
+ </div>

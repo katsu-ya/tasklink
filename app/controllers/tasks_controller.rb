@@ -40,8 +40,8 @@ class TasksController < ApplicationController
       
 
       # 🔽 並び替え + ページネーション
-      @tasks = @tasks.order(completed: :asc, created_at: :desc)
-                 .page(params[:page]).per(6)
+      @tasks = @tasks.order(:position)
+               .page(params[:page]).per(6)
       
     end
 
@@ -63,8 +63,6 @@ class TasksController < ApplicationController
       @task = current_user.tasks.find(params[:id])
     end
 
-
-
     def update
   @task = current_user.tasks.find(params[:id])
 
@@ -81,20 +79,29 @@ class TasksController < ApplicationController
   end
 end
 
-
-
-
-
-
     def destroy
       @task = current_user.tasks.find(params[:id])
       @task.destroy
       redirect_to root_path, notice: "削除しました"
     end
 
+    
+    def sort
+  params[:ids].each_with_index do |id, index|
+    current_user.tasks.find(id).update(position: index)
+  end
+
+  head :ok
+end
+
+
+
+
+
     private
 
     def task_params
       params.require(:task).permit(:title, :description, :status, :team_id, :completed)
     end
+
 end
