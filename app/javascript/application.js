@@ -62,6 +62,13 @@ document.addEventListener("turbo:load", () => {
 });
 
 
+
+
 import "@hotwired/turbo-rails"
 import "controllers"
+
+
+
+
+
 

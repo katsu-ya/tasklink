@@ -48,7 +48,8 @@
 
   <!-- タスク一覧 -->
   <% if @tasks.any? %>
-    <div class="grid grid-cols-3 gap-6">
+    <div class="grid grid-cols-3 gap-6"
+     data-controller="sort">
 
       <% @tasks.each do |task| %>
   <%= render task %>
