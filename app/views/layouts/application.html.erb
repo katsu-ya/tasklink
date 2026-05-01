@@ -72,13 +72,27 @@
 
   <% unless devise_controller? %>
 
-  <div class="max-w-6xl mx-auto px-4 bg-white p-6 rounded-2xl shadow-xl">
+    <div class="max-w-6xl mx-auto px-4 bg-white p-6 rounded-2xl shadow-xl">
 
+      <%= yield %>
+    </div>
+  <% else %>
     <%= yield %>
-  </div>
-<% else %>
-  <%= yield %>
-<% end %>
+  <% end %>
+
+  
+  <div id="modal-wrapper"
+     class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+
+  <turbo-frame id="modal"
+    class="bg-white p-6 rounded-xl w-full max-w-md shadow-xl">
+  </turbo-frame>
+
+</div>
+
+
+
+
 
 </body>
 </html>
