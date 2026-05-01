@@ -63,19 +63,19 @@ class TasksController < ApplicationController
       @task = current_user.tasks.find(params[:id])
     end
 
+
+
+
     def update
   @task = current_user.tasks.find(params[:id])
 
   if @task.update(task_params)
     respond_to do |format|
-      format.html { redirect_to tasks_path, notice: "更新しました" }
       format.turbo_stream
+      format.html { redirect_to tasks_path, notice: "更新しました" }
     end
   else
-    respond_to do |format|
-      format.html { render :edit }
-      format.turbo_stream
-    end
+    render :edit
   end
 end
 
@@ -85,7 +85,7 @@ end
       redirect_to root_path, notice: "削除しました"
     end
 
-    
+
     def sort
   params[:ids].each_with_index do |id, index|
     current_user.tasks.find(id).update(position: index)

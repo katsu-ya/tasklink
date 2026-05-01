@@ -64,6 +64,43 @@ document.addEventListener("turbo:load", () => {
 
 
 
+
+document.addEventListener("turbo:frame-load", (e) => {
+  if (e.target.id === "modal") {
+    const modal = document.getElementById("modal-wrapper")
+    modal.classList.remove("hidden")
+    modal.classList.add("flex")
+  }
+})
+
+function closeModal() {
+  const modal = document.getElementById("modal-wrapper")
+  modal.classList.add("hidden")
+  modal.classList.remove("flex")
+
+  document.getElementById("modal").innerHTML = ""
+}
+
+window.closeModal = closeModal
+
+
+document.addEventListener("click", (e) => {
+  const wrapper = document.getElementById("modal-wrapper")
+
+  if (e.target === wrapper) {
+    closeModal()
+  }
+})
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeModal()
+  }
+})
+
+
+
+
 import "@hotwired/turbo-rails"
 import "controllers"
 

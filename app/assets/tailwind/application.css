@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+@layer components {
+  .sortable-chosen {
+    opacity: 0.9;
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+
+  .sortable-ghost {
+    opacity: 0.4;
+    transform: scale(0.98);
+  }
+}
+
+#modal-wrapper {
+  transition: opacity 0.2s ease;
+}

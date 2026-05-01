@@ -1,8 +1,10 @@
-<h1 class="mb-4 text-center">タスク編集</h1>
+<turbo-frame id="modal">
+  <h2 class="text-lg font-bold mb-4">タスク編集</h2>
 
-<%= render "form" %>
+  <%= render "form", task: @task %>
 
-<div class="text-center mt-3">
-  <%= link_to "← 一覧に戻る", tasks_path, class: "btn btn-outline-secondary" %>
-</div>
-
+  <button onclick="closeModal()"
+          class="mt-4 text-gray-500">
+    閉じる
+  </button>
+</turbo-frame>

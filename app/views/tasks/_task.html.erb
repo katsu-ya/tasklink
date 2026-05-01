@@ -1,8 +1,5 @@
     <div id="task_<%= task.id %>"
      data-id="<%= task.id %>"
-    
-    
-
 
          class="bg-white p-4 rounded-xl shadow-md h-full flex flex-col justify-between
            transition-all duration-300        
@@ -15,7 +12,6 @@
         <% end %>
     
       </div>
-
 
       <!-- 左側（タイトル・説明） -->
         <div>
@@ -63,7 +59,9 @@
   <% end %>
 
       <!-- 編集 -->
-  <%= link_to edit_task_path(task), class: "hover:text-blue-500 transition" do %>
+  <%= link_to edit_task_path(task),
+    data: { turbo_frame: "modal" },
+    class: "hover:text-blue-500 transition" do %>
     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
         d="M11 5h2M12 20h9M16.5 3.5a2.1 2.1 0 113 3L7 19l-4 1 1-4 12.5-12.5z"/>
