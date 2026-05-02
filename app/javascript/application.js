@@ -2,33 +2,37 @@
 
 console.log("JS読み込まれた");
 
-document.addEventListener("turbo:load", () => {
-  const flash = document.querySelector(".flash-message");
 
-  if (flash) {
-    // 初期位置（少し上）
-    flash.style.transform = "translateY(-10px)";
-    flash.style.opacity = "0";
+const observer = new MutationObserver(() => {
+  const flashes = document.querySelectorAll(".flash-message")
 
-    // 表示
+  flashes.forEach((flash) => {
+    // すでに処理済み防止
+    if (flash.dataset.processed) return
+    flash.dataset.processed = "true"
+
     setTimeout(() => {
-      flash.style.transition = "all 0.3s ease";
-      flash.style.transform = "translateY(0)";
-      flash.style.opacity = "1";
-    }, 50);
+      flash.style.transition = "all 0.3s ease"
+      flash.style.opacity = "0"
+      flash.style.transform = "translateY(-10px)"
+    }, 1000)
 
-    // 3秒後に消す
     setTimeout(() => {
-      flash.style.opacity = "0";
-      flash.style.transform = "translateY(-10px)";
-    }, 3000);
+      flash.remove()
+    }, 1300)
+  })
+})
 
-    // 削除
-    setTimeout(() => {
-      flash.remove();
-    }, 3500);
-  }
-});
+// 画面の変化を監視
+observer.observe(document.body, { childList: true, subtree: true })
+
+
+
+
+
+
+
+
 
 
 
@@ -92,17 +96,22 @@ document.addEventListener("click", (e) => {
   }
 })
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
+
+document.addEventListener("turbo:submit-end", (e) => {
+  if (e.detail.success) {
     closeModal()
   }
 })
 
 
 
-
 import "@hotwired/turbo-rails"
 import "controllers"
+
+
+
+
+
 
 
 

@@ -1,6 +1,50 @@
 <div class="max-w-5xl mx-auto mt-10">
 
-<div class="flex gap-3 mb-4">
+
+
+  <!-- タイトル -->
+  <h1 class="text-2xl font-bold mb-6">
+    <% if params[:keyword].present? %>
+      「<%= params[:keyword] %>」の検索結果
+    <% else %>
+      タスク一覧
+    <% end %>
+  </h1>
+
+  <!-- 新規作成 -->
+  <%= link_to "＋ 新規投稿", new_task_path,
+      class: "inline-block bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-600" %>
+
+
+<div class="flex items-center justify-between mb-6">
+
+  <!-- 検索 -->
+  <div class="flex gap-2 w-full max-w-xl">
+    <%= form_with url: tasks_path, method: :get, local: true, class: "flex gap-2 w-full" do |f| %>
+      <%= f.text_field :keyword,
+          placeholder: "タイトル検索",
+          class: "border rounded px-3 py-2 w-full" %>
+      <button class="bg-gray-400 text-white px-4 py-2 rounded whitespace-nowrap">
+        検索
+      </button>
+    <% end %>
+
+
+<div class="w-24">
+    <% if params[:keyword].present? %>
+      <%= link_to "全て表示", tasks_path,
+          class: "px-4 py-2 border rounded hover:bg-gray-100" %>
+    <% end %>
+</div>
+
+
+</div>
+
+
+
+
+
+  <div class="flex gap-3 mb-4">
 
   <%= link_to "すべて",
       tasks_path(status: "all"),
@@ -16,35 +60,13 @@
 
 </div>
 
-  <!-- タイトル -->
-  <h1 class="text-2xl font-bold mb-6">
-    <% if params[:keyword].present? %>
-      「<%= params[:keyword] %>」の検索結果
-    <% else %>
-      タスク一覧
-    <% end %>
-  </h1>
+</div>
 
-  <!-- 新規作成 -->
-  <%= link_to "＋ 新規投稿", new_task_path,
-      class: "inline-block bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-600" %>
 
-  <!-- 検索 -->
-  <div class="flex gap-2 mb-6">
-    <%= form_with url: tasks_path, method: :get, local: true, class: "flex gap-2 w-full" do |f| %>
-      <%= f.text_field :keyword,
-          placeholder: "タイトル検索",
-          class: "border rounded px-3 py-2 w-full" %>
-      <button class="bg-gray-400 text-white px-4 py-2 rounded whitespace-nowrap">
-        検索
-      </button>
-    <% end %>
 
-    <% if params[:keyword].present? %>
-      <%= link_to "全て表示", tasks_path,
-          class: "px-4 py-2 border rounded hover:bg-gray-100" %>
-    <% end %>
-  </div>
+
+
+
 
   <!-- タスク一覧 -->
   <% if @tasks.any? %>
@@ -55,12 +77,6 @@
   <%= render task %>
 <% end %>
 
-        
-
-        
-
-
- 
       
     </div>
   <% else %>

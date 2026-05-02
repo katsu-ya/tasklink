@@ -54,20 +54,17 @@
     right: 20px;
     z-index: 9999;
  ">
-  <% flash.each do |type, message| %>
-    <div class="flash-message" style="
-      display: inline-block;
-      padding: 10px;
-      margin-top: 8px;
-      border-radius: 6px;
-      color: white;
-      background: <%= type.to_s == "notice" ? "#22c55e" : "#ef4444" %>;
-  ">
+
+  <div id="flash">
+  <% flash.each do |key, message| %>
+    <div class="flash-message bg-green-100 text-green-700 px-4 py-2 rounded mb-4">
       <%= message %>
     </div>
   <% end %>
-  </div>
+</div>
 
+
+  </div>
 
 
   <% unless devise_controller? %>
@@ -80,18 +77,15 @@
     <%= yield %>
   <% end %>
 
-  
+
   <div id="modal-wrapper"
      class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
 
   <turbo-frame id="modal"
-    class="bg-white p-6 rounded-xl w-full max-w-md shadow-xl">
+    class="bg-white p-6 rounded-xl w-full max-w-4xl max-h-[80vh] overflow-y-auto shadow-xl">
   </turbo-frame>
 
 </div>
-
-
-
 
 
 </body>
