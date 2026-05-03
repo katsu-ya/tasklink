@@ -46,15 +46,22 @@ end
       @task = Task.new
     end
 
-    def create
-      @task = current_user.tasks.new(task_params)
 
-      if @task.save
-       redirect_to tasks_path, notice: "投稿しました"
-      else
-       render :new, status: :unprocessable_entity
-      end
+    def create
+  @task = current_user.tasks.new(task_params)
+
+  if @task.save
+    flash[:notice] = "投稿しました"
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to tasks_path }
     end
+  else
+    render :new
+  end
+end
+
 
     def edit
       @task = current_user.tasks.find(params[:id])
@@ -78,10 +85,16 @@ end
 
 
     def destroy
-      @task = current_user.tasks.find(params[:id])
-      @task.destroy
-      redirect_to root_path, notice: "削除しました"
-    end
+  @task = current_user.tasks.find(params[:id])
+  @task.destroy
+
+  flash[:notice] = "削除しました"
+
+  respond_to do |format|
+    format.turbo_stream
+    format.html { redirect_to tasks_path }
+  end
+end
 
 
     def sort

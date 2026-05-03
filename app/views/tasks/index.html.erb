@@ -1,9 +1,9 @@
-<div class="max-w-5xl mx-auto mt-10">
+<div class="max-w-5xl mx-auto mt-1">
 
 
 
   <!-- タイトル -->
-  <h1 class="text-2xl font-bold mb-6">
+  <h1 class="text-2xl font-bold mb-2">
     <% if params[:keyword].present? %>
       「<%= params[:keyword] %>」の検索結果
     <% else %>
@@ -13,7 +13,8 @@
 
   <!-- 新規作成 -->
   <%= link_to "＋ 新規投稿", new_task_path,
-      class: "inline-block bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-600" %>
+    data: { turbo_frame: "modal" },
+      class: "inline-block bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-600 mt-2" %>
 
 
 <div class="flex items-center justify-between mb-6">
@@ -33,15 +34,12 @@
 <div class="w-24">
     <% if params[:keyword].present? %>
       <%= link_to "全て表示", tasks_path,
-          class: "px-4 py-2 border rounded hover:bg-gray-100" %>
+          class: "px-4 py-2 border rounded hover:bg-gray-100 whitespace-nowrap relative top-[7px]" %>
     <% end %>
 </div>
 
 
 </div>
-
-
-
 
 
   <div class="flex gap-3 mb-4">
@@ -63,14 +61,9 @@
 </div>
 
 
-
-
-
-
-
   <!-- タスク一覧 -->
   <% if @tasks.any? %>
-    <div class="grid grid-cols-3 gap-6"
+    <div id="tasks" class="grid grid-cols-3 gap-6"
      data-controller="sort">
 
       <% @tasks.each do |task| %>
