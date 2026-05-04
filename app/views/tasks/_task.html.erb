@@ -1,8 +1,9 @@
     <div id="task_<%= task.id %>"
+     data-controller="remove"
      data-id="<%= task.id %>"
 
          class="bg-white p-4 rounded-xl shadow-md h-full flex flex-col justify-between
-           transition-all duration-300        
+           transition-all duration-500 transform 
            <%= 'opacity-50 line-through' if task.status == "done" %>">
 
            <div class="flex items-center mb-2">
@@ -70,10 +71,17 @@
 
       <!-- 削除 -->
     <%= link_to task_path(task),
-        data: { turbo_method: :delete, turbo_confirm: "削除しますか？" },
-        class: "hover:text-red-500" do %>
-      🗑
-    <% end %>
+    data: {
+      turbo_method: :delete,
+      turbo_confirm: "削除しますか？",
+      action: "click->remove#fadeOutAndSubmit"
+    },
+    class: "hover:text-red-500" do %>
+  🗑
+<% end %>
+
+
+
 
      </div>
 
