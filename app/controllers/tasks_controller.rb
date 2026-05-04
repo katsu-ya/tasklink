@@ -97,6 +97,8 @@ end
 end
 
 
+
+
     def sort
   params[:ids].each_with_index do |id, index|
     current_user.tasks.find(id).update(position: index)
