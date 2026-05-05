@@ -5,6 +5,9 @@ export default class extends Controller {
   fadeOutAndSubmit(event) {
   event.preventDefault()
 
+  // 👇 ここ追加
+  if (!window.confirm("本当に削除しますか？")) return
+
   const element = this.element.closest("[id^='task_']")
   const url = event.currentTarget.getAttribute("href")
 
@@ -21,9 +24,7 @@ export default class extends Controller {
       }
     })
     .then(res => res.text())
-    .then(html => {
-      Turbo.renderStreamMessage(html) // 👈 これが重要
-    })
+    .then(html => Turbo.renderStreamMessage(html))
   }, 500)
 }
 }

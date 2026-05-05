@@ -63,12 +63,13 @@
 
   <!-- タスク一覧 -->
   <% if @tasks.any? %>
-    <div id="tasks" class="grid grid-cols-3 gap-6"
-     data-controller="sort">
+    <div id="tasks"
+     data-controller="sortable"
+     class="grid grid-cols-3 gap-6">
+  <%= render @tasks %>
+</div>
 
-      <% @tasks.each do |task| %>
-  <%= render task %>
-<% end %>
+    
 
       
     </div>
