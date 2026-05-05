@@ -47,15 +47,25 @@ end
     end
 
 
+
     def create
   @task = current_user.tasks.new(task_params)
 
   if @task.save
-    flash[:notice] = "投稿しました"
+    current_user.tasks.where.not(id: @task.id)
+                .update_all("position = position + 1")
+
+    @task.update(position: 1)
+
+    # 👇 これ重要（再描画用）
+    @tasks = current_user.tasks.order(:position)
+                 .page(1).per(6)
+
+    flash[:notice] = "作成しました"
 
     respond_to do |format|
-      format.turbo_stream
       format.html { redirect_to tasks_path }
+      format.turbo_stream
     end
   else
     render :new
@@ -63,20 +73,26 @@ end
 end
 
 
+
+
+
     def edit
       @task = current_user.tasks.find(params[:id])
     end
 
+    
 
     def update
   @task = current_user.tasks.find(params[:id])
 
   if @task.update(task_params)
-    flash[:notice] = "更新しました"   # ← これ追加
+    # 👇 これ追加
+    @tasks = current_user.tasks.order(:position)
+                 .page(params[:page]).per(6)
 
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to tasks_path }
+      format.html { redirect_to tasks_path, notice: "更新しました" }
     end
   else
     render :edit
@@ -84,9 +100,15 @@ end
 end
 
 
+
+
     def destroy
   @task = current_user.tasks.find(params[:id])
   @task.destroy
+
+  # 👇 これが超重要
+  @tasks = current_user.tasks.order(:position)
+               .page(params[:page]).per(6)
 
   flash[:notice] = "削除しました"
 
@@ -95,6 +117,9 @@ end
     format.html { redirect_to tasks_path }
   end
 end
+
+
+
 
 
 

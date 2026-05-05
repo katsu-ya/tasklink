@@ -1,6 +1,10 @@
-<turbo-stream action="replace" target="task_<%= @task.id %>">
+<turbo-stream action="replace" target="tasks">
   <template>
-    <%= render partial: "tasks/task", formats: [:html], locals: { task: @task } %>
+    <div id="tasks"
+         data-controller="sortable"
+         class="grid grid-cols-3 gap-6">
+      <%= render partial: "tasks/task", formats: [:html], collection: @tasks %>
+    </div>
   </template>
 </turbo-stream>
 

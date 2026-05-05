@@ -1,3 +1,16 @@
+<turbo-stream action="replace" target="tasks">
+  <template>
+    <div id="tasks" 
+    data-controller="sortable"
+    
+    class="grid grid-cols-3 gap-6">
+      <%= render partial: "tasks/task", formats: [:html], collection: @tasks %>
+    </div>
+  </template>
+</turbo-stream>
+
+
+
 <turbo-stream action="replace" target="flash">
   <template>
     <div id="flash">
@@ -12,6 +25,8 @@
 </turbo-stream>
 
 <% flash.discard %>
+
+
 
 
 
