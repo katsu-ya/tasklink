@@ -67,6 +67,14 @@ end
       format.html { redirect_to tasks_path }
       format.turbo_stream
     end
+
+    # 👇 ここが重要
+@tasks.each do |task|
+  if task.id == @task.id
+    task.instance_variable_set(:@newly_created, true)
+  end
+end
+
   else
     render :new
   end
