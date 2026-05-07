@@ -42,6 +42,9 @@ class TasksController < ApplicationController
 end
 
 
+
+
+
     def new
       @task = Task.new
     end
@@ -94,8 +97,18 @@ end
   @task = current_user.tasks.find(params[:id])
 
   if @task.update(task_params)
-    # 👇 これ追加
-    @tasks = current_user.tasks.order(:position)
+
+    flash.now[:notice] = case @task.status
+    when "todo"
+      "未着手に戻しました 📝"
+    when "doing"
+      "作業中にしました 🔥"
+    when "done"
+      "タスク完了！ 🎉"
+    end
+
+    @tasks = current_user.tasks
+                 .order(:position)
                  .page(params[:page]).per(6)
 
     respond_to do |format|
@@ -106,6 +119,8 @@ end
     render :edit
   end
 end
+
+
 
 
 
