@@ -9,6 +9,13 @@
   </template>
 </turbo-stream>
 
+<turbo-stream action="replace" target="filters">
+  <template>
+    <%= render partial: "tasks/filters", formats: [:html] %>
+  </template>
+</turbo-stream>
+
+
 
 
 <turbo-stream action="replace" target="flash">

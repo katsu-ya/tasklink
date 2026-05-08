@@ -1,0 +1,24 @@
+
+
+
+
+<div id="filters"
+  class "flex gap-2 mb-3 overflow-x-auto scrollbar-hide pb-2">
+
+  <%= link_to "すべて",
+      tasks_path(status: "all"),
+      class: "relative top-2 px-2.5 py-2 rounded-full text-sm #{params[:status] == 'all' || params[:status].nil? ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200 transition-all whitespace-nowrap duration-300 hover:scale-105'}" %>
+
+  <%= link_to "📝 未着手（#{@todo_count}）",
+      tasks_path(status: "todo"),
+      class: "relative top-2 px-2.5 py-2 rounded-full text-sm #{params[:status] == 'todo' ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200 transition-all whitespace-nowrap duration-300 hover:scale-105'}" %>
+
+  <%= link_to "🔥 作業中（#{@doing_count}）",
+      tasks_path(status: "doing"),
+      class: "relative top-2 px-2.5 py-2 rounded-full text-sm #{params[:status] == 'doing' ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200 transition-all whitespace-nowrap duration-300 hover:scale-105'}" %>
+
+  <%= link_to "✔ 完了（#{@done_count}）",
+      tasks_path(status: "done"),
+      class: "relative top-2 px-2.5 py-2 rounded-full text-sm #{params[:status] == 'done' ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200 transition-all whitespace-nowrap duration-300 hover:scale-105'}" %>
+
+</div>
