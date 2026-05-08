@@ -5,13 +5,24 @@ class TasksController < ApplicationController
     def index
   @tasks = current_user.tasks
 
+  @todo_count = current_user.tasks.where(status: "todo").count
+  @doing_count = current_user.tasks.where(status: "doing").count
+  @done_count = current_user.tasks.where(status: "done").count
+
+
+
+
   # 🔽 フィルター（ここ修正）
   case params[:status]
   when "todo"
-    @tasks = @tasks.where(status: ["todo", "doing"])
+    @tasks = @tasks.where(status: "todo")
+  when "doing"
+    @tasks = @tasks.where(status: "doing")
   when "done"
     @tasks = @tasks.where(status: "done")
   end
+
+
 
   # 🔍 検索
   if params[:keyword].present?
@@ -29,6 +40,9 @@ class TasksController < ApplicationController
                       base.where(status: "doing")
                     when "未着手"
                       base.where(status: "todo")
+                    when "完了"
+                      base.where(status: "done")
+
                     else
                       base.none
                     end
@@ -51,6 +65,8 @@ end
 
 
 
+
+
     def create
   @task = current_user.tasks.new(task_params)
 
@@ -65,6 +81,10 @@ end
                  .page(1).per(6)
 
     flash[:notice] = "作成しました"
+
+    @todo_count = current_user.tasks.where(status: "todo").count
+      @doing_count = current_user.tasks.where(status: "doing").count
+      @done_count = current_user.tasks.where(status: "done").count
 
     respond_to do |format|
       format.html { redirect_to tasks_path }
@@ -114,6 +134,10 @@ end
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to tasks_path, notice: "更新しました" }
+
+      @todo_count = current_user.tasks.where(status: "todo").count
+      @doing_count = current_user.tasks.where(status: "doing").count
+      @done_count = current_user.tasks.where(status: "done").count
     end
   else
     render :edit
@@ -134,6 +158,10 @@ end
                .page(params[:page]).per(6)
 
   flash[:notice] = "削除しました"
+
+  @todo_count = current_user.tasks.where(status: "todo").count
+      @doing_count = current_user.tasks.where(status: "doing").count
+      @done_count = current_user.tasks.where(status: "done").count
 
   respond_to do |format|
     format.turbo_stream
