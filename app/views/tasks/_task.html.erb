@@ -1,8 +1,9 @@
     <div id="task_<%= task.id %>"
-     data-controller="remove highlight"
+     data-controller="remove highlight confetti"
      data-id="<%= task.id %>"
+     data-status="<%= task.status %>"
 
-         class="bg-white p-4 rounded-xl shadow-md h-full flex flex-col justify-between
+         class="relative bg-white p-4 rounded-xl shadow-md h-full flex flex-col justify-between
            transition-all duration-300 transform hover:shadow-xl hover:-translate-y-1 active:scale-95
            <%= 'opacity-50 line-through' if task.status == "done" %>
            <%= 'opacity-0 translate-y-6 scale-95 bg-yellow-100 shadow-2xl' if task.instance_variable_get(:@newly_created) %>">

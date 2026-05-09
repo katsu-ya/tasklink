@@ -35,6 +35,26 @@
   </template>
 </turbo-stream>
 
+
+<% if @task.status == "done" %>
+  <turbo-stream action="after" target="task_<%= @task.id %>">
+    <template>
+      <script>
+        setTimeout(() => {
+          const element =
+            document.querySelector("#task_<%= @task.id %>")
+
+          if (element) {
+            element.dispatchEvent(
+              new CustomEvent("celebrate")
+            )
+          }
+        }, 100)
+      </script>
+    </template>
+  </turbo-stream>
+<% end %>
+
 <% flash.discard %>
 
 

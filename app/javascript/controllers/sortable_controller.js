@@ -5,11 +5,17 @@ export default class extends Controller {
   connect() {
     this.sortable = Sortable.create(this.element, {
       animation: 150,
-      ghostClass: "opacity-30",
-      
+
+      // 👇 プレースホルダー
+      ghostClass: "drag-ghost",
+
+      // 👇 掴んでる要素
+      chosenClass: "drag-chosen",
 
       // 👇 ドラッグ開始
       onStart: (event) => {
+        this.element.classList.add("sorting")
+        
         event.item.classList.add(
           "opacity-70",
           "scale-105",
@@ -18,9 +24,11 @@ export default class extends Controller {
         )
       },
 
-      // 👇 ドラッグ終了（見た目 + 並び替え）
+      // 👇 ドラッグ終了
       onEnd: (event) => {
         // 見た目戻す
+        this.element.classList.remove("sorting")
+
         event.item.classList.remove(
           "opacity-70",
           "scale-105",
@@ -46,4 +54,3 @@ export default class extends Controller {
     })
   }
 }
-
