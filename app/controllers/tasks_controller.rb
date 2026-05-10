@@ -50,10 +50,19 @@ class TasksController < ApplicationController
     @tasks = text_search.or(status_search)
   end
 
-  # 🔽 並び替え + ページネーション
-  @tasks = @tasks.order(:position)
-                 .page(params[:page]).per(6)
+
+  @tasks = @tasks
+  .order(Arel.sql("
+    CASE
+      WHEN deadline IS NULL THEN 1
+      ELSE 0
+    END,
+    deadline ASC,
+    position ASC
+  "))
+  .page(params[:page]).per(6)
 end
+
 
 
 
@@ -62,8 +71,6 @@ end
     def new
       @task = Task.new
     end
-
-
 
 
 
@@ -169,25 +176,23 @@ end
   end
 end
 
+  
 
-
-
-
-    def sort
-  params[:ids].each_with_index do |id, index|
-    current_user.tasks.find(id).update(position: index)
-  end
+  def reorder
+    params[:ids].each_with_index do |id, index|
+      current_user.tasks.find(id).update(position: index + 1)
+    end
 
   head :ok
 end
 
 
 
-
     private
 
     def task_params
-      params.require(:task).permit(:title, :description, :status, :team_id, :completed)
+      params.require(:task).permit(:title, :description, :status, :team_id, :completed, :deadline)
     end
 
 end
+

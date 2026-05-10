@@ -6,7 +6,9 @@
          class="relative bg-white p-4 rounded-xl shadow-md h-full flex flex-col justify-between
            transition-all duration-300 transform hover:shadow-xl hover:-translate-y-1 active:scale-95
            <%= 'opacity-50 line-through' if task.status == "done" %>
-           <%= 'opacity-0 translate-y-6 scale-95 bg-yellow-100 shadow-2xl' if task.instance_variable_get(:@newly_created) %>">
+           <%= 'opacity-0 translate-y-6 scale-95 bg-yellow-100 shadow-2xl' if task.instance_variable_get(:@newly_created) %>
+           <%= 'border-2 border-red-300 bg-red-50' if task.deadline.present? && task.deadline < Date.current %>
+           <%= 'ring-2 ring-yellow-200' if task.deadline == Date.current %>">
 
 
            <div class="flex items-center mb-2">
@@ -26,6 +28,60 @@
           <p class="text-xs text-gray-400 mb-2">
              作成日: <%= task.created_at.strftime("%Y/%m/%d") %></p>
         </div>
+
+        
+
+
+        <% if task.deadline.present? %>
+  <div class="mt-2 text-sm font-semibold flex items-center justify-between">
+
+    <div>
+      <% if task.deadline < Date.current %>
+        <span class="text-red-500">
+          🔴 期限切れ
+        </span>
+
+      <% elsif task.deadline == Date.current %>
+        <span class="text-yellow-500">
+          🟡 今日まで
+        </span>
+
+      <% elsif task.deadline == Date.tomorrow %>
+        <span class="text-blue-500">
+          🔵 明日まで
+        </span>
+
+      <% else %>
+        <span class="text-green-500">
+          🟢 <%= task.deadline.strftime("%m/%d") %>まで
+        </span>
+      <% end %>
+    </div>
+
+    <div class="text-xs text-gray-500">
+      <% days_left = (task.deadline - Date.current).to_i %>
+
+      <% if days_left < 0 %>
+        <span class="text-red-400">
+          <%= days_left.abs %>日超過
+        </span>
+
+      <% elsif days_left == 0 %>
+        今日
+
+      <% elsif days_left == 1 %>
+        あと1日
+
+      <% else %>
+        あと<%= days_left %>日
+      <% end %>
+    </div>
+
+  </div>
+<% end %>
+
+
+
 
         <!-- 右側（ステータス・ボタン） -->
         
