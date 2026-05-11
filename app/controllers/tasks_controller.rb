@@ -10,6 +10,16 @@ class TasksController < ApplicationController
   @done_count = current_user.tasks.where(status: "done").count
 
 
+  @total_tasks = current_user.tasks.count
+@completed_tasks = current_user.tasks.where(status: "done").count
+
+@progress =
+  if @total_tasks.zero?
+    0
+  else
+    ((@completed_tasks.to_f / @total_tasks) * 100).round
+  end
+
 
 
   # 🔽 フィルター（ここ修正）
@@ -68,6 +78,8 @@ end
 
 
 
+
+
     def new
       @task = Task.new
     end
@@ -90,8 +102,16 @@ end
     flash[:notice] = "作成しました"
 
     @todo_count = current_user.tasks.where(status: "todo").count
-      @doing_count = current_user.tasks.where(status: "doing").count
-      @done_count = current_user.tasks.where(status: "done").count
+    @doing_count = current_user.tasks.where(status: "doing").count
+    @done_count = current_user.tasks.where(status: "done").count
+
+    @total_tasks = current_user.tasks.count
+@completed_tasks = current_user.tasks.where(status: "done").count
+
+@progress =
+  ((@completed_tasks.to_f / @total_tasks) * 100).round
+
+
 
     respond_to do |format|
       format.html { redirect_to tasks_path }
@@ -145,6 +165,13 @@ end
       @todo_count = current_user.tasks.where(status: "todo").count
       @doing_count = current_user.tasks.where(status: "doing").count
       @done_count = current_user.tasks.where(status: "done").count
+
+      @total_tasks = current_user.tasks.count
+@completed_tasks = current_user.tasks.where(status: "done").count
+
+@progress =
+  ((@completed_tasks.to_f / @total_tasks) * 100).round
+
     end
   else
     render :edit
@@ -169,6 +196,13 @@ end
   @todo_count = current_user.tasks.where(status: "todo").count
       @doing_count = current_user.tasks.where(status: "doing").count
       @done_count = current_user.tasks.where(status: "done").count
+
+      @total_tasks = current_user.tasks.count
+@completed_tasks = current_user.tasks.where(status: "done").count
+
+@progress =
+  ((@completed_tasks.to_f / @total_tasks) * 100).round
+  
 
   respond_to do |format|
     format.turbo_stream

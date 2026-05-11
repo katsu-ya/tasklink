@@ -8,6 +8,14 @@
   </template>
 </turbo-stream>
 
+<turbo-stream action="replace" target="progress-bar">
+  <template>
+    <%= render partial: "tasks/progress", formats: [:html] %>
+  </template>
+</turbo-stream>
+
+
+
 <turbo-stream action="replace" target="filters">
   <template>
     <%= render partial: "tasks/filters", formats: [:html] %>
