@@ -18,7 +18,7 @@
            
 
 
-           <div class="flex items-center mb-2">
+           <div class="flex items-center mb-1">
 
              <%= form_with model: task, url: task_path(task), method: :patch do |f| %>
 
@@ -35,8 +35,6 @@
           <p class="text-xs text-gray-400 mb-2">
              作成日: <%= task.created_at.strftime("%Y/%m/%d") %></p>
         </div>
-
-
 
 
         <% if task.deadline.present? && task.status != "done" %>

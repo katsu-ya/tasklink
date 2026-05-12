@@ -15,10 +15,13 @@
       class: "inline-block bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-600 mt-3" %>
 
 
-<div class="flex items-center justify-between mb-6">
+
+
+
+<div class="flex items-center gap-4 mb-6">
 
   <!-- 検索 -->
-  <div class="-mt-1 flex gap-2 w-full max-w-xl">
+  <div class="flex-1 flex gap-2">
     <%= form_with url: tasks_path, method: :get, local: true, class: "flex gap-2 w-full" do |f| %>
       <%= f.text_field :keyword,
           placeholder: "タイトル検索",
@@ -32,17 +35,20 @@
 <div class="w-24">
     <% if params[:keyword].present? %>
       <%= link_to "全て表示", tasks_path,
-          class: "px-4 py-2 border rounded hover:bg-gray-100 whitespace-nowrap relative top-[7px]" %>
+          class: "px-3 py-2 border rounded hover:bg-gray-100 whitespace-nowrap relative top-[7px]" %>
     <% end %>
 </div>
 
+<!-- フィルター -->
+  <%= render "filters" %>
+
 
 </div>
+
+
 </div>
 
   <%= render "tasks/progress" %>
-
-  <%= render "filters" %>
   
 </div>
 
