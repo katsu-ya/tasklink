@@ -170,7 +170,7 @@ Turbo Frameを使用し、ページ遷移なしでタスクの作成・編集が
 
 ```bash
 # clone
-git clone https://github.com/your_name/tasklink.git
+git clone https://github.com/katsu-ya/tasklink.git
 
 # move
 cd tasklink
