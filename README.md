@@ -203,6 +203,12 @@ bin/dev
 ### 新規作成
 ![新規作成](images/new.png)
 
-### 検索結果
-![検索結果](images/search.png)
+### 検索結果（検索ワード）
+![検索結果](images/search1.png)
+
+### 検索結果（完了）
+![検索結果](images/search2.png)
+
+
+
 
