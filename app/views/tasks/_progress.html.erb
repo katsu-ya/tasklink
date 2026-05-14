@@ -2,14 +2,15 @@
      class="bg-white rounded-2xl shadow-sm px-4 py-3 mb-6 border">
 
   <div class="flex items-center justify-between mb-2">
-    <h5 class="text-[11px] leading-none font-medium text-gray-500">
+    <h6 class="text-[11px] leading-none font-medium text-gray-500">
       🚀 タスク達成率
-    </h5>
+    </h6>
 
     <span class="text-sm font-semibold text-gray-500">
       <%= @progress %>%
     </span>
   </div>
+  
 
   <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
     <div
@@ -18,7 +19,7 @@
     </div>
   </div>
 
-  <div class="mt-2 text-xs text-gray-500">
+  <div class="mt-3 text-xs text-gray-500">
     完了 <%= @completed_tasks %> / <%= @total_tasks %> 件
   </div>
 </div>
