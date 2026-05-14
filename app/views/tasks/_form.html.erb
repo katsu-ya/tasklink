@@ -35,21 +35,16 @@
             class: "w-full border rounded px-3 py-2" %>
           </div>
 
-
-
           <div>
-  <%= f.label :deadline, "期限",
-      class: "block text-sm font-medium text-gray-700 mb-1" %>
+           <%= f.label :deadline, "期限",
+            class: "block text-semibold font-bold text-gray-700 mb-1" %>
 
-  <%= f.date_field :deadline,
-      class: "w-full rounded-lg border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
-</div>
+          <%= f.date_field :deadline,
+            class: "w-full rounded-lg border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
+          </div>
 
-
-
-
-            <%= f.submit "投稿", class: "bg-green-500 text-white px-4 py-2 rounded" %>
-        <% end %>
+            <%= f.submit "投稿", class: "bg-green-500 text-white px-4 py-2 rounded mt-4" %>
+          <% end %>
       </div>
     </div>
   </div>

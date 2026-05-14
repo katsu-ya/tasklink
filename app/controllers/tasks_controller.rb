@@ -75,11 +75,6 @@ end
 
 
 
-
-
-
-
-
     def new
       @task = Task.new
     end
@@ -106,10 +101,10 @@ end
     @done_count = current_user.tasks.where(status: "done").count
 
     @total_tasks = current_user.tasks.count
-@completed_tasks = current_user.tasks.where(status: "done").count
+    @completed_tasks = current_user.tasks.where(status: "done").count
 
-@progress =
-  ((@completed_tasks.to_f / @total_tasks) * 100).round
+    @progress =
+      ((@completed_tasks.to_f / @total_tasks) * 100).round
 
 
 
@@ -119,19 +114,16 @@ end
     end
 
     # 👇 ここが重要
-@tasks.each do |task|
-  if task.id == @task.id
-    task.instance_variable_set(:@newly_created, true)
-  end
-end
+    @tasks.each do |task|
+      if task.id == @task.id
+        task.instance_variable_set(:@newly_created, true)
+      end
+    end
 
-  else
-    render :new
-  end
-end
-
-
-
+      else
+        render :new
+      end
+    end
 
 
     def edit
@@ -141,9 +133,9 @@ end
     
 
     def update
-  @task = current_user.tasks.find(params[:id])
+      @task = current_user.tasks.find(params[:id])
 
-  if @task.update(task_params)
+     if @task.update(task_params)
 
     flash.now[:notice] = case @task.status
     when "todo"
@@ -167,19 +159,16 @@ end
       @done_count = current_user.tasks.where(status: "done").count
 
       @total_tasks = current_user.tasks.count
-@completed_tasks = current_user.tasks.where(status: "done").count
+      @completed_tasks = current_user.tasks.where(status: "done").count
 
-@progress =
-  ((@completed_tasks.to_f / @total_tasks) * 100).round
+      @progress =
+      ((@completed_tasks.to_f / @total_tasks) * 100).round
 
+        end
+      else
+        render :edit
+      end
     end
-  else
-    render :edit
-  end
-end
-
-
-
 
 
 
@@ -198,11 +187,11 @@ end
       @done_count = current_user.tasks.where(status: "done").count
 
       @total_tasks = current_user.tasks.count
-@completed_tasks = current_user.tasks.where(status: "done").count
+      @completed_tasks = current_user.tasks.where(status: "done").count
 
-@progress =
-  ((@completed_tasks.to_f / @total_tasks) * 100).round
-  
+    @progress =
+      ((@completed_tasks.to_f / @total_tasks) * 100).round
+
 
   respond_to do |format|
     format.turbo_stream
@@ -219,7 +208,6 @@ end
 
   head :ok
 end
-
 
 
     private
