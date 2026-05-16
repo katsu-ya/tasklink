@@ -2,10 +2,13 @@
 
 ## URL
 
-※ Renderでデプロイ済み
+### AWS EC2 (Production)
 
-【アプリURL】
-[https://tasklink-1iv9.onrender.com](https://tasklink-1iv9.onrender.com)
+http://54.199.176.245
+
+### Render
+
+https://tasklink-1iv9.onrender.com
 
 ---
 
@@ -13,7 +16,7 @@
 
 TaskLinkは、タスクを直感的に管理できるToDo管理アプリです。
 
-Turbo Streamを活用し、画面遷移を減らしながらリアルタイムにUIが更新される構成にしています。
+Turbo Streamを活用し、ページ遷移を減らしながらリアルタイムにUIが更新される構成にしています。
 
 また、ドラッグ＆ドロップ、期限管理、達成率表示など、実務を意識したUI/UXを重視しています。
 
@@ -29,6 +32,8 @@ Railsの基礎学習後、
 を意識して開発しました。
 
 特にTurbo Streamを使用したリアルタイム更新と、ストレスの少ないUI/UXにこだわっています。
+
+また、AWS EC2 + Nginx + Puma + PostgreSQL を用いて、本番環境構築まで行いました。
 
 ---
 
@@ -50,8 +55,29 @@ Railsの基礎学習後、
 
 ## Infrastructure
 
+* AWS EC2 (Ubuntu)
+* Nginx
+* Puma
+* systemd
+* PostgreSQL
 * Render
 * GitHub
+
+---
+
+# インフラ構成
+
+```text
+Browser
+↓
+Nginx
+↓
+Puma
+↓
+Rails
+↓
+PostgreSQL
+```
 
 ---
 
@@ -155,14 +181,31 @@ Turbo Frameを使用し、ページ遷移なしでタスクの作成・編集が
 
 ---
 
+## AWS本番環境構築
+
+AWS EC2上にRailsアプリをデプロイし、
+
+* Nginx
+* Puma
+* systemd
+* PostgreSQL
+
+を使用した本番環境構築を行いました。
+
+また、systemdを利用してPumaを常駐化し、サーバ再起動時にも自動起動する構成にしています。
+
+---
+
 # 今後追加したい機能
 
-* AWSへのデプロイ
+* HTTPS化（SSL対応）
+* 独自ドメイン対応
 * タスク通知機能
 * タグ機能
 * ダークモード
 * カレンダー表示
 * チーム共有機能
+* GitHub Actionsによる自動デプロイ
 
 ---
 
@@ -190,24 +233,33 @@ bin/dev
 
 # 作者
 
-カツ
+新城克哉
 
-* GitHub: [https://github.com/katsu-ya](https://github.com/katsu-ya)
+GitHub:
+https://github.com/katsu-ya
 
+---
 
 ## 📷 画面イメージ
 
 ### タスク一覧
+
 ![タスク一覧](images/index.png)
 
 ### 新規作成
+
 ![新規作成](images/new.png)
 
 ### 検索結果（検索ワード）
+
 ![検索結果](images/search1.png)
 
 ### 検索結果（完了）
+
 ![検索結果](images/search2.png)
+
+
+
 
 
 
