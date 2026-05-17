@@ -4,7 +4,7 @@
 
 ### AWS EC2 (Production)
 
-http://54.199.176.245
+http://54.248.41.247
 
 ### Render
 
@@ -62,6 +62,7 @@ Railsの基礎学習後、
 * PostgreSQL
 * Render
 * GitHub
+* Elastic IP
 
 ---
 
@@ -194,7 +195,23 @@ AWS EC2上にRailsアプリをデプロイし、
 
 また、systemdを利用してPumaを常駐化し、サーバ再起動時にも自動起動する構成にしています。
 
+さらに Elastic IP を設定し、停止・再起動後も同じURLでアクセス可能な環境を構築しています。
+
 ---
+
+# 構成のポイント
+
+* Nginx
+    リバースプロキシとして動作
+    HTTPリクエストを Puma に転送
+* Puma
+    Railsアプリケーションサーバー
+    systemd 管理で自動起動
+* systemd
+    Puma のプロセス管理
+    EC2再起動後も自動復旧
+* Elastic IP
+    固定IP化によりURL変更なしでアクセス可能
 
 # 今後追加したい機能
 
