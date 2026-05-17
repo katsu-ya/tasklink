@@ -60,7 +60,7 @@ Railsの基礎学習後、
 * Puma
 * systemd
 * PostgreSQL
-* Render
+* Render（旧デプロイ環境）
 * GitHub
 * Elastic IP
 
