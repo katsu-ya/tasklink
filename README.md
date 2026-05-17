@@ -56,7 +56,7 @@ Railsの基礎学習後、
 ## Infrastructure
 
 * AWS EC2 (Ubuntu)
-* Nginx
+* Nginx (Reverse Proxy)
 * Puma
 * systemd
 * PostgreSQL
