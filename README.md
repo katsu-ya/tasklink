@@ -2,11 +2,11 @@
 
 ## URL
 
-### AWS EC2 (Production)
+### Production (AWS EC2)
 
 https://tasklink-app.com
 
-### Render
+### Render (Demo)
 
 https://tasklink-1iv9.onrender.com
 
@@ -16,26 +16,31 @@ https://tasklink-1iv9.onrender.com
 
 TaskLinkは、タスクを直感的に管理できるToDo管理アプリです。
 
-Turbo Streamを活用し、ページ遷移を減らしながらリアルタイムにUIが更新される構成にしています。
+Turbo Streamを活用し、ページ遷移を最小限に抑えながらリアルタイムにUIが更新される構成にしています。
 
-また、ドラッグ＆ドロップ、期限管理、達成率表示など、実務を意識したUI/UXを重視しています。
+また、
+
+* ドラッグ＆ドロップ
+* モーダルUI
+* 期限管理
+* 達成率表示
+
+など、実務を意識したUI/UXを重視して開発しました。
 
 ---
 
 # 作成背景
 
-Railsの基礎学習後、
+Rails基礎学習後、
 
 * 「実際に使いたくなるアプリ」
 * 「動きで差別化できるポートフォリオ」
 
 を意識して開発しました。
 
-特にTurbo Streamを使用したリアルタイム更新と、ストレスの少ないUI/UXにこだわっています。
+特に、Turbo Streamを利用したリアルタイム更新と、ストレスの少ないUI/UXにこだわっています。
 
-本番環境はAWS EC2上に構築し、Nginx + Puma + systemd構成で運用しています。
-
-また、独自ドメイン・HTTPS化（SSL/TLS）に対応しています。
+また、インフラ面ではAWS EC2上に本番環境を構築し、Nginx + Puma + systemdによる実運用に近い構成を経験しました。
 
 ---
 
@@ -58,27 +63,58 @@ Railsの基礎学習後、
 ## Infrastructure
 
 * AWS EC2 (Ubuntu)
-* Nginx（リバースプロキシ）
-* Puma（Rails Application Server）
-* systemd（Puma自動起動）
+* Nginx (Reverse Proxy)
+* Puma
+* systemd
 * PostgreSQL
-* Route 53（独自ドメイン）
-* Let's Encrypt + Certbot（HTTPS / SSL証明書）
-* Elastic IP（固定IP）
+* Route 53
+* Elastic IP
+* Let's Encrypt / Certbot (HTTPS)
 
 ---
 
-## Server Architecture
+# インフラ構成
 
+本番環境はAWS EC2上に構築し、独自ドメイン + HTTPS化に対応しています。
+
+```text
 Browser
-   ↓ HTTPS 
-Nginx (Reverse Proxy) 
-   ↓ 
-Puma 
-   ↓ 
-Rails 8 Application 
-   ↓ 
+   ↓ HTTPS
+Nginx (Reverse Proxy)
+   ↓
+Puma
+   ↓
+Rails 8 Application
+   ↓
 PostgreSQL
+```
+
+## 構成のポイント
+
+### Nginx
+
+* リバースプロキシとして動作
+* HTTP/HTTPSリクエストをPumaへ転送
+
+### Puma
+
+* Railsアプリケーションサーバー
+* systemd管理で自動起動
+
+### systemd
+
+* Pumaのプロセス管理
+* EC2再起動後も自動復旧
+
+### Elastic IP
+
+* 固定IP化
+* 停止・再起動後もURL変更なし
+
+### HTTPS
+
+* Let's Encrypt + CertbotでSSL化
+* HTTP → HTTPSへ自動リダイレクト
 
 ---
 
@@ -86,50 +122,42 @@ PostgreSQL
 
 ## タスク管理
 
-* タスクの作成
-* タスクの編集
-* タスクの削除
+* タスク作成
+* タスク編集
+* タスク削除
 * ステータス変更
 
   * 未着手
   * 作業中
   * 完了
 
----
-
 ## 検索・フィルター
 
 * キーワード検索
 * ステータス別フィルター
-* タスク件数のリアルタイム表示
-
----
+* タスク件数リアルタイム表示
 
 ## ドラッグ＆ドロップ
 
-SortableJSを利用し、タスクを直感的に並び替え可能にしました。
+SortableJSを利用し、タスクを直感的に並び替え可能
 
-* 並び替えの保存
+* 並び替え保存
 * ドラッグ中エフェクト
 * プレースホルダ表示
 
----
-
 ## モーダルUI
 
-Turbo Frameを使用し、ページ遷移なしでタスクの作成・編集が可能です。
+Turbo Frameを利用し、ページ遷移なしでタスクの作成・編集が可能
 
-* ESCキーでモーダルを閉じる
+* ESCキーで閉じる
 * 背景オーバーレイ対応
-
----
 
 ## 期限管理
 
 * 期限日設定
 * 期限切れ表示
 * 残り日数表示
-* 期限に応じた色分け
+* 状況に応じた色分け
 
 ### 表示例
 
@@ -137,30 +165,20 @@ Turbo Frameを使用し、ページ遷移なしでタスクの作成・編集が
 * 🟡 今日まで
 * 🟢 余裕あり
 
----
-
 ## 達成率バー
 
-完了タスクの割合をリアルタイムで可視化しています。
+完了タスク割合をリアルタイム可視化
 
 * Turbo Streamによる即時更新
-* 進捗率を視覚的に表示
-
----
-
-## アニメーション
-
-* ホバーエフェクト
-* タスク作成時ハイライト
-* 完了時の紙吹雪エフェクト
+* 進捗率の視覚化
 
 ---
 
 # 工夫した点
 
-## Turbo Streamを使ったリアルタイム更新
+## Turbo Streamによるリアルタイム更新
 
-タスクの作成・更新・削除時に、
+タスク作成・更新・削除時に
 
 * タスク一覧
 * フィルター件数
@@ -168,19 +186,15 @@ Turbo Frameを使用し、ページ遷移なしでタスクの作成・編集が
 
 をページリロードなしで更新しています。
 
----
-
 ## UI/UXを意識した設計
 
 単に機能を実装するだけではなく、
 
 * 視認性
-* 操作の直感性
+* 直感的な操作
 * ストレスの少なさ
 
 を重視しました。
-
----
 
 ## AWS本番環境構築
 
@@ -191,38 +205,23 @@ AWS EC2上にRailsアプリをデプロイし、
 * systemd
 * PostgreSQL
 
-を使用した本番環境構築を行いました。
+を利用した本番環境を構築しました。
 
-また、systemdを利用してPumaを常駐化し、サーバ再起動時にも自動起動する構成にしています。
+また、systemdを利用してPumaを常駐化し、サーバ再起動後も自動起動する構成にしています。
 
-さらに Elastic IP を設定し、停止・再起動後も同じURLでアクセス可能な環境を構築しています。
+さらに、独自ドメイン + HTTPS化を実装し、本番運用を意識した構成を実現しました。
 
 ---
 
-# 構成のポイント
-
-* Nginx
-    リバースプロキシとして動作
-    HTTPリクエストを Puma に転送
-* Puma
-    Railsアプリケーションサーバー
-    systemd 管理で自動起動
-* systemd
-    Puma のプロセス管理
-    EC2再起動後も自動復旧
-* Elastic IP
-    固定IP化によりURL変更なしでアクセス可能
-
 # 今後追加したい機能
 
-* HTTPS化（SSL対応）
-* 独自ドメイン対応
 * タスク通知機能
 * タグ機能
 * ダークモード
 * カレンダー表示
 * チーム共有機能
-* GitHub Actionsによる自動デプロイ
+* GitHub ActionsによるCI/CD
+* Docker対応
 
 ---
 
@@ -246,7 +245,6 @@ rails db:migrate
 bin/dev
 ```
 
----
 
 # 作者
 
