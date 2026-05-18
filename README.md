@@ -56,13 +56,13 @@ Railsの基礎学習後、
 ## Infrastructure
 
 * AWS EC2 (Ubuntu)
-* Nginx (Reverse Proxy)
-* Puma
-* systemd
+* Nginx（リバースプロキシ）
+* Puma（Rails Application Server）
+* systemd（Puma自動起動）
 * PostgreSQL
-* Render（旧デプロイ環境）
-* GitHub
-* Elastic IP
+* Route 53（独自ドメイン）
+* Let's Encrypt + Certbot（HTTPS / SSL証明書）
+* Elastic IP（固定IP）
 
 ---
 
