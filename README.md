@@ -4,7 +4,7 @@
 
 ### AWS EC2 (Production)
 
-http://54.248.41.247
+https://tasklink-app.com
 
 ### Render
 
@@ -33,7 +33,9 @@ Railsの基礎学習後、
 
 特にTurbo Streamを使用したリアルタイム更新と、ストレスの少ないUI/UXにこだわっています。
 
-また、AWS EC2 + Nginx + Puma + PostgreSQL を用いて、本番環境構築まで行いました。
+本番環境はAWS EC2上に構築し、Nginx + Puma + systemd構成で運用しています。
+
+また、独自ドメイン・HTTPS化（SSL/TLS）に対応しています。
 
 ---
 
