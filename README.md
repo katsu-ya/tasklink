@@ -66,19 +66,17 @@ Railsの基礎学習後、
 
 ---
 
-# インフラ構成
+## Server Architecture
 
-```text
 Browser
-↓
-Nginx
-↓
-Puma
-↓
-Rails
-↓
+   ↓ HTTPS 
+Nginx (Reverse Proxy) 
+   ↓ 
+Puma 
+   ↓ 
+Rails 8 Application 
+   ↓ 
 PostgreSQL
-```
 
 ---
 
