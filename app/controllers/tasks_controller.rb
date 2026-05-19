@@ -46,16 +46,16 @@ class TasksController < ApplicationController
     )
 
     status_search = case params[:keyword]
-                    when "作業中"
+    when "作業中"
                       base.where(status: "doing")
-                    when "未着手"
+    when "未着手"
                       base.where(status: "todo")
-                    when "完了"
+    when "完了"
                       base.where(status: "done")
 
-                    else
+    else
                       base.none
-                    end
+    end
 
     @tasks = text_search.or(status_search)
   end
@@ -120,9 +120,9 @@ end
       end
     end
 
-      else
+  else
         render :new
-      end
+  end
     end
 
 
@@ -130,7 +130,7 @@ end
       @task = current_user.tasks.find(params[:id])
     end
 
-    
+
 
     def update
       @task = current_user.tasks.find(params[:id])
@@ -163,11 +163,10 @@ end
 
       @progress =
       ((@completed_tasks.to_f / @total_tasks) * 100).round
-
         end
-      else
+     else
         render :edit
-      end
+     end
     end
 
 
@@ -199,7 +198,7 @@ end
   end
 end
 
-  
+
 
   def reorder
     params[:ids].each_with_index do |id, index|
@@ -215,6 +214,4 @@ end
     def task_params
       params.require(:task).permit(:title, :description, :status, :team_id, :completed, :deadline)
     end
-
 end
-
