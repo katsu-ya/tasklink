@@ -9,7 +9,6 @@ jobs:
 deploy:
 runs-on: ubuntu-latest
 
-```
 steps:
   - name: Deploy to EC2
     uses: appleboy/ssh-action@master
@@ -21,15 +20,8 @@ steps:
 
       script: |
         cd ~/tasklink
-
         git pull origin main
-
         bundle install
-
         RAILS_ENV=production bin/rails db:migrate
-
         RAILS_ENV=production bin/rails assets:precompile
-
         sudo systemctl restart tasklink
-```
-
