@@ -79,17 +79,19 @@ Rails基礎学習後、
 
 本番環境はAWS EC2上に構築し、独自ドメイン + HTTPS化に対応しています。
 
-```text
+GitHub Actions (CI/CD)
+↓
+Deploy
+↓
 Browser
-   ↓ HTTPS
+↓ HTTPS
 Nginx (Reverse Proxy)
-   ↓
+↓
 Puma
-   ↓
+↓
 Rails 8 Application
-   ↓
+↓
 PostgreSQL
-```
 
 ## 構成のポイント
 
