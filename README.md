@@ -251,7 +251,6 @@ GitHub Actions から EC2 へ自動デプロイされます。
 * ダークモード
 * カレンダー表示
 * チーム共有機能
-* GitHub ActionsによるCI/CD
 * Docker対応
 
 ---
