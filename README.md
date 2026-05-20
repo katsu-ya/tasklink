@@ -198,7 +198,7 @@ Turbo Frameを利用し、ページ遷移なしでタスクの作成・編集が
 
 を重視しました。
 
-## AWS本番環境構築
+## AWS本番環境構築 / CI/CD
 
 AWS EC2上にRailsアプリをデプロイし、
 
@@ -207,11 +207,38 @@ AWS EC2上にRailsアプリをデプロイし、
 * systemd
 * PostgreSQL
 
-を利用した本番環境を構築しました。
+を利用した本番環境を構築しています。
 
-また、systemdを利用してPumaを常駐化し、サーバ再起動後も自動起動する構成にしています。
+また、独自ドメイン・HTTPS（SSL/TLS）に対応し、安全な通信環境を実現しています。
 
-さらに、独自ドメイン + HTTPS化を実装し、本番運用を意識した構成を実現しました。
+さらに GitHub Actions を利用し、CI/CD を構築しています。
+
+### CI（継続的インテグレーション）
+
+GitHub Push時に以下を自動実行：
+
+* RuboCop（コード規約チェック）
+* bundler-audit（脆弱性チェック）
+* Rails Test（テスト実行）
+
+コード品質を担保し、安全性を確認したうえでデプロイ可能な構成にしています。
+
+### CD（継続的デプロイ）
+
+mainブランチへ push 後、
+
+GitHub Actions から EC2 へ自動デプロイされます。
+
+デプロイ時には以下を実行：
+
+* `git pull`
+* `bundle install`
+* `rails db:migrate`
+* `assets:precompile`
+* Puma再起動（systemd）
+
+これにより、コード変更後の本番反映を自動化しています。
+
 
 ---
 
