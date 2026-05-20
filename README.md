@@ -309,3 +309,7 @@ https://github.com/katsu-ya
 
 
 
+## CI/CD Test
+
+GitHub Actions automatic deploy working ✅
+
