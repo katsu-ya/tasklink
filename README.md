@@ -215,29 +215,26 @@ AWS EC2上にRailsアプリをデプロイし、
 
 さらに GitHub Actions を利用し、CI/CD を構築しています。
 
-### CI（継続的インテグレーション）
+### CI/CD
 
-GitHub Push時に以下を自動実行：
+GitHub Actions を利用し、CI/CD を構築しています。
 
-* RuboCop（コード規約チェック）
+#### CI
+
+* RuboCop（コード品質チェック）
 * bundler-audit（脆弱性チェック）
-* Rails Test（テスト実行）
+* Rails Test
 
-コード品質を担保し、安全性を確認したうえでデプロイ可能な構成にしています。
+#### CD
 
-### CD（継続的デプロイ）
+main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 
-mainブランチへ push 後、
+デプロイ時に以下を自動実行：
 
-GitHub Actions から EC2 へ自動デプロイされます。
-
-デプロイ時には以下を実行：
-
-* `git pull`
 * `bundle install`
 * `rails db:migrate`
 * `assets:precompile`
-* Puma再起動（systemd）
+* Puma restart (`systemd`)
 
 これにより、コード変更後の本番反映を自動化しています。
 
