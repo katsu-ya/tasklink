@@ -8,7 +8,6 @@ class TaskTest < ActiveSupport::TestCase
     )
 
     assert task.valid?
-
   end
 
   test "task is invalid without title" do
@@ -18,8 +17,5 @@ class TaskTest < ActiveSupport::TestCase
     )
 
     assert_not task.valid?
-
   end
 end
-
-
