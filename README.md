@@ -217,7 +217,11 @@ AWS EC2上にRailsアプリをデプロイし、
 
 ### CI/CD
 
-GitHub Actions を利用し、CI/CD を構築しています。
+GitHub Actions により以下を自動化しています。
+
+* Rubocop
+* Rails Test
+* EC2 自動デプロイ
 
 #### CI
 
