@@ -84,22 +84,17 @@ Rails基礎学習後、
 
 GitHub Actions (CI/CD)
 
-↓
-Deploy
+Deploy↓
 
-↓
-Browser
+Browser↓
 
-↓ HTTPS
-Nginx (Reverse Proxy)
+HTTPS
+Nginx (Reverse Proxy)↓
 
-↓
-Puma
+Puma↓
 
-↓
-Rails 8 Application
+Rails 8 Application↓
 
-↓
 PostgreSQL
 
 ## 構成のポイント
