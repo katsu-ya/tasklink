@@ -85,16 +85,16 @@ Rails基礎学習後、
 GitHub Actions (CI/CD)
 
 Deploy
-↓
+→
 Browser
-↓
+→
 HTTPS
 Nginx (Reverse Proxy)
-↓
+→
 Puma
-↓
+→
 Rails 8 Application
-↓
+→
 PostgreSQL
 
 ## 構成のポイント
