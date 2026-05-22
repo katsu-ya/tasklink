@@ -255,18 +255,18 @@ SimpleCov を利用し、テストカバレッジを可視化しています。
 ### 実施テスト
 
 Model Test
-* Task validation
-* status enum 確認
-* user 必須チェック
-* team optional 確認
+* Taskバリデーション
+* status enum確認
+* user関連付け
+* team optional確認
   
 ### Request Test
 
-* /tasks アクセス確認
-* 未ログイン時リダイレクト
-* task 作成 / 更新 / 削除
+* タスク一覧取得
+* ログイン認証
+* タスク作成 / 更新 / 削除
 * 不正パラメータ時の失敗
-* 他ユーザー task へのアクセス禁止（認可）
+* 他ユーザーTaskアクセス制御
 
 
 ---
