@@ -62,14 +62,7 @@ class TasksController < ApplicationController
 
 
   @tasks = @tasks
-  .order(Arel.sql("
-    CASE
-      WHEN deadline IS NULL THEN 1
-      ELSE 0
-    END,
-    deadline ASC,
-    position ASC
-  "))
+  .order(created_at: :desc)
   .page(params[:page]).per(6)
 end
 
@@ -91,8 +84,9 @@ end
     @task.update(position: 1)
 
     # 👇 これ重要（再描画用）
-    @tasks = current_user.tasks.order(:position)
-                 .page(1).per(6)
+    @tasks = current_user.tasks
+                     .order(created_at: :desc)
+                     .page(1).per(6)
 
     flash[:notice] = "作成しました"
 
@@ -147,7 +141,7 @@ end
     end
 
     @tasks = current_user.tasks
-                 .order(:position)
+                 .order(created_at: :desc)
                  .page(params[:page]).per(6)
 
     respond_to do |format|
@@ -176,7 +170,7 @@ end
   @task.destroy
 
   # 👇 これが超重要
-  @tasks = current_user.tasks.order(:position)
+  @tasks = current_user.tasks.order(created_at: :desc)
                .page(params[:page]).per(6)
 
   flash[:notice] = "削除しました"

@@ -53,7 +53,7 @@
     <div id="tasks"
      data-controller="sortable"
      class="grid grid-cols-3 gap-6">
-  <%= render @tasks %>
+  <%= render partial: "tasks/task", collection: @tasks %>
 </div>
       
     </div>
