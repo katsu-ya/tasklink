@@ -1,7 +1,6 @@
 require "application_system_test_case"
 
 class TasksTest < ApplicationSystemTestCase
-
   def login(user)
   visit new_user_session_path
 
