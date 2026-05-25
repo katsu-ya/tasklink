@@ -255,7 +255,7 @@ Model / Request / System Test を実装し、バリデーション・認可・�
 
 SimpleCov を利用し、テストカバレッジを可視化しています。
 
-* Line Coverage: **82.95%**
+* Line Coverage: **83.46%**
 
 ### Model Test
 
@@ -278,9 +278,12 @@ Task / User モデルに対して以下を検証しています。
 
 タスク機能の動作と認可をテストしています。
 
-* `/tasks` 検索機能
-* タスク検索結果の検証
-* 他ユーザー task へのアクセス防止（認可）
+* 検索
+* status filter
+* keyword + status 組み合わせ
+* 未ログイン制御
+* 他ユーザーアクセス禁止（認可）
+* create/update/destroy
 
 ### System Test
 
