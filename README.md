@@ -245,49 +245,75 @@ main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 
 ---
 
+
+
 ## テスト・品質管理
 
-TaskLinkでは、品質向上のために Model / Request / System Test を実装しています。
+TaskLinkでは、アプリ品質向上のために、テスト・静的解析・CI/CD を導入しています。
+
+Model / Request / System Test を実装し、バリデーション・認可・実際の画面操作まで含めて検証できる構成にしています。
 
 ### Test Coverage
 
-SimpleCov によりテストカバレッジを可視化しています。
+SimpleCov を利用し、テストカバレッジを可視化しています。
 
-* Coverage: 74.42%
+* Line Coverage: **82.95%**
 
 ### Model Test
 
-Taskモデルに対して以下を検証しています。
+Task / User モデルに対して以下を検証しています。
+
+#### Task
 
 * title 必須バリデーション
 * user 必須バリデーション
 * status enum の動作確認
 * team optional の確認
 
+#### User
+
+* email 必須
+* password による正常作成
+* email 重複禁止
+
 ### Request Test
 
 タスク機能の動作と認可をテストしています。
 
-* `/tasks` アクセス確認
-* 未ログイン時のリダイレクト
-* タスク作成成功
-* タスク更新成功
-* 不正パラメータ時の失敗
-* タスク削除成功
-* キーワード検索機能
-* 他ユーザー task へのアクセス禁止（認可）
+* `/tasks` 検索機能
+* タスク検索結果の検証
+* 他ユーザー task へのアクセス防止（認可）
 
-
-### System Test
+### System Test (E2E)
 
 Capybara + Selenium により、実際のユーザー操作を想定した E2E テストを実装しています。
-
-現在は以下を自動テストしています。
 
 * タスク作成
 * タスク削除
 * ステータス変更
-* 検索機能
+* タスク検索
+
+### CI / CD
+
+GitHub Actions により以下を自動化しています。
+
+#### CI
+
+* RuboCop（静的解析）
+* bundler-audit（脆弱性チェック）
+* Rails Test
+
+#### CD
+
+main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
+
+デプロイ時に以下を自動実行：
+
+* `bundle install`
+* `rails db:migrate`
+* `assets:precompile`
+* Puma restart (`systemd`)
+
 
 
 
