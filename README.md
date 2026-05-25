@@ -204,6 +204,7 @@ Turbo Frameを利用し、ページ遷移なしでタスクの作成・編集が
 
 を重視しました。
 
+
 ## AWS本番環境構築 / CI/CD
 
 AWS EC2上にRailsアプリをデプロイし、
@@ -219,47 +220,42 @@ AWS EC2上にRailsアプリをデプロイし、
 
 さらに GitHub Actions を利用し、CI/CD を構築しています。
 
-### CI/CD
+### CI（自動品質チェック）
 
-GitHub Actions により以下を自動化しています。
-
-* Rubocop
-* Rails Test
-* EC2 自動デプロイ
-
-#### CI
+GitHub Actions により、push / pull request 時に以下を自動実行しています。
 
 * RuboCop（コード品質チェック）
 * bundler-audit（脆弱性チェック）
 * Rails Test
 
-#### CD
+これにより、本番反映前にコード品質・セキュリティ・テストを自動検証しています。
+
+### CD（自動デプロイ）
 
 main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 
-デプロイ時に以下を自動実行：
+デプロイ時には以下を自動実行しています。
 
 * `bundle install`
 * `rails db:migrate`
 * `assets:precompile`
-* Puma restart (`systemd`)
+* Puma restart（systemd）
 
-これにより、コード変更後の本番反映を自動化しています。
+コード変更から本番反映までを自動化し、運用負荷を削減しています。
+
+---
 
 ## テスト・品質管理
 
-TaskLinkでは、アプリ品質向上のために、テスト・静的解析・CI/CD を導入しています。
-
-また、Model / Request / System Test を実装し、バリデーション・認可・実際の画面操作まで含めて検証できる構成にしています。
-
+TaskLinkでは、品質向上のために Model / Request / System Test を実装しています。
 
 ### Test Coverage
 
-SimpleCov を利用し、テストカバレッジを可視化しています。
+SimpleCov によりテストカバレッジを可視化しています。
 
 * Coverage: 78.29%
-  
-### 実施テスト
+
+### Model Test
 
 Taskモデルに対して以下を検証しています。
 
@@ -267,12 +263,12 @@ Taskモデルに対して以下を検証しています。
 * user 必須バリデーション
 * status enum の動作確認
 * team optional の確認
-  
+
 ### Request Test
 
-タスク機能の動作と認可をテストしています。
+タスク機能の動作・認可をテストしています。
 
-* /tasks アクセス確認
+* `/tasks` アクセス確認
 * 未ログイン時のリダイレクト
 * タスク作成成功
 * タスク更新成功
@@ -280,34 +276,14 @@ Taskモデルに対して以下を検証しています。
 * タスク削除成功
 * 他ユーザー task へのアクセス禁止
 
-### System Test
+### System Test（E2E）
 
-Capybara + Selenium により、実際のユーザー操作を想定した E2E テストを実装しています。
-
-現在は以下を自動テストしています。
+Capybara + Selenium を利用し、実際のユーザー操作を想定したE2Eテストを実装しています。
 
 * タスク作成
 * タスク削除
 * ステータス変更
 
-### Coverage
-
-SimpleCov を導入し、テストカバレッジを可視化しています。
-
-例：
-
-* Line Coverage: 58%+
-
-CI（GitHub Actions）上でもテストが自動実行される構成にしています。
-
-### CI / コード品質
-
-GitHub Actions による CI を構築し、push 時に自動で以下を実行しています。
-
-RuboCop（静的解析）
-テスト実行
-
-これにより、本番反映前に品質チェックが行われる構成にしています。
 
 
 ---
