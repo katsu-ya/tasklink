@@ -253,7 +253,7 @@ TaskLinkでは、品質向上のために Model / Request / System Test を実�
 
 SimpleCov によりテストカバレッジを可視化しています。
 
-* Coverage: 78.29%
+* Coverage: 74.42%
 
 ### Model Test
 
@@ -276,13 +276,16 @@ Taskモデルに対して以下を検証しています。
 * タスク削除成功
 * 他ユーザー task へのアクセス禁止
 
-### System Test（E2E）
+### System Test
 
-Capybara + Selenium を利用し、実際のユーザー操作を想定したE2Eテストを実装しています。
+Capybara + Selenium により、実際のユーザー操作を想定した E2E テストを実装しています。
+
+現在は以下を自動テストしています。
 
 * タスク作成
 * タスク削除
 * ステータス変更
+* 検索機能
 
 
 
