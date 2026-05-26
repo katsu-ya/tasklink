@@ -15,7 +15,6 @@ password_confirmation: "password123"
 )
 
 sign_in @user
-
 end
 
 test "can search tasks" do
@@ -36,7 +35,6 @@ get tasks_path, params: {
 assert_response :success
 assert_match "Rails Task", response.body
 assert_no_match "React Task", response.body
-
 end
 
 test "cannot access other user's task" do
@@ -52,7 +50,6 @@ patch task_path(other_task), params: {
 }
 
 assert_response :not_found
-
 end
 
 test "redirects when not logged in" do
@@ -61,7 +58,6 @@ sign_out @user
 get tasks_path
 
 assert_response :redirect
-
 end
 
 test "can create task" do
@@ -75,7 +71,6 @@ status: "todo"
 end
 
 assert_response :redirect
-
 end
 
 test "cannot create invalid task" do
@@ -102,7 +97,6 @@ patch task_path(task), params: {
 }
 
 assert_equal "New Title", task.reload.title
-
 end
 
 test "can destroy task" do
@@ -114,7 +108,6 @@ status: "todo"
 assert_difference("Task.count", -1) do
   delete task_path(task)
 end
-
 end
 
 test "can filter todo tasks" do
@@ -135,7 +128,6 @@ get tasks_path, params: {
 assert_response :success
 assert_match "Todo Task", response.body
 assert_no_match "Done Task", response.body
-
 end
 
 test "can filter done tasks" do
@@ -156,7 +148,6 @@ get tasks_path, params: {
 assert_response :success
 assert_match "Done Task", response.body
 assert_no_match "Todo Task", response.body
-
 end
 
 test "can search with keyword and status filter" do
@@ -178,7 +169,6 @@ get tasks_path, params: {
 assert_response :success
 assert_match "Rails Todo", response.body
 assert_no_match "Rails Done", response.body
-
 end
 
 test "cannot update task with invalid params" do

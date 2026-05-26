@@ -8,7 +8,7 @@ class TaskTest < ActiveSupport::TestCase
       password_confirmation: "password123"
     )
   end
-  
+
   test "is valid with title and user" do
     user = User.create!(
       email: "task@example.com",
