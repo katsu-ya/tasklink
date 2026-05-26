@@ -121,23 +121,6 @@ Rails基礎学習後、
 
 ---
 
-
-
-
-### データ構造
-
-* User → Task（1対多）
-* User ↔ Team（中間テーブル `team_users` を利用）
-* Team → User（多対多）
-* Task → Comment（将来的な拡張を想定）
-
-※ 将来的なチーム共有・コメント機能を見据えて設計しています。
-
-
-![ER図](images/er_diagram.png)
-
----
-
 ## Infrastructure
 
 ```text
