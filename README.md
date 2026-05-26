@@ -305,6 +305,81 @@ main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 * `rails db:migrate`
 * `assets:precompile`
 * Puma restart (`systemd`)
+  
+  
+## ER図
+
+### データ構造
+
+TaskLinkでは、ユーザーごとのタスク管理に加え、チーム機能を想定した構成にしています。
+
+User
+ ├── has_many :tasks
+ ├── has_many :team_users
+ └── has_many :teams, through: :team_users
+
+Task
+ └── belongs_to :user
+
+Team
+ ├── has_many :team_users
+ └── has_many :users, through: :team_users
+
+TeamUser
+ ├── belongs_to :user
+ └── belongs_to :team
+
+Comment（将来的な拡張）
+ └── belongs_to :task
+
+※ 将来的なチーム共有・コメント機能を見据えて設計しています。
+
+---
+
+# テスト戦略
+
+品質担保のため、Model / Request / System Test を実装しています。
+
+## Model Test
+
+バリデーションやモデルの振る舞いを検証しています。
+
+例：
+
+* タスクタイトル必須
+* 期限(deadline)の正常系
+* deadlineが空でも保存可能
+* User作成時のバリデーション
+
+## Request Test
+
+コントローラの責務・認証・権限制御を検証しています。
+
+例：
+
+* タスク作成 / 更新 / 削除
+* ログイン必須制御
+* 他ユーザーのタスク編集防止
+* キーワード検索
+* ステータスフィルター
+* progress計算のNaN再発防止
+
+## System Test
+
+実際のユーザー操作を想定し、画面挙動を検証しています。
+
+* タスク作成
+* 検索
+* statusフィルター
+* モーダル操作
+* 達成率表示
+
+## テスト結果
+
+35 runs, 73 assertions, 0 failures, 0 errors, 0 skips
+Coverage: 90.23%
+
+実装だけでなく、品質担保を意識した開発を行っています。
 
 
 
