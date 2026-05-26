@@ -17,20 +17,94 @@ https://tasklink-1iv9.onrender.com
 
 # アプリ概要
 
-TaskLinkは、タスクを直感的に管理できるToDo管理アプリです。
+TaskLinkは、Turbo Streamを活用したリアルタイム更新対応のToDo管理アプリです。
 
-Turbo Streamを活用し、ページ遷移を最小限に抑えながらリアルタイムにUIが更新される構成にしています。
+実務を意識し、
 
-また、
+- ドラッグ＆ドロップ
+- モーダルUI
+- 期限管理
+- 達成率表示
+- 認証 / 権限制御
+- CI/CD
 
-* ドラッグ＆ドロップ
-* モーダルUI
-* 期限管理
-* 達成率表示
-
-など、実務を意識したUI/UXを重視して開発しました。
+を実装しています。
 
 ---
+
+## 📷 画面イメージ
+
+### タスク一覧
+
+![タスク一覧](images/index.png)
+
+### 新規作成
+
+![新規作成](images/new.png)
+
+### 検索結果（検索ワード）
+
+![検索結果](images/search1.png)
+
+### 検索結果（完了）
+
+![検索結果](images/search2.png)
+
+
+
+## 💡 Key Features / 工夫した点
+
+### Turbo Streamによるリアルタイム更新
+
+タスク作成・更新・削除時に、
+
+- タスク一覧
+- 達成率バー
+- フィルター件数
+
+をページリロードなしで更新。
+
+### UI/UXを意識した設計
+
+- モーダルUI
+- ドラッグ＆ドロップ
+- 期限状態の色分け
+- 視認性を意識したデザイン
+
+### 実運用を意識したインフラ構築
+
+AWS EC2上に、
+
+- Nginx
+- Puma
+- systemd
+- PostgreSQL
+
+を構築。
+
+独自ドメイン + HTTPS にも対応。
+
+
+## Tech Stack
+
+| Category | Tech |
+|---|---|
+| Backend | Ruby 3.3 / Rails 8 |
+| Frontend | Turbo / Stimulus / Tailwind |
+| DB | PostgreSQL |
+| Infra | AWS EC2 / Nginx / Puma |
+| CI/CD | GitHub Actions |
+
+
+
+## ER Diagram
+
+将来的なチーム共有機能・コメント機能まで見据えて設計しています。
+
+![ER Diagram](images/er_diagram.png)
+
+
+
 
 # 作成背景
 
@@ -47,52 +121,7 @@ Rails基礎学習後、
 
 ---
 
-# 使用技術
 
-## Backend
-
-* Ruby 3.3.10
-* Rails 8
-* PostgreSQL
-* Devise
-* Kaminari
-
-## Frontend
-
-* Hotwire (Turbo / Stimulus)
-* Tailwind CSS
-* SortableJS
-
-## Infrastructure
-
-* AWS EC2 (Ubuntu)
-* Nginx（リバースプロキシ）
-* Puma（Rails Application Server）
-* systemd（Puma自動起動）
-* PostgreSQL
-* Route 53（独自ドメイン）
-* Let's Encrypt + Certbot（HTTPS / SSL証明書）
-* Elastic IP（固定IP）
-* GitHub Actions（CI/CD）
-* Dependabot（依存関係アップデート）
-
----
-
-# ER図
-
-TaskLinkでは、ユーザー単位のタスク管理を中心に、将来的なチーム共有機能まで見据えたデータ設計を行っています。
-
-## データ構造
-
-* User → Task（1対多）
-* User ↔ Team（中間テーブル team_users を利用）
-* Team → User（多対多）
-* Task → Comment（将来的な拡張を想定）
-
-※ 将来的なチーム共有・コメント機能を見据えて設計しています。
-
-
-![ER Diagram](images/er_diagram.png)
 
 
 ### データ構造
@@ -109,24 +138,19 @@ TaskLinkでは、ユーザー単位のタスク管理を中心に、将来的な
 
 ---
 
-# インフラ構成
+## Infrastructure
 
-本番環境はAWS EC2上に構築し、独自ドメイン + HTTPS化に対応しています。
-
-GitHub Actions (CI/CD)
-
-Deploy
-→
+```text
 Browser
-→
-HTTPS
-Nginx (Reverse Proxy)
-→
+↓ HTTPS
+Nginx
+↓
 Puma
-→
-Rails 8 Application
-→
+↓
+Rails 8
+↓
 PostgreSQL
+
 
 ## 構成のポイント
 
@@ -213,27 +237,6 @@ Turbo Frameを利用し、ページ遷移なしでタスクの作成・編集が
 
 ---
 
-# 工夫した点
-
-## Turbo Streamによるリアルタイム更新
-
-タスク作成・更新・削除時に
-
-* タスク一覧
-* フィルター件数
-* 達成率バー
-
-をページリロードなしで更新しています。
-
-## UI/UXを意識した設計
-
-単に機能を実装するだけではなく、
-
-* 視認性
-* 直感的な操作
-* ストレスの少なさ
-
-を重視しました。
 
 
 ## AWS本番環境構築 / CI/CD
@@ -276,127 +279,45 @@ main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 
 ---
 
-## テスト・品質管理
-
-TaskLinkでは、アプリ品質向上のため、Model / Request / System Test を実装しています。
-
-### Model Test
-
-Task / User モデルに対して以下を検証：
-
-* バリデーション
-* status enum
-* user association
-* optional relation
-* Request Test
-
-タスク機能の動作・認可・検索を検証：
-
-* タスク作成 / 更新 / 削除
-* 未ログイン時のリダイレクト
-* 他ユーザー task へのアクセス禁止
-* キーワード検索
-* status filter
-* keyword + status 組み合わせ検索
-* invalid params 時の挙動
-* System Test
-
-### Capybara + Selenium による E2E テスト：
-
-* タスク作成
-* タスク削除
-* ステータス変更
-* 検索機能
-* status filter
-
-### Coverage
-
-SimpleCov を利用しテストカバレッジを可視化。
-
-Line Coverage: 84.21%  
-
-
-### CI / CD
-
-GitHub Actions により以下を自動化しています。
-
-#### CI
-
-* RuboCop（静的解析）
-* bundler-audit（脆弱性チェック）
-* Rails Test
-
-#### CD
-
-main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
-
-デプロイ時に以下を自動実行：
-
-* `bundle install`
-* `rails db:migrate`
-* `assets:precompile`
-* Puma restart (`systemd`)
-  
----
-
-# テスト戦略
+## Test Strategy
 
 品質担保のため、Model / Request / System Test を実装しています。
 
-## Model Test
+### Model Test
+- validation
+- association
+- deadline正常系
 
-バリデーションやモデルの振る舞いを検証しています。
+### Request Test
+- CRUD
+- 認証
+- 他ユーザー制御
+- 検索 / フィルター
+- progress NaN再発防止
 
-例：
+### System Test
+- タスク作成
+- status変更
+- モーダル
+- 検索
 
-* タスクタイトル必須
-* 期限(deadline)の正常系
-* deadlineが空でも保存可能
-* User作成時のバリデーション
+### Result
 
-## Request Test
+35 runs, 73 assertions, 0 failures
 
-コントローラの責務・認証・権限制御を検証しています。
-
-例：
-
-* タスク作成 / 更新 / 削除
-* ログイン必須制御
-* 他ユーザーのタスク編集防止
-* キーワード検索
-* ステータスフィルター
-* progress計算のNaN再発防止
-
-## System Test
-
-実際のユーザー操作を想定し、画面挙動を検証しています。
-
-* タスク作成
-* 検索
-* statusフィルター
-* モーダル操作
-* 達成率表示
-
-## テスト結果
-
-35 runs, 73 assertions, 0 failures, 0 errors, 0 skips
 Coverage: 90.23%
-
-実装だけでなく、品質担保を意識した開発を行っています。
-
 
 
 
 ---
 
-# 今後追加したい機能
+## Future Features
 
-* タスク通知機能
-* タグ機能
-* ダークモード
-* カレンダー表示
-* チーム共有機能
-* Docker対応
+- チーム共有
+- 通知機能
+- カレンダー表示
+- Docker対応
+- GitHub Actions強化
 
 ---
 
@@ -429,25 +350,6 @@ GitHub:
 https://github.com/katsu-ya
 
 ---
-
-## 📷 画面イメージ
-
-### タスク一覧
-
-![タスク一覧](images/index.png)
-
-### 新規作成
-
-![新規作成](images/new.png)
-
-### 検索結果（検索ワード）
-
-![検索結果](images/search1.png)
-
-### 検索結果（完了）
-
-![検索結果](images/search2.png)
-
 
 
 
