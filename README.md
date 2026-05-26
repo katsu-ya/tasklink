@@ -78,6 +78,12 @@ Rails基礎学習後、
 
 ---
 
+# ER図
+
+(images/er_diagram.png)
+
+---
+
 # インフラ構成
 
 本番環境はAWS EC2上に構築し、独自ドメイン + HTTPS化に対応しています。
