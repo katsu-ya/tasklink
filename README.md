@@ -80,7 +80,7 @@ Rails基礎学習後、
 
 # ER図
 
-(images/er_diagram.png)
+![ER図](images/er_diagram.png)
 
 ---
 
