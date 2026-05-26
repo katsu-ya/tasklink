@@ -80,6 +80,31 @@ Rails基礎学習後、
 
 # ER図
 
+## ER図
+
+TaskLinkでは、ユーザー単位のタスク管理を中心に、将来的なチーム共有機能まで見据えたデータ設計を行っています。
+
+## データ構造
+
+* User → Task（1対多）
+* User ↔ Team（中間テーブル team_users を利用）
+* Team → User（多対多）
+* Task → Comment（将来的な拡張を想定）
+
+※ 将来的なチーム共有・コメント機能を見据えて設計しています。
+
+![ER Diagram](images/er_diagram.png)
+
+### データ構造
+
+* User → Task（1対多）
+* User ↔ Team（中間テーブル `team_users` を利用）
+* Team → User（多対多）
+* Task → Comment（将来的な拡張を想定）
+
+※ 将来的なチーム共有・コメント機能を見据えて設計しています。
+
+
 ![ER図](images/er_diagram.png)
 
 ---
@@ -312,34 +337,6 @@ main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 * `assets:precompile`
 * Puma restart (`systemd`)
   
-  
-## ER図
-
-### データ構造
-
-TaskLinkでは、ユーザーごとのタスク管理に加え、チーム機能を想定した構成にしています。
-
-User
- ├── has_many :tasks
- ├── has_many :team_users
- └── has_many :teams, through: :team_users
-
-Task
- └── belongs_to :user
-
-Team
- ├── has_many :team_users
- └── has_many :users, through: :team_users
-
-TeamUser
- ├── belongs_to :user
- └── belongs_to :team
-
-Comment（将来的な拡張）
- └── belongs_to :task
-
-※ 将来的なチーム共有・コメント機能を見据えて設計しています。
-
 ---
 
 # テスト戦略
