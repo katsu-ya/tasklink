@@ -1,70 +1,115 @@
 require "test_helper"
 
 class TaskTest < ActiveSupport::TestCase
-  test "task is valid with title" do
+  setup do
+    @user = User.create!(
+      email: "task_test@example.com",
+      password: "password123",
+      password_confirmation: "password123"
+    )
+  end
+  
+  test "is valid with title and user" do
+    user = User.create!(
+      email: "task@example.com",
+      password: "password123",
+      password_confirmation: "password123"
+    )
+
     task = Task.new(
-      title: "Study Rails",
-      user: users(:one)
+      title: "Test Task",
+      user: user,
+      status: "todo"
     )
 
     assert task.valid?
   end
 
-  test "task is invalid without title" do
+  test "is invalid without title" do
+    user = User.create!(
+      email: "task2@example.com",
+      password: "password123",
+      password_confirmation: "password123"
+    )
+
     task = Task.new(
       title: nil,
-      user: users(:one)
-    )
-
-    assert_not task.valid?
-   end
-
-  test "task is invalid without user" do
-    task = Task.new(
-      title: "Study Rails",
-      user: nil
+      user: user
     )
 
     assert_not task.valid?
   end
 
-  test "task status can be todo" do
+  test "is invalid without user" do
     task = Task.new(
-      title: "Study Rails",
-      user: users(:one),
-      status: :todo
+      title: "Test Task"
+    )
+
+    assert_not task.valid?
+  end
+
+  test "status enum works" do
+    user = User.create!(
+      email: "task3@example.com",
+      password: "password123",
+      password_confirmation: "password123"
+    )
+
+    task = Task.create!(
+      title: "Enum Test",
+      user: user,
+      status: "doing"
+    )
+
+    assert task.doing?
+  end
+
+  test "team is optional" do
+    user = User.create!(
+      email: "task4@example.com",
+      password: "password123",
+      password_confirmation: "password123"
+    )
+
+    task = Task.new(
+      title: "Optional Team",
+      user: user,
+      status: "todo"
     )
 
     assert task.valid?
   end
 
-  test "task status can be doing" do
-    task = Task.new(
-      title: "Study Rails",
-      user: users(:one),
-      status: :doing
-    )
+  test "deadline can be blank" do
+  task = Task.new(
+    title: "No deadline task",
+    status: "todo",
+    user: @user,
+    deadline: nil
+  )
 
-    assert task.valid?
-  end
+  assert task.valid?
+end
 
-  test "task status can be done" do
-    task = Task.new(
-      title: "Study Rails",
-      user: users(:one),
-      status: :done
-    )
+test "task can have future deadline" do
+  task = Task.new(
+    title: "Future task",
+    status: "todo",
+    user: @user,
+    deadline: Date.tomorrow
+  )
 
-    assert task.valid?
-  end
+  assert task.valid?
+end
 
-  test "task is valid without team" do
-    task = Task.new(
-      title: "Study Rails",
-      user: users(:one),
-      team: nil
-    )
+test "task can have past deadline" do
+  task = Task.new(
+    title: "Expired task",
+    status: "todo",
+    user: @user,
+    deadline: Date.yesterday
+  )
 
-    assert task.valid?
-  end
+  assert task.valid?
+end
 end
