@@ -247,55 +247,42 @@ main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 
 ## テスト・品質管理
 
-TaskLinkでは、アプリ品質向上のために、テスト・静的解析・CI/CD を導入しています。
-
-Model / Request / System Test を実装し、バリデーション・認可・実際の画面操作まで含めて検証できる構成にしています。
-
-### Test Coverage
-
-SimpleCov を利用し、テストカバレッジを可視化しています。
-
-* Line Coverage: **83.46%**
+TaskLinkでは、アプリ品質向上のため、Model / Request / System Test を実装しています。
 
 ### Model Test
 
-Task / User モデルに対して以下を検証しています。
+Task / User モデルに対して以下を検証：
 
-#### Task
+* バリデーション
+* status enum
+* user association
+* optional relation
+* Request Test
 
-* title 必須バリデーション
-* user 必須バリデーション
-* status enum の動作確認
-* team optional の確認
+タスク機能の動作・認可・検索を検証：
 
-#### User
-
-* email 必須
-* password による正常作成
-* email 重複禁止
-
-### Request Test
-
-タスク機能の動作と認可をテストしています。
-
-* 検索
+* タスク作成 / 更新 / 削除
+* 未ログイン時のリダイレクト
+* 他ユーザー task へのアクセス禁止
+* キーワード検索
 * status filter
-* keyword + status 組み合わせ
-* 未ログイン制御
-* 他ユーザーアクセス禁止（認可）
-* create/update/destroy
+* keyword + status 組み合わせ検索
+* invalid params 時の挙動
+* System Test
 
-### System Test
-
-Capybara + Selenium により、実際のユーザー操作を想定した E2E テストを実装しています。
-
-現在は以下を自動テストしています。
+### Capybara + Selenium による E2E テスト：
 
 * タスク作成
 * タスク削除
 * ステータス変更
-* キーワード検索
-* ステータスフィルター（未着手 / 作業中 / 完了）
+* 検索機能
+* status filter
+
+### Coverage
+
+SimpleCov を利用しテストカバレッジを可視化。
+
+Line Coverage: 84.21%  
 
 
 ### CI / CD
