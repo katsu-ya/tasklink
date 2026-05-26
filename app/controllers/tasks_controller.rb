@@ -38,7 +38,7 @@ class TasksController < ApplicationController
   if params[:keyword].present?
     keyword = "%#{params[:keyword]}%"
 
-    base = current_user.tasks
+    base = @tasks
 
     text_search = base.where(
       "title LIKE :kw OR description LIKE :kw",
@@ -127,9 +127,9 @@ end
 
 
     def update
-      @task = current_user.tasks.find(params[:id])
+  @task = current_user.tasks.find(params[:id])
 
-     if @task.update(task_params)
+  if @task.update(task_params)
 
     flash.now[:notice] = case @task.status
     when "todo"
@@ -141,28 +141,32 @@ end
     end
 
     @tasks = current_user.tasks
-                 .order(created_at: :desc)
-                 .page(params[:page]).per(6)
+                         .order(created_at: :desc)
+                         .page(params[:page]).per(6)
+
+    @todo_count = current_user.tasks.where(status: "todo").count
+    @doing_count = current_user.tasks.where(status: "doing").count
+    @done_count = current_user.tasks.where(status: "done").count
+
+    @total_tasks = current_user.tasks.count
+    @completed_tasks = current_user.tasks.where(status: "done").count
+
+    @progress =
+      if @total_tasks.zero?
+        0
+      else
+        ((@completed_tasks.to_f / @total_tasks) * 100).round
+      end
 
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to tasks_path, notice: "更新しました" }
-
-      @todo_count = current_user.tasks.where(status: "todo").count
-      @doing_count = current_user.tasks.where(status: "doing").count
-      @done_count = current_user.tasks.where(status: "done").count
-
-      @total_tasks = current_user.tasks.count
-      @completed_tasks = current_user.tasks.where(status: "done").count
-
-      @progress =
-      ((@completed_tasks.to_f / @total_tasks) * 100).round
-        end
-     else
-        render :edit
-     end
     end
 
+  else
+    render :edit, status: :unprocessable_entity
+  end
+end
 
 
     def destroy
@@ -183,7 +187,11 @@ end
       @completed_tasks = current_user.tasks.where(status: "done").count
 
     @progress =
-      ((@completed_tasks.to_f / @total_tasks) * 100).round
+  if @total_tasks.zero?
+    0
+  else
+    ((@completed_tasks.to_f / @total_tasks) * 100).round
+  end
 
 
   respond_to do |format|
