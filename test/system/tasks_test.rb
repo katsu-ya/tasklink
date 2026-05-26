@@ -144,5 +144,4 @@ click_link "✔ 完了"
 assert_text "Done Task"
 assert_no_text "Todo Task"
 end
-
 end
