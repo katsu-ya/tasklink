@@ -143,9 +143,11 @@ Rails基礎学習後、
 
 ---
 
+
 ## Infrastructure
 
-```text
+text
+
 Browser
 ↓ HTTPS
 Nginx
@@ -155,6 +157,8 @@ Puma
 Rails 8
 ↓
 PostgreSQL
+
+
 
 
 ## 構成ポイント
@@ -242,8 +246,6 @@ Turbo Frameを利用し、ページ遷移なしでタスクの作成・編集が
 - 進捗率の視覚化
 
 ---
-
-
 
 ## AWS本番環境構築 / CI/CD
 
@@ -359,6 +361,23 @@ GitHub:
 https://github.com/katsu-ya
 
 ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
