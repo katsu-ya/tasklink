@@ -146,8 +146,6 @@ Rails基礎学習後、
 
 ## Infrastructure
 
-text
-
 Browser
 ↓ HTTPS
 Nginx
@@ -200,9 +198,9 @@ PostgreSQL
 - タスク削除
 - ステータス変更
 
-  - 未着手
-  - 作業中
-  - 完了
+  📝 未着手（todo）
+  🔥 作業中（doing）
+  ✅ 完了（done）
 
 ## 検索・フィルター
 
