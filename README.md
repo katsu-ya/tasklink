@@ -168,6 +168,7 @@ PostgreSQL
 
 ---
 
+
 # 主な機能
 
 ## タスク管理
@@ -271,22 +272,25 @@ main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 品質担保のため、Model / Request / System Test を実装しています。
 
 ### Model Test
-- validation
-- association
-- deadline正常系
+
+* validation
+* association
+* deadline正常系
 
 ### Request Test
-- CRUD
-- 認証
-- 他ユーザー制御
-- 検索 / フィルター
-- progress NaN再発防止
+
+* CRUD
+* 認証
+* 他ユーザー制御
+* 検索 / フィルター
+* progress NaN再発防止
 
 ### System Test
-- タスク作成
-- status変更
-- モーダル
-- 検索
+
+* タスク作成
+* status変更
+* モーダル
+* 検索
 
 ### Result
 
