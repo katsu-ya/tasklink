@@ -71,6 +71,24 @@ TaskLinkは、Turbo Streamを活用したリアルタイム更新対応のToDo�
 - 期限状態の色分け
 - 視認性を意識したデザイン
 
+### Error Handling
+
+異常系のUXも考慮し、404 / 500 カスタムエラーページを実装しています。
+
+404 Not Found
+
+存在しないURLへアクセスした場合、ユーザーが迷わないようにエラーページを表示し、タスク一覧へ戻れる導線を用意しています。
+
+500 Internal Server Error
+
+サーバ内部エラー発生時にも専用ページを表示し、ユーザー体験を損なわない構成にしています。
+
+- カスタム404ページ
+- カスタム500ページ
+- タスク一覧へ戻る導線
+- 異常系UXを考慮した設計
+
+
 ### 実運用を意識したインフラ構築
 
 AWS EC2上に、
@@ -110,16 +128,16 @@ AWS EC2上に、
 
 Rails基礎学習後、
 
-* 「実際に使いたくなるアプリ」
-* 「動きで差別化できるポートフォリオ」
+- 「実際に使いたくなるアプリ」
+- 「動きで差別化できるポートフォリオ」
 
 を意識して開発しました。
 
 特に、
 
-* Turbo Streamによるリアルタイム更新
-* UI/UXへのこだわり
-* AWS本番環境構築
+- Turbo Streamによるリアルタイム更新
+- UI/UXへのこだわり
+- AWS本番環境構築
 
 に力を入れています。
 
@@ -139,32 +157,32 @@ Rails 8
 PostgreSQL
 
 
-## 構成のポイント
+## 構成ポイント
 
 ### Nginx
 
-* リバースプロキシとして動作
-* HTTP/HTTPSリクエストをPumaへ転送
+- リバースプロキシとして動作
+- HTTP/HTTPSリクエストをPumaへ転送
 
 ### Puma
 
-* Railsアプリケーションサーバー
-* systemd管理で自動起動
+- Railsアプリケーションサーバー
+- systemd管理で自動起動
 
 ### systemd
 
-* Pumaのプロセス管理
-* EC2再起動後も自動復旧
+- Pumaのプロセス管理
+- EC2再起動後も自動復旧
 
 ### Elastic IP
 
-* 固定IP化
-* 停止・再起動後もURL変更なし
+- 固定IP化
+- 停止・再起動後もURL変更なし
 
 ### HTTPS
 
-* Let's Encrypt + CertbotでSSL化
-* HTTP → HTTPSへ自動リダイレクト
+- Let's Encrypt + CertbotでSSL化
+- HTTP → HTTPSへ自動リダイレクト
 
 ---
 
@@ -173,55 +191,55 @@ PostgreSQL
 
 ## タスク管理
 
-* タスク作成
-* タスク編集
-* タスク削除
-* ステータス変更
+- タスク作成
+- タスク編集
+- タスク削除
+- ステータス変更
 
-  * 未着手
-  * 作業中
-  * 完了
+  - 未着手
+  - 作業中
+  - 完了
 
 ## 検索・フィルター
 
-* キーワード検索
-* ステータス別フィルター
-* タスク件数リアルタイム表示
+- キーワード検索
+- ステータス別フィルター
+- タスク件数リアルタイム表示
 
 ## ドラッグ＆ドロップ
 
 SortableJSを利用し、タスクを直感的に並び替え可能
 
-* 並び替え保存
-* ドラッグ中エフェクト
-* プレースホルダ表示
+- 並び替え保存
+- ドラッグ中エフェクト
+- プレースホルダ表示
 
 ## モーダルUI
 
 Turbo Frameを利用し、ページ遷移なしでタスクの作成・編集が可能
 
-* ESCキーで閉じる
-* 背景オーバーレイ対応
+- ESCキーで閉じる
+- 背景オーバーレイ対応
 
 ## 期限管理
 
-* 期限日設定
-* 期限切れ表示
-* 残り日数表示
-* 状況に応じた色分け
+- 期限日設定
+- 期限切れ表示
+- 残り日数表示
+- 状況に応じた色分け
 
 ### 表示例
 
-* 🔴 期限切れ
-* 🟡 今日まで
-* 🟢 余裕あり
+- 🔴 期限切れ
+- 🟡 今日まで
+- 🟢 余裕あり
 
 ## 達成率バー
 
 完了タスク割合をリアルタイム可視化
 
-* Turbo Streamによる即時更新
-* 進捗率の視覚化
+- Turbo Streamによる即時更新
+- 進捗率の視覚化
 
 ---
 
@@ -231,10 +249,10 @@ Turbo Frameを利用し、ページ遷移なしでタスクの作成・編集が
 
 AWS EC2上にRailsアプリをデプロイし、
 
-* Nginx
-* Puma
-* systemd
-* PostgreSQL
+- Nginx
+- Puma
+- systemd
+- PostgreSQL
 
 を利用した本番環境を構築しています。
 
@@ -246,9 +264,9 @@ AWS EC2上にRailsアプリをデプロイし、
 
 GitHub Actions により、push / pull request 時に以下を自動実行しています。
 
-* RuboCop（コード品質チェック）
-* bundler-audit（脆弱性チェック）
-* Rails Test
+- RuboCop（コード品質チェック）
+- bundler-audit（脆弱性チェック）
+- Rails Test
 
 これにより、本番反映前にコード品質・セキュリティ・テストを自動検証しています。
 
@@ -258,10 +276,10 @@ main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 
 デプロイ時には以下を自動実行しています。
 
-* `bundle install`
-* `rails db:migrate`
-* `assets:precompile`
-* Puma restart（systemd）
+- `bundle install`
+- `rails db:migrate`
+- `assets:precompile`
+- Puma restart（systemd）
 
 コード変更から本番反映までを自動化し、運用負荷を削減しています。
 
@@ -273,24 +291,24 @@ main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 
 ### Model Test
 
-* validation
-* association
-* deadline正常系
+- validation
+- association
+- deadline正常系
 
 ### Request Test
 
-* CRUD
-* 認証
-* 他ユーザー制御
-* 検索 / フィルター
-* progress NaN再発防止
+- CRUD
+- 認証
+- 他ユーザー制御
+- 検索 / フィルター
+- progress NaN再発防止
 
 ### System Test
 
-* タスク作成
-* status変更
-* モーダル
-* 検索
+- タスク作成
+- status変更
+- モーダル
+- 検索
 
 ### Result
 
