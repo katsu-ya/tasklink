@@ -146,11 +146,11 @@ Rails基礎学習後、
 
 ## Infrastructure
 
-GitHub Actions (CI/CD) ↓
-Browser ↓ 
-HTTPS Nginx (Reverse Proxy) ↓ 
-Puma ↓ 
-Rails 8 Application ↓ 
+GitHub Actions (CI/CD) →
+Browser → 
+HTTPS Nginx (Reverse Proxy) → 
+Puma → 
+Rails 8 Application →
 PostgreSQL
 
 
