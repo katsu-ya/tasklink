@@ -114,9 +114,27 @@ AWS EC2上に、
 | CI/CD | GitHub Actions |
 
 
-## 🐳 Docker
+## Docker Development Environment
 
-Docker / Docker Compose に対応しており、ローカル環境をコンテナ上で再現できます。
+TaskLinkでは、開発環境を Docker / Docker Compose に対応しています。
+
+Rails + PostgreSQL をコンテナ化し、ローカル環境差異を減らした再現性の高い開発環境を構築しています。
+
+### 構成
+
+```text
+Docker Compose
+├─ web (Rails 8 / Puma)
+└─ db (PostgreSQL 16)
+```
+
+### 使用技術
+
+* Docker
+* Docker Compose
+* PostgreSQL 16
+* Ruby 3.3
+* Rails 8
 
 ### 起動方法
 
@@ -124,41 +142,50 @@ Docker / Docker Compose に対応しており、ローカル環境をコンテ�
 # build
 docker compose build
 
+# DB作成
+docker compose run web rails db:create
+
+# migration
+docker compose run web rails db:migrate
+
 # start
 docker compose up
 ```
 
-ブラウザ：
+ブラウザで以下へアクセス：
 
 ```text
 http://localhost:3000
 ```
 
-### Database Setup
+### 永続化（Volume）
 
-初回起動時：
+PostgreSQL のデータは Docker Volume により永続化しています。
+
+そのため、
 
 ```bash
-docker compose run web rails db:create
-docker compose run web rails db:migrate
+docker compose down
 ```
 
-### 使用技術（Docker）
+後もデータは保持されます。
 
-* Docker
-* Docker Compose
-* PostgreSQL 16
-* Ruby 3.3 / Rails 8
+DBを初期化したい場合：
 
-### 構成
-
-```text
-Docker Compose
-├── web (Rails 8 / Puma)
-└── db (PostgreSQL 16)
+```bash
+docker compose down -v
 ```
 
-Docker化により、環境差異を減らし、チーム開発を想定した再現性の高い開発環境を構築しています。
+### Docker採用理由
+
+* 開発環境差異の削減
+* 再現性の高い環境構築
+* Rails / PostgreSQL の依存関係管理
+* 将来的な本番 Docker 化を見据えた構成
+
+```
+```
+
 
 
 
