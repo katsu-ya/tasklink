@@ -116,9 +116,9 @@ AWS EC2上に、
 
 ## Docker Development Environment
 
-TaskLinkでは、開発環境を Docker / Docker Compose に対応しています。
+TaskLinkでは、Docker / Docker Compose に対応し、開発環境をコンテナ化しています。
 
-Rails + PostgreSQL をコンテナ化し、ローカル環境差異を減らした再現性の高い開発環境を構築しています。
+Rails + PostgreSQL を Docker 上で動作させることで、ローカル環境差異を減らし、再現性の高い開発環境を構築しています。
 
 ### 構成
 
@@ -142,7 +142,7 @@ Docker Compose
 # build
 docker compose build
 
-# DB作成
+# DB create
 docker compose run web rails db:create
 
 # migration
@@ -152,7 +152,7 @@ docker compose run web rails db:migrate
 docker compose up
 ```
 
-ブラウザで以下へアクセス：
+ブラウザ：
 
 ```text
 http://localhost:3000
@@ -160,7 +160,7 @@ http://localhost:3000
 
 ### 永続化（Volume）
 
-PostgreSQL のデータは Docker Volume により永続化しています。
+PostgreSQL データは Docker Volume により永続化しています。
 
 そのため、
 
@@ -170,18 +170,22 @@ docker compose down
 
 後もデータは保持されます。
 
-DBを初期化したい場合：
+DB を初期化したい場合：
 
 ```bash
 docker compose down -v
 ```
+
+### Docker Optimization
+
+`.dockerignore` を設定し、不要ファイル（log / tmp / node_modules / coverage など）を除外することで、Docker build の軽量化と開発環境の再現性向上を行っています。
 
 ### Docker採用理由
 
 * 開発環境差異の削減
 * 再現性の高い環境構築
 * Rails / PostgreSQL の依存関係管理
-* 将来的な本番 Docker 化を見据えた構成
+* 将来的なコンテナベース運用を見据えた構成
 
 
 
