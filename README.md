@@ -183,8 +183,6 @@ docker compose down -v
 * Rails / PostgreSQL の依存関係管理
 * 将来的な本番 Docker 化を見据えた構成
 
-```
-```
 
 
 
