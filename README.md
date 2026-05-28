@@ -114,6 +114,54 @@ AWS EC2上に、
 | CI/CD | GitHub Actions |
 
 
+## 🐳 Docker
+
+Docker / Docker Compose に対応しており、ローカル環境をコンテナ上で再現できます。
+
+### 起動方法
+
+```bash
+# build
+docker compose build
+
+# start
+docker compose up
+```
+
+ブラウザ：
+
+```text
+http://localhost:3000
+```
+
+### Database Setup
+
+初回起動時：
+
+```bash
+docker compose run web rails db:create
+docker compose run web rails db:migrate
+```
+
+### 使用技術（Docker）
+
+* Docker
+* Docker Compose
+* PostgreSQL 16
+* Ruby 3.3 / Rails 8
+
+### 構成
+
+```text
+Docker Compose
+├── web (Rails 8 / Puma)
+└── db (PostgreSQL 16)
+```
+
+Docker化により、環境差異を減らし、チーム開発を想定した再現性の高い開発環境を構築しています。
+
+
+
 
 ## ER Diagram
 
