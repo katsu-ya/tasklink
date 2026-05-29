@@ -409,6 +409,14 @@ make logs
 
 品質担保のため、Model / Request / System Test を実装しています。
 
+## 品質管理
+
+- RSpec によるテスト
+- FactoryBot によるテストデータ生成
+- RuboCop によるコード品質チェック
+- GitHub Actions によるCI自動化
+- SimpleCov によるテストカバレッジ計測
+
 ### Model Test
 
 - validation
