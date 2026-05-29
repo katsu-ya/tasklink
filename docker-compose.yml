@@ -7,6 +7,8 @@ services:
       POSTGRES_DB: tasklink_development
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   web:
     build: .
@@ -21,4 +23,6 @@ services:
       DATABASE_HOST: db
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: password
-      
+
+volumes:
+  postgres_data:
