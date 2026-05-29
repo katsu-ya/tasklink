@@ -4,58 +4,58 @@ on:
   push:
     branches:
       - main
-    pull_request:
+  pull_request:
 
 jobs:
   rspec:
     runs-on: ubuntu-latest
 
-services:
-  postgres:
-    image: postgres:16
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: tasklink_test
+        ports:
+          - 5432:5432
+
     env:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: tasklink_test
-    ports:
-      - 5432:5432
+      RAILS_ENV: test
+      DATABASE_HOST: localhost
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password
 
-env:
-  RAILS_ENV: test
-  DATABASE_HOST: localhost
-  DATABASE_USERNAME: postgres
-  DATABASE_PASSWORD: password
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-steps:
-  - name: Checkout
-    uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.10
+          bundler-cache: true
 
-  - name: Set up Ruby
-    uses: ruby/setup-ruby@v1
-    with:
-      ruby-version: 3.3.10
-      bundler-cache: true
+      - name: Install dependencies
+        run: bundle install
 
-  - name: Install dependencies
-    run: bundle install
+      - name: Setup database
+        run: |
+          bin/rails db:create
+          bin/rails db:migrate
 
-  - name: Setup database
-    run: |
-      bin/rails db:create
-      bin/rails db:migrate
+      - name: Run RSpec
+        run: bundle exec rspec
 
-  - name: Run RSpec
-    run: bundle exec rspec
+  docker-build:
+    runs-on: ubuntu-latest
 
-docker-build:
-  runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-steps:
-  - name: Checkout
-    uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-  - name: Set up Docker Buildx
-    uses: docker/setup-buildx-action@v3
-
-  - name: Build Docker image
-    run: docker compose build
+      - name: Build Docker image
+        run: docker compose build
