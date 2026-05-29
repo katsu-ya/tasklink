@@ -48,4 +48,15 @@
 
 # Ignore Docker-related files
 /.dockerignore
-/Dockerfile*
+
+# Test / coverage
+
+/coverage
+/spec
+/test
+
+# Local editor files
+
+/.vscode
+/.idea
+
