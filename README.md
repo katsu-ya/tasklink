@@ -373,6 +373,35 @@ main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 
 push 時に自動でワークフローが実行され、品質チェックとデプロイを行う構成にしています。
 
+## Makefile
+
+開発効率向上のため、Makefile を導入しています。
+
+よく使う Docker コマンドを短縮し、チーム開発を意識した構成にしています。
+
+### 使用コマンド
+
+```bash
+# 起動
+make up
+
+# 停止
+make down
+
+# build
+make build
+
+# migrate
+make migrate
+
+# database create
+make dbcreate
+
+# logs
+make logs
+```
+
+
 
 ---
 
