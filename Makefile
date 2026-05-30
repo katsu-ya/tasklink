@@ -15,3 +15,6 @@ dbcreate:
 
 logs:
 	docker compose logs -f web
+
+security:
+	docker compose run web bundle exec brakeman
