@@ -444,6 +444,45 @@ make logs
 
 Coverage: 90.23%
 
+## テスト
+
+RSpec を用いて Model Spec / Request Spec を実装しています。
+
+### 実装内容
+
+#### Model Spec
+
+Task モデルのバリデーション・関連付けを検証
+
+* title の presence validation
+* title の文字数制限
+* User との関連付け（belongs_to）
+* status（todo / doing / done）の検証
+
+#### Request Spec
+
+TasksController の CRUD 処理と認可を検証
+
+* タスク一覧表示
+* タスク作成
+* タスク更新
+* タスク削除
+* バリデーションエラー時の挙動
+* 他ユーザーのタスク更新防止（認可テスト）
+
+### テスト結果
+
+* RSpec: 18 examples
+* Failures: 0
+* Coverage: 61%
+
+```bash
+docker compose run web bundle exec rspec
+```
+
+継続的にテストを追加し、カバレッジ向上を進めています。
+
+
 
 
 ---
