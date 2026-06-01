@@ -3,7 +3,7 @@ class TasksController < ApplicationController
 
 
     def index
-  @tasks = current_user.tasks
+  @tasks = current_user.tasks.includes(:team)
 
   @todo_count = current_user.tasks.where(status: "todo").count
   @doing_count = current_user.tasks.where(status: "doing").count
@@ -78,45 +78,46 @@ end
   @task = current_user.tasks.new(task_params)
 
   if @task.save
-    current_user.tasks.where.not(id: @task.id)
-                .update_all("position = position + 1")
+    tasks = current_user.tasks
+
+    tasks.where.not(id: @task.id)
+         .update_all("position = position + 1")
 
     @task.update(position: 1)
 
-    # 👇 これ重要（再描画用）
-    @tasks = current_user.tasks
-                     .order(created_at: :desc)
-                     .page(1).per(6)
+    @tasks = tasks
+               .order(created_at: :desc)
+               .page(1).per(6)
 
     flash[:notice] = "作成しました"
 
-    @todo_count = current_user.tasks.where(status: "todo").count
-    @doing_count = current_user.tasks.where(status: "doing").count
-    @done_count = current_user.tasks.where(status: "done").count
+    @todo_count = tasks.where(status: "todo").count
+    @doing_count = tasks.where(status: "doing").count
+    @done_count = tasks.where(status: "done").count
 
-    @total_tasks = current_user.tasks.count
-    @completed_tasks = current_user.tasks.where(status: "done").count
+    @total_tasks = tasks.count
+    @completed_tasks = tasks.where(status: "done").count
 
     @progress =
       ((@completed_tasks.to_f / @total_tasks) * 100).round
-
-
 
     respond_to do |format|
       format.html { redirect_to tasks_path }
       format.turbo_stream
     end
 
-    # 👇 ここが重要
     @tasks.each do |task|
       if task.id == @task.id
         task.instance_variable_set(:@newly_created, true)
       end
     end
-
   else
-        render :new
+    render :new
   end
+end
+
+    def show
+      @task = current_user.tasks.find(params[:id])
     end
 
 

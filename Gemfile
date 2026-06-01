@@ -58,11 +58,12 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "simplecov", require: false
   gem "brakeman", require: false
+  gem "bullet"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem "web-console"
+  gem "web-console" 
 end
 
 group :test do
