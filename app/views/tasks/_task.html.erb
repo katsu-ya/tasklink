@@ -17,7 +17,6 @@
            <%= 'ring-2 ring-yellow-200' if task.deadline == Date.current && task.status != "done" %>">
            
 
-
            <div class="flex items-center">
 
              <%= form_with model: task, url: task_path(task), method: :patch do |f| %>
@@ -34,6 +33,12 @@
           <p class="text-gray-600 text-sm"><%= task.description %></p>
           <p class="text-xs text-gray-400 mb-2">
              作成日: <%= task.created_at.strftime("%Y/%m/%d") %></p>
+             
+          <% if task.team.present? %>
+            <p class="text-xs text-purple-400">
+              Team: <%= task.team.name %>
+            </p>
+          <% end %>
         </div>
 
 
@@ -89,9 +94,6 @@
 
   </div>
 <% end %>
-
-
-
 
         <!-- 右側（ステータス・ボタン） -->
         
@@ -149,9 +151,6 @@
     class: "hover:text-red-500" do %>
   🗑
 <% end %>
-
-
-
 
      </div>
 
