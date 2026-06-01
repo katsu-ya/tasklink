@@ -444,32 +444,32 @@ make logs
 
 Coverage: 90.23%
 
-## テスト
+## テスト / 品質保証
 
-RSpecを用いて、Model Spec / Request Spec を実装しています。
+RSpecを用いて Model Spec / Request Spec を実装しています。
 
-### 主なテスト内容
+### 主なテスト
 
 * Taskモデルのバリデーション
+* タスクCRUD
+* 認証（未ログイン時のリダイレクト）
+* 認可（他ユーザーのタスク編集防止）
+* ステータス更新
+* 検索 / フィルター
 
-  * title の必須チェック
-  * 文字数制限
-  * status の検証
-  * user関連付け
+### CI/CD
 
-* Request Spec
+GitHub Actions を利用し、push時に自動テスト・コード品質チェックを実行しています。
 
-  * タスク作成 / 更新 / 削除
-  * 認証（未ログイン時のリダイレクト）
-  * 認可（他ユーザーのタスク編集防止）
-  * タスク詳細表示
-  * ステータス更新
-  * 検索 / フィルター
+* RSpec（自動テスト）
+* RuboCop（コード品質）
+* EC2自動デプロイ
 
-品質担保を意識し、機能追加時に回帰確認ができる構成を意識しています。
+機能追加時に回帰確認を行える構成を意識し、品質担保を重視しています。
 
-* テスト数：27 examples
-* Coverage：約72%
+* Test Coverage：約72%
+* CI：GitHub Actions
+* Deploy：AWS EC2
 
 
 
