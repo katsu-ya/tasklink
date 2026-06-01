@@ -115,7 +115,6 @@ patch task_path(task), params: {
 
 expect(response).to redirect_to(tasks_path)
 expect(task.reload.title).to eq("New Title")
-
 end
 
 it "does not update with invalid params" do
@@ -132,7 +131,6 @@ patch task_path(task), params: {
 
 expect(task.reload.title).to eq("Old Title")
 expect(response).to have_http_status(:unprocessable_content)
-
 end
 end
 
@@ -148,7 +146,6 @@ expect do
 end.to change(Task, :count).by(-1)
 
 expect(response).to redirect_to(tasks_path)
-
 end
 end
 
@@ -168,7 +165,6 @@ get tasks_path, params: {
 
 expect(response.body).to include("Buy milk")
 expect(response.body).not_to include("Workout")
-
 end
 end
 
@@ -189,7 +185,6 @@ patch task_path(task), params: {
 
 expect(response).to redirect_to(tasks_path)
 expect(task.reload.status).to eq("doing")
-
 end
 end
 
@@ -234,7 +229,6 @@ sign_in user
 get edit_task_path(task)
 
 expect(response).to have_http_status(:success)
-
 end
 end
 
@@ -259,7 +253,6 @@ patch task_path(task), params: {
 task.reload
 
 expect(task.title).to eq("Original Title")
-
 end
 end
 
@@ -271,7 +264,6 @@ sign_in user
 get new_task_path
 
 expect(response).to have_http_status(:success)
-
 end
 end
 
@@ -285,7 +277,6 @@ sign_in user
 get edit_task_path(task)
 
 expect(response).to have_http_status(:success)
-
 end
 end
 
@@ -310,7 +301,6 @@ it "redirects to login when accessing new without sign in" do
 get new_task_path
 
 expect(response).to redirect_to(new_user_session_path)
-
 end
 
 it "redirects to login when creating task without sign in" do
@@ -321,7 +311,6 @@ title: "Unauthorized Task"
 }
 
 expect(response).to redirect_to(new_user_session_path)
-
 end
 
 it "redirects to login when editing task without sign in" do
@@ -330,9 +319,7 @@ task = create(:task)
 get edit_task_path(task)
 
 expect(response).to redirect_to(new_user_session_path)
-
 end
 end
-
   end
 end

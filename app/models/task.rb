@@ -2,7 +2,7 @@ class Task < ApplicationRecord
   belongs_to :user
   belongs_to :team, optional: true
 
-  validates :title, 
+  validates :title,
             presence: true,
             length: { maximum: 100 }
 
