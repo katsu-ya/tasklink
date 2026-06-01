@@ -446,41 +446,31 @@ Coverage: 90.23%
 
 ## テスト
 
-RSpec を用いて Model Spec / Request Spec を実装しています。
+RSpecを用いて、Model Spec / Request Spec を実装しています。
 
-### 実装内容
+### 主なテスト内容
 
-#### Model Spec
+* Taskモデルのバリデーション
 
-Task モデルのバリデーション・関連付けを検証
+  * title の必須チェック
+  * 文字数制限
+  * status の検証
+  * user関連付け
 
-* title の presence validation
-* title の文字数制限
-* User との関連付け（belongs_to）
-* status（todo / doing / done）の検証
+* Request Spec
 
-#### Request Spec
+  * タスク作成 / 更新 / 削除
+  * 認証（未ログイン時のリダイレクト）
+  * 認可（他ユーザーのタスク編集防止）
+  * タスク詳細表示
+  * ステータス更新
+  * 検索 / フィルター
 
-TasksController の CRUD 処理と認可を検証
+品質担保を意識し、機能追加時に回帰確認ができる構成を意識しています。
 
-* タスク一覧表示
-* タスク作成
-* タスク更新
-* タスク削除
-* バリデーションエラー時の挙動
-* 他ユーザーのタスク更新防止（認可テスト）
+* テスト数：27 examples
+* Coverage：約72%
 
-### テスト結果
-
-* RSpec: 18 examples
-* Failures: 0
-* Coverage: 61%
-
-```bash
-docker compose run web bundle exec rspec
-```
-
-継続的にテストを追加し、カバレッジ向上を進めています。
 
 
 
