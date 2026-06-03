@@ -544,7 +544,6 @@ includes(:user, :team)
 - チーム共有
 - 通知機能
 - カレンダー表示
-- Docker対応
 - GitHub Actions強化
 
 ---
