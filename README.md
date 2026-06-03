@@ -299,7 +299,7 @@ RSpecを用いて Model Spec / Request Spec を実装しています。
 * ステータス更新
 * 検索 / フィルター
 
-* Test Coverage：約72%
+* Coverage：約72%
 * CI：GitHub Actions
 * Deploy：AWS EC2
 
