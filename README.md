@@ -162,6 +162,7 @@ db (PostgreSQL 16)
 
 ## Infrastructure
 
+```bash
 GitHub Actions
 ↓
 AWS EC2
@@ -173,6 +174,7 @@ Puma
 Rails
 ↓
 PostgreSQL
+```
 
 - HTTPS対応
 - 独自ドメイン対応
