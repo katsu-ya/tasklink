@@ -114,67 +114,7 @@ AWS EC2上に、
 | CI/CD | GitHub Actions |
 
 
-## Docker Development Environment
 
-TaskLinkでは、Docker / Docker Compose に対応し、開発環境をコンテナ化しています。
-
-Rails + PostgreSQL を Docker 上で動作させることで、ローカル環境差異を減らし、再現性の高い開発環境を構築しています。
-
-### 構成
-
-```text
-Docker Compose
-├─ web (Rails 8 / Puma)
-└─ db (PostgreSQL 16)
-```
-
-### 使用技術
-
-* Docker
-* Docker Compose
-* PostgreSQL 16
-* Ruby 3.3
-* Rails 8
-
-### 起動方法
-
-```bash
-# build
-docker compose build
-
-# DB create
-docker compose run web rails db:create
-
-# migration
-docker compose run web rails db:migrate
-
-# start
-docker compose up
-```
-
-ブラウザ：
-
-```text
-http://localhost:3000
-```
-
-### 永続化（Volume）
-
-PostgreSQL データは Docker Volume により永続化しています。
-
-そのため、
-
-```bash
-docker compose down
-```
-
-後もデータは保持されます。
-
-DB を初期化したい場合：
-
-```bash
-docker compose down -v
-```
 
 ## Docker
 
