@@ -52,7 +52,7 @@ TaskLinkは、Turbo Streamを活用したリアルタイム更新対応のToDo�
 
 
 
-## 💡 Key Features / 工夫した点
+## 💡 工夫した点
 
 ### Turbo Streamによるリアルタイム更新
 
@@ -103,7 +103,7 @@ AWS EC2上に、
 独自ドメイン + HTTPS にも対応。
 
 
-## Tech Stack
+## 使用技術
 
 | Category | Tech |
 |---|---|
@@ -176,16 +176,31 @@ DB を初期化したい場合：
 docker compose down -v
 ```
 
-### Docker Optimization
+## Docker
 
-`.dockerignore` を設定し、不要ファイル（log / tmp / node_modules / coverage など）を除外することで、Docker build の軽量化と開発環境の再現性向上を行っています。
+Docker Compose を利用し、
+Rails + PostgreSQL の開発環境をコンテナ化しています。
 
-### Docker採用理由
+### 起動
 
-* 開発環境差異の削減
-* 再現性の高い環境構築
-* Rails / PostgreSQL の依存関係管理
-* 将来的なコンテナベース運用を見据えた構成
+docker compose build
+docker compose up
+
+### DB
+
+docker compose run web rails db:create
+docker compose run web rails db:migrate
+
+### 構成
+
+web (Rails 8 / Puma)
+db (PostgreSQL 16)
+
+### 工夫
+
+- 開発環境差異の削減
+- 再現性の高い環境構築
+- .dockerignore による軽量化
 
 
 
@@ -366,6 +381,8 @@ main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
 コード変更から本番反映までを自動化し、運用負荷を削減しています。
 
 
+
+
 ### 自動実行内容
 
 * Docker build の検証
@@ -405,44 +422,7 @@ make logs
 
 ---
 
-## Test Strategy
 
-品質担保のため、Model / Request / System Test を実装しています。
-
-## 品質管理
-
-- RSpec によるテスト
-- FactoryBot によるテストデータ生成
-- RuboCop によるコード品質チェック
-- GitHub Actions によるCI自動化
-- SimpleCov によるテストカバレッジ計測
-
-### Model Test
-
-- validation
-- association
-- deadline正常系
-
-### Request Test
-
-- CRUD
-- 認証
-- 他ユーザー制御
-- 検索 / フィルター
-- progress NaN再発防止
-
-### System Test
-
-- タスク作成
-- status変更
-- モーダル
-- 検索
-
-### Result
-
-35 runs, 73 assertions, 0 failures
-
-Coverage: 90.23%
 
 ## テスト / 品質保証
 
@@ -471,48 +451,25 @@ GitHub Actions を利用し、push時に自動テスト・コード品質チェ�
 * CI：GitHub Actions
 * Deploy：AWS EC2
 
-### Punditによる認可機能
 
-Punditを導入し、チーム単位のアクセス制御を実装しました。
 
-* policy_scope を利用したデータ取得制御
-* TaskPolicy による閲覧・編集・削除権限制御
-* 他チームのタスクへアクセスできない設計
-* タスク作成時に所属チームを自動付与
+## Authorization (Pundit)
 
-認可ロジックをコントローラから分離し、保守性・拡張性を意識した構成にしています。
-
+Pundit を利用し、
+チーム単位でアクセス制御を実装しています。
 
 ### 実装内容
 
-* 他ユーザーのタスクを閲覧できない
-* 他ユーザーのタスクを編集できない
-* 他ユーザーのタスクを削除できない
-* タスクの更新・削除時にPunditで権限チェックを実施
-
-### 工夫した点
-
-認証だけではURLを直接指定された場合に他人のデータへアクセスできる可能性があります。
-
-そのため、Punditを用いてサーバーサイドで認可を行い、タスク所有者のみが編集・削除できるように設計しました。
-
-また、RSpecによる認可テストを作成し、他ユーザーのタスク操作が拒否されることを確認しています。
+- policy_scope によるデータ取得制御
+- TaskPolicy による閲覧・編集・削除制御
+- 他チームのタスクへアクセス不可
+- タスク作成時に所属チームを自動付与
 
 ### 使用技術
 
-* Devise（認証）
-* Pundit（認可）
-* RSpec（認可テスト）
-
-## 認可・パフォーマンス改善
-
-### Punditによる認可制御
-
-Punditを導入し、タスクの操作権限を管理しています。
-
-* ログインユーザー自身のタスクのみ操作可能
-* 他ユーザーのタスクへのアクセスを制限
-* Policyによる権限管理を実装
+- Devise（認証）
+- Pundit（認可）
+- RSpec（認可テスト）
 
 ### BulletによるN+1検知
 
@@ -539,7 +496,7 @@ includes(:user, :team)
 
 ---
 
-## Future Features
+## 今後追加したい機能
 
 - チーム共有
 - 通知機能
