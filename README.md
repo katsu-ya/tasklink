@@ -19,16 +19,17 @@ https://tasklink-1iv9.onrender.com
 
 TaskLinkは、Turbo Streamを活用したリアルタイム更新対応のToDo管理アプリです。
 
-実務を意識し、
+Rails学習後、単なるCRUDアプリではなく、
 
-- ドラッグ＆ドロップ
-- モーダルUI
-- 期限管理
-- 達成率表示
-- 認証 / 権限制御
-- CI/CD
+- Turbo Streamによるリアルタイム更新
+- Docker環境構築
+- AWS本番運用
+- GitHub Actions
+- Pundit認可
 
-を実装しています。
+まで含めた、
+
+実務を意識したアプリ開発を目的として作成しました。
 
 ---
 
