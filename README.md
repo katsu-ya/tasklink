@@ -338,7 +338,13 @@ RSpecを用いて Model Spec / Request Spec を実装しています。
 * ステータス更新
 * 検索 / フィルター
 
-### CI/CD
+* Test Coverage：約72%
+* CI：GitHub Actions
+* Deploy：AWS EC2
+
+
+
+## CI/CD
 
 GitHub Actions を利用して
 自動テスト・自動デプロイを構築しています。
@@ -360,9 +366,7 @@ mainブランチへPush時
 
 を自動実行し EC2へデプロイ
 
-* Test Coverage：約72%
-* CI：GitHub Actions
-* Deploy：AWS EC2
+
 
 
 
