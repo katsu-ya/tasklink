@@ -162,19 +162,21 @@ db (PostgreSQL 16)
 
 ## Infrastructure
 
-```text
-GitHub Actions (CI/CD)
-        ↓
-Browser
-   ↓ HTTPS
-Nginx (Reverse Proxy)
-        ↓
+GitHub Actions
+↓
+AWS EC2
+↓
+Nginx
+↓
 Puma
-        ↓
-Rails 8 Application
-        ↓
+↓
+Rails
+↓
 PostgreSQL
-```
+
+- HTTPS対応
+- 独自ドメイン対応
+- systemdによるPuma常駐化
 
 
 
