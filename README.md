@@ -274,38 +274,11 @@ Turbo Frameを利用し、ページ遷移なしでタスクの作成・編集が
 
 
 
+## Development Environment
 
-
-
-
-
-## Makefile
-
-開発効率向上のため、Makefile を導入しています。
-
-よく使う Docker コマンドを短縮し、チーム開発を意識した構成にしています。
-
-### 使用コマンド
-
-```bash
-# 起動
-make up
-
-# 停止
-make down
-
-# build
-make build
-
-# migrate
-make migrate
-
-# database create
-make dbcreate
-
-# logs
-make logs
-```
+- Docker
+- Docker Compose
+- Makefile
 
 
 
