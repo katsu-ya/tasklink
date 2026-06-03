@@ -342,43 +342,9 @@ Turbo Frameを利用し、ページ遷移なしでタスクの作成・編集が
 
 ---
 
-## AWS本番環境構築 / CI/CD
 
-AWS EC2上にRailsアプリをデプロイし、
 
-- Nginx
-- Puma
-- systemd
-- PostgreSQL
 
-を利用した本番環境を構築しています。
-
-また、独自ドメイン・HTTPS（SSL/TLS）に対応し、安全な通信環境を実現しています。
-
-さらに GitHub Actions を利用し、CI/CD を構築しています。
-
-### CI（自動品質チェック）
-
-GitHub Actions により、push / pull request 時に以下を自動実行しています。
-
-- RuboCop（コード品質チェック）
-- bundler-audit（脆弱性チェック）
-- Rails Test
-
-これにより、本番反映前にコード品質・セキュリティ・テストを自動検証しています。
-
-### CD（自動デプロイ）
-
-main ブランチへ push 後、自動で EC2 本番環境へデプロイ。
-
-デプロイ時には以下を自動実行しています。
-
-- `bundle install`
-- `rails db:migrate`
-- `assets:precompile`
-- Puma restart（systemd）
-
-コード変更から本番反映までを自動化し、運用負荷を削減しています。
 
 
 
@@ -439,13 +405,25 @@ RSpecを用いて Model Spec / Request Spec を実装しています。
 
 ### CI/CD
 
-GitHub Actions を利用し、push時に自動テスト・コード品質チェックを実行しています。
+GitHub Actions を利用して
+自動テスト・自動デプロイを構築しています。
 
-* RSpec（自動テスト）
-* RuboCop（コード品質）
-* EC2自動デプロイ
+### CI
 
-機能追加時に回帰確認を行える構成を意識し、品質担保を重視しています。
+- RSpec
+- RuboCop
+- bundler-audit
+
+### CD
+
+mainブランチへPush時
+
+- bundle install
+- db:migrate
+- assets:precompile
+- Puma restart
+
+を自動実行し EC2へデプロイ
 
 * Test Coverage：約72%
 * CI：GitHub Actions
@@ -498,10 +476,11 @@ includes(:user, :team)
 
 ## 今後追加したい機能
 
-- チーム共有
+- チーム共有機能
+- コメント機能
 - 通知機能
 - カレンダー表示
-- GitHub Actions強化
+- ダークモード
 
 ---
 
