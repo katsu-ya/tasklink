@@ -4,12 +4,11 @@ import Sortable from "sortablejs"
 export default class extends Controller {
   connect() {
 
-    console.log("Sortable Connected")
 
     this.sortable = Sortable.create(this.element, {
       animation: 150,
 
-      forceFallback: true,
+      
 
       // 👇 プレースホルダー
       ghostClass: "drag-ghost",
@@ -17,19 +16,26 @@ export default class extends Controller {
       // 👇 掴んでる要素
       chosenClass: "drag-chosen",
 
+      fallbackClass: "drag-fallback",
+
+
       // 👇 ドラッグ開始
       onStart: (event) => {
         console.log("START")
         
+        console.log(event.clone)
+
         this.element.classList.add("sorting")
+
+        console.log("FORCE", true)
         
         event.item.classList.add(
-          "opacity-70",
           "scale-105",
           "shadow-2xl",
           "cursor-grabbing"
         )
       },
+      
 
       // 👇 ドラッグ終了
       onEnd: (event) => {
@@ -37,7 +43,6 @@ export default class extends Controller {
         this.element.classList.remove("sorting")
 
         event.item.classList.remove(
-          "opacity-70",
           "scale-105",
           "shadow-2xl",
           "cursor-grabbing"

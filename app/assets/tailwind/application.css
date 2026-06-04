@@ -6,27 +6,46 @@
 
 
 .drag-ghost {
-  opacity: 0.3 !important;
+  background: #dbeafe !important;
+  border: 4px dashed #2563eb !important;
+  opacity: 1 !important;
+  border-radius: 16px;
+}
 
-  background: red !important;
+.drag-fallback {
+  border: 4px dashed #2563eb !important;
+  background: #dbeafe !important;
+  opacity: 0.8 !important;
+  border-radius: 16px;
+}
 
-  border: 5px dashed blue !important;
+#tasks .drag-ghost {
+  border: 8px dashed #2563eb !important;
+  background: #dbeafe !important;
+}
 
-  min-height: 180px;
+#tasks .drag-ghost.border {
+  border: 8px dashed #2563eb !important;
+}
 
-  transform: scale(1.02);
+#tasks .drag-ghost.bg-green-50 {
+  background: #dbeafe !important;
+}
+
+#tasks .drag-ghost.border-green-200 {
+  border: 8px dashed #2563eb !important;
 }
 
 
-
 .drag-chosen {
+  opacity: 1 !important;
   transform: rotate(2deg) scale(1.03);
   transition: all 0.15s ease;
   z-index: 50;
 }
 
 #tasks.sorting > * {
-  opacity: 0.5;
+  opacity: 0.9;
   transition: opacity 0.2s ease;
 }
 
