@@ -235,26 +235,21 @@ end
 
 describe "authorization" do
 it "does not allow another user's task to be updated" do
-user = create(:user)
-other_user = create(:user)
+  user = create(:user)
+  sign_in user
 
-task = create(:task,
-              user: other_user,
-              title: "Original Title")
+  other_user = create(:user)
+  other_task = create(:task, user: other_user)
 
-sign_in user
-
-patch task_path(task), params: {
-  task: {
-    title: "Hacked Title"
-  }
-}
-
-task.reload
-
-expect(task.title).to eq("Original Title")
+  expect {
+    patch task_path(other_task),
+          params: {
+            task: { title: "hack" }
+          }
+  }.to raise_error(Pundit::NotAuthorizedError)
 end
 end
+
 
 describe "GET /tasks/new" do
 it "returns http success" do
@@ -321,5 +316,25 @@ get edit_task_path(task)
 expect(response).to redirect_to(new_user_session_path)
 end
 end
+
+
+describe "authorization" do
+  let(:user) { create(:user) }
+  let(:other_user) { create(:user) }
+
+  before { sign_in user }
+
+  it "does not allow editing another user's task" do
+    other_task = create(:task, user: other_user)
+
+    expect {
+      patch task_path(other_task),
+            params: {
+              task: { title: "hack" }
+            }
+    }.to raise_error(Pundit::NotAuthorizedError)
+  end
+end
+
   end
 end

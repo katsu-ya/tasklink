@@ -4,12 +4,20 @@
   transition: opacity 0.2s ease;
 }
 
+
 .drag-ghost {
-  opacity: 0.2;
-  border: 2px dashed #94a3b8;
-  background: #f8fafc;
-  border-radius: 16px;
+  opacity: 0.3 !important;
+
+  background: red !important;
+
+  border: 5px dashed blue !important;
+
+  min-height: 180px;
+
+  transform: scale(1.02);
 }
+
+
 
 .drag-chosen {
   transform: rotate(2deg) scale(1.03);

@@ -3,8 +3,13 @@ import Sortable from "sortablejs"
 
 export default class extends Controller {
   connect() {
+
+    console.log("Sortable Connected")
+
     this.sortable = Sortable.create(this.element, {
       animation: 150,
+
+      forceFallback: true,
 
       // 👇 プレースホルダー
       ghostClass: "drag-ghost",
@@ -14,6 +19,8 @@ export default class extends Controller {
 
       // 👇 ドラッグ開始
       onStart: (event) => {
+        console.log("START")
+        
         this.element.classList.add("sorting")
         
         event.item.classList.add(

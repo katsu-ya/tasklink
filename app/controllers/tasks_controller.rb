@@ -3,26 +3,24 @@ class TasksController < ApplicationController
 
 
     def index
-  @tasks = current_user.tasks.includes(:team)
+  tasks = policy_scope(Task)
 
-  @todo_count = current_user.tasks.where(status: "todo").count
-  @doing_count = current_user.tasks.where(status: "doing").count
-  @done_count = current_user.tasks.where(status: "done").count
+  @tasks = tasks.includes(:team)
 
+  @todo_count  = tasks.where(status: "todo").count
+  @doing_count = tasks.where(status: "doing").count
+  @done_count  = tasks.where(status: "done").count
 
-  @total_tasks = current_user.tasks.count
-@completed_tasks = current_user.tasks.where(status: "done").count
+  @total_tasks = tasks.count
+  @completed_tasks = tasks.where(status: "done").count
 
-@progress =
-  if @total_tasks.zero?
-    0
-  else
-    ((@completed_tasks.to_f / @total_tasks) * 100).round
-  end
+  @progress =
+    if @total_tasks.zero?
+      0
+    else
+      ((@completed_tasks.to_f / @total_tasks) * 100).round
+    end
 
-
-
-  # 🔽 フィルター（ここ修正）
   case params[:status]
   when "todo"
     @tasks = @tasks.where(status: "todo")
@@ -32,9 +30,6 @@ class TasksController < ApplicationController
     @tasks = @tasks.where(status: "done")
   end
 
-
-
-  # 🔍 検索
   if params[:keyword].present?
     keyword = "%#{params[:keyword]}%"
 
@@ -45,25 +40,24 @@ class TasksController < ApplicationController
       kw: keyword
     )
 
-    status_search = case params[:keyword]
-    when "作業中"
-                      base.where(status: "doing")
-    when "未着手"
-                      base.where(status: "todo")
-    when "完了"
-                      base.where(status: "done")
-
-    else
-                      base.none
-    end
+    status_search =
+      case params[:keyword]
+      when "作業中"
+        base.where(status: "doing")
+      when "未着手"
+        base.where(status: "todo")
+      when "完了"
+        base.where(status: "done")
+      else
+        base.none
+      end
 
     @tasks = text_search.or(status_search)
   end
 
-
   @tasks = @tasks
-  .order(created_at: :desc)
-  .page(params[:page]).per(6)
+             .order(created_at: :desc)
+             .page(params[:page]).per(6)
 end
 
 
@@ -75,7 +69,8 @@ end
 
 
     def create
-  @task = current_user.tasks.new(task_params)
+  @task = current_user.tasks.build(task_params)
+  @task.team = current_user.team
 
   if @task.save
     tasks = current_user.tasks
@@ -117,18 +112,22 @@ end
 end
 
     def show
-      @task = current_user.tasks.find(params[:id])
+      @task = Task.find(params[:id])
+      authorize @task
     end
 
 
     def edit
-      @task = current_user.tasks.find(params[:id])
+      @task = Task.find(params[:id])
+      authorize @task
     end
 
 
 
     def update
-  @task = current_user.tasks.find(params[:id])
+  @task = Task.find(params[:id])
+
+  authorize @task
 
   if @task.update(task_params)
 
@@ -171,7 +170,10 @@ end
 
 
     def destroy
-  @task = current_user.tasks.find(params[:id])
+  @task = Task.find(params[:id])
+
+  authorize @task
+
   @task.destroy
 
   # 👇 これが超重要
