@@ -61,6 +61,7 @@ group :development, :test do
   gem "simplecov", require: false
   gem "brakeman", require: false
   gem "bullet"
+  gem "faker"
 end
 
 group :development do
