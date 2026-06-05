@@ -335,6 +335,5 @@ describe "authorization" do
     }.to raise_error(Pundit::NotAuthorizedError)
   end
 end
-
   end
 end
