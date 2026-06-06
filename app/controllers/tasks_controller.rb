@@ -53,7 +53,7 @@ class TasksController < ApplicationController
         end
 
         @tasks = text_search.or(status_search)
-      end
+        end
 
       @tasks = @tasks
              .order(created_at: :desc)
