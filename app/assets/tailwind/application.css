@@ -20,12 +20,11 @@
 }
 
 #tasks .drag-ghost {
-  border: 8px dashed #2563eb !important;
-  background: #dbeafe !important;
+  border: 2px dashed #374151 !important;
 }
 
 #tasks .drag-ghost.border {
-  border: 8px dashed #2563eb !important;
+  border: 2px dashed #374151 !important;
 }
 
 #tasks .drag-ghost.bg-green-50 {
