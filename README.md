@@ -459,8 +459,7 @@ bin/dev
 
 新城克哉
 
-GitHub:
-https://github.com/katsu-ya
+- GitHub: https://github.com/katsu-ya
 
 - TaskLink Repository: https://github.com/katsu-ya/tasklink
 
