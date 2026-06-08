@@ -463,7 +463,7 @@ bin/dev
 
 - TaskLink Repository: https://github.com/katsu-ya/tasklink
 
-- Qiita: https://qiita.com/@katsu-ya
+- Qiita: https://qiita.com/katsu-ya
 
 ---
 
