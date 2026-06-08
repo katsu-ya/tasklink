@@ -51,11 +51,11 @@ Turbo Streamによるリアルタイム更新と
 
 ## 技術的な挑戦
 
-・Turbo Streamによるリアルタイム更新
-・Punditによるチーム単位認可
-・GitHub ActionsによるCI/CD
-・AWS EC2への本番デプロイ
-・Dockerによる開発環境統一
+- Turbo Streamによるリアルタイム更新
+- Punditによるチーム単位認可
+- GitHub ActionsによるCI/CD
+- AWS EC2への本番デプロイ
+- Dockerによる開発環境統一
 
 ---
 
