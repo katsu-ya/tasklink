@@ -41,53 +41,51 @@
 
 
         <% if task.deadline.present? && task.status != "done" %>
-  <div class="mt-2 text-sm font-semibold flex items-center justify-between">
+          <div class="mt-2 text-sm font-semibold flex items-center justify-between">
 
-    <div>
-      <% if task.deadline < Date.current %>
-        <span class="text-red-500">
-          🔴 期限切れ
-        </span>
+        <div>
+        <% if task.deadline < Date.current %>
+          <span class="text-red-500">
+            🔴 期限切れ
+          </span>
 
-      <% elsif task.deadline == Date.current %>
-        <span class="text-yellow-500">
-          🟡 今日まで
-        </span>
+          <% elsif task.deadline == Date.current %>
+            <span class="text-yellow-500">
+            🟡 今日まで
+          </span>
 
-      <% elsif task.deadline == Date.tomorrow %>
-        <span class="text-blue-500">
-          🔵 明日まで
-        </span>
+          <% elsif task.deadline == Date.tomorrow %>
+            <span class="text-blue-500">
+            🔵 明日まで
+          </span>
 
-      <% else %>
-        <span class="text-green-500">
-          🟢 <%= task.deadline.strftime("%m/%d") %>まで
-        </span>
-      <% end %>
-    </div>
-
-
+          <% else %>
+            <span class="text-green-500">
+            🟢 <%= task.deadline.strftime("%m/%d") %>まで
+          </span>
+        <% end %>
+      </div>
 
     <% unless task.status == "done" %>
-  <div class="text-xs text-gray-500">
-    <% days_left = (task.deadline - Date.current).to_i %>
+      <div class="text-xs text-gray-500">
+        <% days_left = (task.deadline - Date.current).to_i %>
 
-    <% if days_left < 0 %>
-      <span class="text-red-400">
-        <%= days_left.abs %>日超過
+      <% if days_left < 0 %>
+        <span class="text-red-400">
+          <%= days_left.abs %>日超過
       </span>
 
-    <% elsif days_left == 0 %>
-      今日
+      <% elsif days_left == 0 %>
+        今日
 
-    <% elsif days_left == 1 %>
-      あと1日
+      <% elsif days_left == 1 %>
+        あと1日
 
-    <% else %>
-      あと<%= days_left %>日
-    <% end %>
-  </div>
-<% end %>
+      <% else %>
+        あと<%= days_left %>日
+      <% end %>
+    </div>
+  <% end %>
 
 
   </div>
@@ -95,7 +93,7 @@
 
         <!-- 右側（ステータス・ボタン） -->
         
-        <div class="flex items-center gap-3 whitespace-nowrap mt-3">
+        <div class="flex items-center justify-between mt-3">
 
           <!-- ステータス -->
           <span class="px-2 py-1 text-sm rounded
@@ -128,7 +126,6 @@
       class: "bg-blue-100 text-blue-600 px-2 py-0.5 text-xs scale-90 rounded-full bg-gray-100 hover:bg-gray-300 transition-all duration-300" %>
   <% end %>
 
-
       <!-- 編集 -->
   <% if policy(task).update? %>
   <%= link_to edit_task_path(task),
@@ -149,7 +146,6 @@
   <% end %>
 <% end %>
 
-
       <!-- 削除 -->
     <% if policy(task).destroy? %>
   <%= link_to task_path(task),
@@ -165,7 +161,7 @@
   <% end %>
 <% end %>
 
-
      </div>
 
  </div>
+ 
