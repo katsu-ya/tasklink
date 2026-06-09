@@ -2,7 +2,6 @@
 
 console.log("JS読み込まれた");
 
-
 const observer = new MutationObserver(() => {
   const flashes = document.querySelectorAll(".flash-message")
 
@@ -25,15 +24,6 @@ const observer = new MutationObserver(() => {
 
 // 画面の変化を監視
 observer.observe(document.body, { childList: true, subtree: true })
-
-
-
-
-
-
-
-
-
 
 
 document.addEventListener("turbo:load", () => {
@@ -64,9 +54,6 @@ document.addEventListener("turbo:load", () => {
   setupToggle("password_confirmation_field", "toggle_password_confirmation");
 
 });
-
-
-
 
 
 document.addEventListener("turbo:frame-load", (e) => {
@@ -102,7 +89,6 @@ document.addEventListener("turbo:submit-end", (e) => {
     closeModal()
   }
 })
-
 
 
 import "@hotwired/turbo-rails"
