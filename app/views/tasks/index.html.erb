@@ -14,15 +14,10 @@
     data: { turbo_frame: "modal" },
       class: "inline-block bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-600 mt-3" %>
 
-
-<div class="flex flex-col md:flex-row gap-4 mb-6">
-
-
-
-
+    <div class="mb-6">
 
   <!-- 検索 -->
-  <div class="w-full flex flex-col sm:flex-row gap-2">
+  <div class="w-full flex flex-col sm:flex-row gap-2 mb-4">
     <%= form_with url: tasks_path, method: :get, local: true, class: "flex gap-2 w-full" do |f| %>
       <%= f.text_field :keyword,
           placeholder: "タイトル検索",
@@ -42,16 +37,15 @@
 
 </div>
 
-<!-- フィルター -->
+  <!-- フィルター -->
   <div class="mb-4">
     <%= render "filters" %>
-
   </div>
 
-  <%= render "tasks/progress" %>
-  
-
-
+  <!-- 達成率 -->
+  <div class="mb-6">
+    <%= render "tasks/progress" %>
+  </div>
 
 
   <!-- タスク一覧 -->
@@ -60,7 +54,7 @@
      data-controller="sortable"
      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
   <%= render partial: "tasks/task", collection: @tasks %>
-</div>
+  </div>
       
     </div>
   <% else %>
@@ -81,8 +75,3 @@
   </div>
 
 </div>
-
-
-
-
-
