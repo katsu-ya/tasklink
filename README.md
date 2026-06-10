@@ -69,6 +69,10 @@ Turbo Streamによるリアルタイム更新と
 
 ![検索結果](images/search2.png)
 
+### スマホ表示
+
+![検索結果](images/smartphone.png)
+
 
 ---
 
