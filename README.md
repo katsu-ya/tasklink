@@ -21,11 +21,12 @@ TaskLinkは、Turbo Streamを活用したリアルタイム更新対応のToDo�
 
 Rails学習後、単なるCRUDアプリではなく、
 
+
 - Turbo Streamによるリアルタイム更新
-- Docker環境構築
-- AWS本番運用
-- GitHub Actions
-- Pundit認可
+- Punditによるチーム単位認可
+- GitHub ActionsによるCI/CD
+- AWS EC2への本番デプロイ
+- Dockerによる開発環境統一
 
 まで含めた、
 
@@ -46,16 +47,6 @@ TaskLinkは個人・チームで利用できるタスク管理アプリです。
 
 Turbo Streamによるリアルタイム更新と
 チーム単位のアクセス制御を実装しました。
-
----
-
-## 技術的な挑戦
-
-- Turbo Streamによるリアルタイム更新
-- Punditによるチーム単位認可
-- GitHub ActionsによるCI/CD
-- AWS EC2への本番デプロイ
-- Dockerによる開発環境統一
 
 ---
 
