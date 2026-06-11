@@ -57,7 +57,10 @@ document.addEventListener("turbo:load", () => {
 
 
 document.addEventListener("turbo:frame-load", (e) => {
-  if (e.target.id === "modal") {
+  if (
+    e.target.id === "modal" &&
+    e.target.innerHTML.trim() !== ""
+  ) {
     const modal = document.getElementById("modal-wrapper")
     modal.classList.remove("hidden")
     modal.classList.add("flex")
@@ -65,11 +68,13 @@ document.addEventListener("turbo:frame-load", (e) => {
 })
 
 function closeModal() {
-  const modal = document.getElementById("modal-wrapper")
-  modal.classList.add("hidden")
-  modal.classList.remove("flex")
+  const wrapper = document.getElementById("modal-wrapper")
+  const modal = document.getElementById("modal")
 
-  document.getElementById("modal").innerHTML = ""
+  wrapper.classList.add("hidden")
+  wrapper.classList.remove("flex")
+
+  modal.innerHTML = ""
 }
 
 window.closeModal = closeModal
