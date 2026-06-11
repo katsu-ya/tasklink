@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {
-    this.element.classList.remove("hidden")
+    this.wrapper = document.getElementById("modal-wrapper")
 
     this.handleKeydown = this.handleKeydown.bind(this)
     document.addEventListener("keydown", this.handleKeydown)
@@ -20,7 +20,8 @@ export default class extends Controller {
 
   close() {
     this.element.innerHTML = ""
-    this.element.classList.add("hidden")
+
+    this.wrapper.classList.add("hidden")
+    this.wrapper.classList.remove("flex")
   }
 }
-
