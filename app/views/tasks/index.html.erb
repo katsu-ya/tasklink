@@ -48,26 +48,24 @@
   </div>
 
 
+  
   <!-- タスク一覧 -->
-  <% if @tasks.any? %>
-    <div id="tasks"
+
+<div id="tasks"
      data-controller="sortable"
      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
   <%= render partial: "tasks/task", collection: @tasks %>
+
+</div>
+
+<% if @tasks.empty? %>
+  <div id="empty-message" class="text-center mt-10 text-gray-500">
+    タスクがまだありません
   </div>
-      
-    </div>
-  <% else %>
+<% end %>
 
-    <div class="text-center mt-10 text-gray-500">
-      <% if params[:keyword].present? %>
-        該当するタスクがありません
-      <% else %>
-        タスクがまだありません
-      <% end %>
-    </div>
 
-  <% end %>
 
   <!-- ページネーション -->
   <div class="flex justify-center mt-8">

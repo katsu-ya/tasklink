@@ -71,7 +71,7 @@ class TasksController < ApplicationController
       @task.team = current_user.team
 
       if @task.save
-        tasks = current_user.tasks
+        tasks = current_user.team.tasks
 
         tasks.where.not(id: @task.id)
              .update_all("position = position + 1")
@@ -81,6 +81,11 @@ class TasksController < ApplicationController
         @tasks = tasks
                .order(created_at: :desc)
                .page(1).per(6)
+
+        Rails.logger.debug "===== CREATE DEBUG ====="
+        Rails.logger.debug "TASK_IDS=#{@tasks.map(&:id)}"
+        Rails.logger.debug "NEW_TASK_ID=#{@task.id}"
+        Rails.logger.debug "========================"
 
         flash[:notice] = "作成しました"
 
