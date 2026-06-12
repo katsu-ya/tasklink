@@ -57,15 +57,25 @@ TaskLinkは個人・チームで利用できるタスク管理アプリです。
 
 ## 📷 画面イメージ
 
-### [タスク一覧画面](images/index.png)
+### [タスク一覧画面]
 
-### [タスク作成モーダル](images/new.png)
+(images/index.png)
 
-### [検索結果画面（キーワード）](images/search1.png)
+### [タスク作成モーダル]
 
-### [検索結果画面（完了タスク）](images/search2.png)
+(images/new.png)
 
-### [スマホ表示](images/smartphone.png)
+### [検索結果画面（キーワード）]
+
+(images/search1.png)
+
+### [検索結果画面（完了タスク）]
+
+(images/search2.png)
+
+### [スマホ表示]
+
+(images/smartphone.png)
 
 
 ---
