@@ -3,6 +3,9 @@
 ![CI](https://github.com/katsu-ya/tasklink/actions/workflows/ci.yml/badge.svg)
 
 
+![CI / RSpec](https://github.com/katsu-ya/tasklink/actions/workflows/ci.yml/badge.svg)
+
+
 Rails + Turbo Streamで構築した、チーム向けリアルタイムタスク管理アプリです。
 
 Rails標準技術である Turbo Stream を活用し、SPA化せずに快適なユーザー体験を実現しました。
