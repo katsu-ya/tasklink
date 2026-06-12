@@ -1,7 +1,5 @@
 # TaskLink
 
-![CI](https://github.com/katsu-ya/tasklink/actions/workflows/ci.yml/badge.svg)
-
 
 ![CI / RSpec](https://github.com/katsu-ya/tasklink/actions/workflows/ci.yml/badge.svg)
 
