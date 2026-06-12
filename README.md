@@ -15,6 +15,18 @@ https://tasklink-1iv9.onrender.com
 
 ---
 
+## 主な機能
+
+- タスク作成・編集・削除
+- Turbo Streamによるリアルタイム更新
+- ドラッグ＆ドロップ並び替え
+- チーム単位アクセス制御
+- 期限管理
+- 検索・フィルター
+- GitHub Actions CI/CD
+
+---
+
 # アプリ概要
 
 TaskLinkは、Turbo Streamを活用したリアルタイム更新対応のToDo管理アプリです。
