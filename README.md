@@ -3,96 +3,57 @@
 ![CI](https://github.com/katsu-ya/tasklink/actions/workflows/ci.yml/badge.svg)
 
 
+リアルタイム更新とチーム単位のアクセス制御を備えたタスク管理アプリです。
+
+Rails標準技術である Turbo Stream を活用し、SPA化せずに快適なユーザー体験を実現しました。
+
+また、認可・テスト・CI/CD・AWSデプロイまで含め、実務を意識した開発を行いました。
+
 ## URL
 
-### Production (AWS EC2)
+### Production（AWS EC2）
 
 https://tasklink-app.com
 
-### Render (Demo)
+### Demo（Render）
 
 https://tasklink-1iv9.onrender.com
 
----
+### GitHub
 
-## 主な機能
-
-- タスク作成・編集・削除
-- Turbo Streamによるリアルタイム更新
-- ドラッグ＆ドロップ並び替え
-- チーム単位アクセス制御
-- 期限管理
-- 検索・フィルター
-- GitHub Actions CI/CD
+https://github.com/katsu-ya/tasklink
 
 ---
 
-# アプリ概要
+## 使用技術
 
-TaskLinkは、Turbo Streamを活用したリアルタイム更新対応のToDo管理アプリです。
-
-Rails学習後、単なるCRUDアプリではなく、
-
-
-- Turbo Streamによるリアルタイム更新
-- Punditによるチーム単位認可
-- GitHub ActionsによるCI/CD
-- AWS EC2への本番デプロイ
-- Dockerによる開発環境統一
-
-まで含めた、
-
-実務を意識したアプリ開発を目的として作成しました。
+| Category       | Tech                             |
+| -------------- | -------------------------------- |
+| Backend        | Ruby 3.3 / Rails 8               |
+| Frontend       | Turbo / Stimulus / Tailwind CSS  |
+| Database       | PostgreSQL                       |
+| Authentication | Devise                           |
+| Authorization  | Pundit                           |
+| Testing        | RSpec                            |
+| CI/CD          | GitHub Actions                   |
+| Infrastructure | AWS EC2 / Nginx / Puma / systemd |
+| Development    | Docker / Docker Compose          |
 
 ---
 
-## 制作背景
+## アプリ概要
 
 TaskLinkは個人・チームで利用できるタスク管理アプリです。
 
-既存のToDoアプリでは、
-・進捗状況が把握しづらい
-・ページ更新が多い
-・複数人での利用を想定していない
+既存のToDoアプリで感じていた、
 
-という課題を感じ、
+* ページ更新が多い
+* チーム利用を想定していない
+* 進捗状況が分かりにくい
 
-Turbo Streamによるリアルタイム更新と
-チーム単位のアクセス制御を実装しました。
+といった課題を解決するために開発しました。
 
 ---
-
-## 技術選定理由
-
-### Turbo Stream
-
-SPA化せずにリアルタイム更新を実現できるため採用。
-
-JavaScriptフレームワークを導入せず、
-Rails標準技術で開発・保守コストを抑えながら
-ユーザー体験を向上できると考えた。
-
-### Pundit
-
-Deviseによる認証だけでは
-URL直接アクセスを防げないため採用。
-
-サーバーサイドで認可を行い、
-チーム単位で安全にデータを管理できるようにした。
-
-### AWS EC2
-
-インフラ理解を深めるため
-RenderではなくEC2へデプロイ。
-
-Nginx・Puma・systemdを構築し、
-実務に近い運用経験を得ることを目的とした。
-
-
----
-
-
-
 
 ## 📷 画面イメージ
 
@@ -119,120 +80,73 @@ Nginx・Puma・systemdを構築し、
 
 ---
 
-## 苦労した点
 
-チーム機能追加時に既存データの移行が必要になり、
-本番環境で team_id が設定されていない問題が発生しました。
 
-Rails console を用いて原因を特定し、
-マイグレーションとデータ移行を行って解決しました。
+## 主な機能
+
+### タスク管理
+
+* タスク作成・編集・削除
+* ステータス管理（Todo / Doing / Done）
+* 期限管理
+* 達成率表示
+
+### 検索・フィルター
+
+* キーワード検索
+* ステータス別フィルター
+* 件数のリアルタイム更新
+
+### UI / UX
+
+* Turbo Streamによるリアルタイム更新
+* Turbo Frameを利用したモーダルUI
+* SortableJSによるドラッグ＆ドロップ並び替え
+* レスポンシブ対応
+
+### セキュリティ
+
+* Deviseによる認証
+* Punditによるチーム単位の認可
+* 他チームのタスクへのアクセス制御
 
 ---
 
+## 工夫した点
 
+### 1. Turbo Streamによるリアルタイム更新
 
-## 💡 工夫した点
+タスクの作成・更新・削除時に、
 
-### Turbo Streamによるリアルタイム更新
+* タスク一覧
+* 達成率バー
+* フィルター件数
 
-タスク作成・更新・削除時に、
+をページリロードなしで更新しています。
 
-- タスク一覧
-- 達成率バー
-- フィルター件数
+SPAを導入せずにユーザー体験を向上させることを意識しました。
 
-をページリロードなしで更新。
+### 2. Punditによる認可
 
-### UI/UXを意識した設計
+認証だけではURL直接アクセスを防げないため、Punditを導入しました。
 
-- モーダルUI
-- ドラッグ＆ドロップ
-- 期限状態の色分け
-- 視認性を意識したデザイン
+* policy_scopeによる取得制御
+* TaskPolicyによる閲覧・編集・削除制御
 
+を実装し、チーム単位で安全にデータを管理できるようにしています。
 
-### Punditによる認可
+### 3. 実運用を意識したインフラ構築
 
-認証だけではURLを直接指定した場合に
-他人のタスクへアクセスできる可能性があるため、
+本番環境をAWS EC2上に構築しました。
 
-Punditを導入し、
-サーバーサイドで権限制御を実装しました。
+* Nginx
+* Puma
+* systemd
+* PostgreSQL
 
+を利用し、HTTPS化および独自ドメイン運用に対応しています。
 
-### Error Handling
-
-異常系のUXも考慮し、404 / 500 カスタムエラーページを実装しています。
-
-404 Not Found
-
-存在しないURLへアクセスした場合、ユーザーが迷わないようにエラーページを表示し、タスク一覧へ戻れる導線を用意しています。
-
-500 Internal Server Error
-
-サーバ内部エラー発生時にも専用ページを表示し、ユーザー体験を損なわない構成にしています。
-
-- カスタム404ページ
-- カスタム500ページ
-- タスク一覧へ戻る導線
-- 異常系UXを考慮した設計
-
-
-### 実運用を意識したインフラ構築
-
-AWS EC2上に、
-
-- Nginx
-- Puma
-- systemd
-- PostgreSQL
-
-を構築。
-
-独自ドメイン + HTTPS にも対応。
-
-
-## 使用技術
-
-| Category | Tech |
-|---|---|
-| Backend | Ruby 3.3 / Rails 8 |
-| Frontend | Turbo / Stimulus / Tailwind |
-| DB | PostgreSQL |
-| Infra | AWS EC2 / Nginx / Puma |
-| CI/CD | GitHub Actions |
-
-
-
-
-## Docker
-
-Docker Compose を利用し、
-Rails + PostgreSQL の開発環境をコンテナ化しています。
-
-### 起動
-
-docker compose build
-docker compose up
-
-### DB
-
-docker compose run web rails db:create
-docker compose run web rails db:migrate
-
-### 構成
-
-web (Rails 8 / Puma)
-db (PostgreSQL 16)
-
-### 工夫
-
-- 開発環境差異の削減
-- 再現性の高い環境構築
-- .dockerignore による軽量化
-
-
-
+---
 
 
 
@@ -243,269 +157,141 @@ db (PostgreSQL 16)
 ![ER Diagram](images/er_diagram.png)
 
 
-
-
 ---
 
+## インフラ構成
 
-## Infrastructure
-
-```bash
 GitHub Actions
+
 ↓
+
 AWS EC2
+
 ↓
+
 Nginx
+
 ↓
+
 Puma
+
 ↓
+
 Rails
+
 ↓
+
 PostgreSQL
-```
 
-- HTTPS対応
-- 独自ドメイン対応
-- systemdによるPuma常駐化
+### 構成ポイント
 
-
-
-
-
-## 構成ポイント
-
-### Nginx
-
-- リバースプロキシとして動作
-- HTTP/HTTPSリクエストをPumaへ転送
-
-### Puma
-
-- Railsアプリケーションサーバー
-- systemd管理で自動起動
-
-### systemd
-
-- Pumaのプロセス管理
-- EC2再起動後も自動復旧
-
-### Elastic IP
-
-- 固定IP化
-- 停止・再起動後もURL変更なし
-
-### HTTPS
-
-- Let's Encrypt + CertbotでSSL化
-- HTTP → HTTPSへ自動リダイレクト
+* GitHub Actionsによる自動デプロイ
+* systemdによるPumaプロセス管理
+* Let's EncryptによるHTTPS対応
+* Elastic IPによる固定IP運用
 
 ---
-
-
-# 主な機能
-
-## タスク管理
-
-- タスク作成
-- タスク編集
-- タスク削除
-- ステータス変更
-
-  - 📝 未着手（todo）
-  - 🔥 作業中（doing）
-  - ✅ 完了（done）
-
-## 検索・フィルター
-
-- キーワード検索
-- ステータス別フィルター
-- タスク件数リアルタイム表示
-
-## ドラッグ＆ドロップ
-
-SortableJSを利用し、タスクを直感的に並び替え可能
-
-- 並び替え保存
-- ドラッグ中エフェクト
-- プレースホルダ表示
-
-## モーダルUI
-
-Turbo Frameを利用し、ページ遷移なしでタスクの作成・編集が可能
-
-- ESCキーで閉じる
-- 背景オーバーレイ対応
-
-## 期限管理
-
-- 期限日設定
-- 期限切れ表示
-- 残り日数表示
-- 状況に応じた色分け
-
-### 表示例
-
-- 🔴 期限切れ
-- 🟡 今日まで
-- 🟢 余裕あり
-
-## 達成率バー
-
-完了タスク割合をリアルタイム可視化
-
-- Turbo Streamによる即時更新
-- 進捗率の視覚化
-
----
-
-
-
-
-
-## Development Environment
-
-- Docker
-- Docker Compose
-- Makefile
-
-
-
----
-
-
-
-## テスト / 品質保証
-
-RSpecを用いて Model Spec / Request Spec を実装しています。
-
-### 主なテスト
-
-* Taskモデルのバリデーション
-* タスクCRUD
-* 認証（未ログイン時のリダイレクト）
-* 認可（他ユーザーのタスク編集防止）
-* ステータス更新
-* 検索 / フィルター
-
-* Coverage：約72%
-* CI：GitHub Actions
-* Deploy：AWS EC2
-
-
 
 ## CI/CD
 
-GitHub Actions を利用して
-自動テスト・自動デプロイを構築しています。
+GitHub Actionsを利用し、mainブランチへのPush時に以下を自動実行しています。
 
 ### CI
 
-- RSpec
-- RuboCop
-- bundler-audit
+* RSpec
+* RuboCop
+* bundler-audit
 
 ### CD
 
-mainブランチへPush時
-
-- bundle install
-- db:migrate
-- assets:precompile
-- Puma restart
-
-を自動実行し EC2へデプロイ
-
-
-
-
-
-## Authorization (Pundit)
-
-Pundit を利用し、
-チーム単位でアクセス制御を実装しています。
-
-### 実装内容
-
-- policy_scope によるデータ取得制御
-- TaskPolicy による閲覧・編集・削除制御
-- 他チームのタスクへアクセス不可
-- タスク作成時に所属チームを自動付与
-
-### 使用技術
-
-- Devise（認証）
-- Pundit（認可）
-- RSpec（認可テスト）
-
-### BulletによるN+1検知
-
-Bulletを導入し、開発中にN+1クエリを検知できるようにしています。
-
-タスク一覧表示時に発生していた
-
-* Task → User
-* Task → Team
-
-の関連取得を改善し、
-
-```ruby
-includes(:user, :team)
-```
-
-を利用してクエリ数を最適化しました。
-
-
-
-
-
-
+* bundle install
+* rails db:migrate
+* assets:precompile
+* Puma restart
 
 ---
 
-## 今後の改善予定
+## テスト
 
-優先度高
-- コメント機能
-- 通知機能
+RSpecを用いてテストを実装しています。
 
-優先度中
-- カレンダー表示
+### テスト対象
 
-優先度低
-- ダークモード
+* Model Spec
+* Request Spec
+* 認証
+* 認可
+* CRUD処理
+* 検索・フィルター
+
+### Coverage
+
+約75%
 
 ---
 
-# セットアップ方法
+## 開発環境
+
+Docker Composeを利用し、RailsとPostgreSQLの開発環境を構築しています。
+
+### 起動
 
 ```bash
-# clone
-git clone https://github.com/katsu-ya/tasklink.git
-
-# move
-cd tasklink
-
-# install
-bundle install
-
-# database
-rails db:create
-rails db:migrate
-
-# start
-bin/dev
+docker compose build
+docker compose up
 ```
 
+### DB作成
 
-# 作者
+```bash
+docker compose run web rails db:create
+docker compose run web rails db:migrate
+```
 
-新城克哉
+---
 
-- GitHub: https://github.com/katsu-ya
+## 苦労した点
 
-- TaskLink Repository: https://github.com/katsu-ya/tasklink
+チーム機能追加時に、本番環境の既存データに team_id が存在しない問題が発生しました。
 
-- Qiita: https://qiita.com/katsu-ya
+Rails consoleを利用して原因を特定し、
+
+* マイグレーション修正
+* データ移行
+
+を行うことで解決しました。
+
+データベース変更時の既存データへの影響について学ぶことができました。
+
+---
+
+## 今後の改善
+
+### 優先度高
+
+* コメント機能
+* 通知機能
+
+### 優先度中
+
+* カレンダー表示
+
+### 優先度低
+
+* ダークモード
+
+---
+
+## 作者
+
+新城 克哉
+
+GitHub
+https://github.com/katsu-ya
+
+Qiita
+https://qiita.com/katsu-ya
+
 
 ---
 
