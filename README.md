@@ -3,7 +3,7 @@
 ![CI](https://github.com/katsu-ya/tasklink/actions/workflows/ci.yml/badge.svg)
 
 
-リアルタイム更新とチーム単位のアクセス制御を備えたタスク管理アプリです。
+Rails + Turbo Streamで構築した、チーム向けリアルタイムタスク管理アプリです。
 
 Rails標準技術である Turbo Stream を活用し、SPA化せずに快適なユーザー体験を実現しました。
 
@@ -57,25 +57,11 @@ TaskLinkは個人・チームで利用できるタスク管理アプリです。
 
 ## 📷 画面イメージ
 
-### タスク一覧
-
-![タスク一覧](images/index.png)
-
-### 新規作成
-
-![新規作成](images/new.png)
-
-### 検索結果（検索ワード）
-
-![検索結果](images/search1.png)
-
-### 検索結果（完了）
-
-![検索結果](images/search2.png)
-
-### スマホ表示
-
-![検索結果](images/smartphone.png)
+![タスク一覧画面](images/index.png)
+![タスク作成モーダル](images/new.png)
+![検索結果画面（キーワード）](images/search1.png)
+![検索結果画面（完了タスク）](images/search2.png)
+![スマホ表示](images/smartphone.png)
 
 
 ---
