@@ -315,6 +315,44 @@ PostgreSQLのバックアップを自動化しています。
 - IAM Roleを利用したアクセスキー不要の構成
 - テスト環境への復元検証を実施済み
 
+---
+
+## CloudWatchによるサーバー監視
+
+TaskLinkの本番環境では AWS CloudWatch Agent を導入し、EC2インスタンスの監視を行っています。
+
+### 監視項目
+
+* ディスク使用率 (`disk_used_percent`)
+* 監視対象: ルートディスク (`/`)
+
+### アラート設定
+
+以下の条件でCloudWatchアラームを作成しています。
+
+* アラーム名: `tasklink-disk-usage-80`
+* 条件: ディスク使用率 80%以上
+* 通知方法: Amazon SNS → メール通知
+
+### 構成
+
+EC2
+↓
+CloudWatch Agent
+↓
+CloudWatch Metrics
+↓
+CloudWatch Alarm
+↓
+Amazon SNS
+↓
+Email Notification
+
+### 導入目的
+
+以前、EC2のディスク容量不足により `No space left on device` エラーが発生したため、容量不足を事前に検知できるよう監視体制を構築しました。
+
+
 
 ---
 
