@@ -319,38 +319,74 @@ PostgreSQLのバックアップを自動化しています。
 
 ## CloudWatchによるサーバー監視
 
-TaskLinkの本番環境では AWS CloudWatch Agent を導入し、EC2インスタンスの監視を行っています。
+TaskLinkの本番環境では AWS CloudWatch Agent を導入し、EC2インスタンスのリソース監視を行っています。
 
 ### 監視項目
 
-* ディスク使用率 (`disk_used_percent`)
-* 監視対象: ルートディスク (`/`)
+#### ディスク使用率監視
 
-### アラート設定
-
-以下の条件でCloudWatchアラームを作成しています。
-
+* メトリクス: `disk_used_percent`
+* 監視対象: `/` (ルートディスク)
 * アラーム名: `tasklink-disk-usage-80`
-* 条件: ディスク使用率 80%以上
-* 通知方法: Amazon SNS → メール通知
+* 通知条件: ディスク使用率 80%以上
 
-### 構成
+#### メモリ使用率監視
 
+* メトリクス: `mem_used_percent`
+* アラーム名: `tasklink-memory-usage-80`
+* 通知条件: メモリ使用率 80%以上
+
+### 通知構成
+
+CloudWatch Alarm発生時はAmazon SNSを経由してメール通知を送信します。
+
+```text
 EC2
-↓
+ ↓
 CloudWatch Agent
-↓
+ ↓
 CloudWatch Metrics
-↓
+ ↓
 CloudWatch Alarm
-↓
+ ↓
 Amazon SNS
-↓
+ ↓
 Email Notification
+```
 
-### 導入目的
+### 運用目的
 
-以前、EC2のディスク容量不足により `No space left on device` エラーが発生したため、容量不足を事前に検知できるよう監視体制を構築しました。
+#### ディスク監視
+
+EC2のディスク容量不足による
+
+```text
+No space left on device
+```
+
+エラーを未然に防ぐため。
+
+#### メモリ監視
+
+Rails・Puma・PostgreSQLのメモリ使用量増加を早期に検知し、アプリケーションのパフォーマンス低下や停止を防ぐため。
+
+### 現在の監視アラーム
+
+| アラーム名                    | 監視内容    | 閾値  |
+| ------------------------ | ------- | --- |
+| tasklink-disk-usage-80   | ディスク使用率 | 80% |
+| tasklink-memory-usage-80 | メモリ使用率  | 80% |
+
+### 今後の改善予定
+
+* CPU使用率監視 (`tasklink-cpu-usage-90`)
+* CloudWatch Logsによるログ監視
+* アプリケーションエラー通知の自動化
+* ダッシュボードの整備
+
+```
+```
+
 
 
 
