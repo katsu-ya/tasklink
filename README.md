@@ -373,11 +373,41 @@ CloudWatch Metricsによるリソース監視とCloudWatch Logsによるログ�
 
 また、ログをCloudWatch Logsへ集約することで、EC2へSSH接続しなくてもAWSコンソール上からログ確認が可能な構成としています。
 
+#### Rails 500エラー監視
+
+CloudWatch LogsのMetric Filterを利用し、
+Railsアプリケーションで発生したHTTP 500エラーを監視しています。
+
+##### 監視構成
+
+CloudWatch Logs
+↓
+Metric Filter (Completed 500)
+↓
+Custom Metric (rails_500_errors)
+↓
+CloudWatch Alarm
+↓
+Amazon SNS
+↓
+Email Notification
+
+##### アラーム
+
+| アラーム名 | 条件 |
+|-----------|------|
+| tasklink-rails-500-errors-alarm | 500エラー発生時 |
+
+##### 導入目的
+
+* 本番障害の早期検知
+* エラー発生時の即時通知
+* MTTR（復旧時間）の短縮
+
 ---
 
 ### 今後の改善予定
 
-* CloudWatch Logsのメトリクスフィルターによる500エラー通知
 * CloudWatch Dashboardによる可視化
 * 障害対応手順（Runbook）の整備
 * アプリケーション監視の強化
