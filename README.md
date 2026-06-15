@@ -335,12 +335,61 @@ CloudWatch AgentとAmazon SNSを組み合わせることで、サーバーリソ
 
 運用中に発生したディスク容量不足の障害をきっかけに監視体制を整備し、障害の早期発見と再発防止を実現しました。
 
+
+  
+
+### CloudWatch Logs監視
+
+TaskLinkではCloudWatch Logsを利用してサーバーログの集中管理を行っています。
+
+#### 監視構成
+
+```text
+Rails / Puma
+     ↓
+systemd journal
+     ↓
+/var/log/syslog
+     ↓
+CloudWatch Agent
+     ↓
+CloudWatch Logs
+```
+
+#### ロググループ
+
+* `/tasklink/syslog`
+
+#### 収集対象
+
+* Railsアクセスログ
+* Railsエラーログ
+* Puma起動ログ
+* systemdログ
+
+#### 導入目的
+
+* 本番環境のエラー調査迅速化
+* 不正アクセスの検知
+* 障害発生時の原因特定
+* CloudWatch Alarmとの連携基盤構築
+
+#### 工夫した点
+
+Rails本番環境ではSTDOUTへ出力されたログをsystemd経由でsyslogへ集約し、CloudWatch Logsへ転送する構成を採用しました。
+
+これによりEC2へSSH接続しなくてもAWSコンソール上からログ確認が可能となり、運用性を向上させています。
+
+
+
 ### 今後の改善予定
 
-* CloudWatch Logsによるログ監視
 * アプリケーションエラー通知の自動化
 * CloudWatch Dashboardによる可視化
 * 障害対応手順（Runbook）の整備
+
+
+
 
 ```
 ```
