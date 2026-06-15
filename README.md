@@ -273,46 +273,21 @@ Rails consoleを利用して原因を特定し、
 
 
 
-## CloudWatchによるサーバー監視
+## 監視・ログ管理
 
-TaskLinkの本番環境では AWS CloudWatch Agent を導入し、EC2インスタンスのリソース監視を行っています。
+TaskLinkの本番環境では、AWS CloudWatch Agent・CloudWatch Logs・Amazon SNSを利用し、サーバー監視およびログ管理を行っています。
 
-### 監視目的
-
-* ディスク容量不足による障害の予防
-* メモリ不足によるアプリケーション停止の予防
-* CPU高負荷によるレスポンス低下の早期検知
-
-### 監視項目
-
-#### ディスク使用率監視
-
-* メトリクス: `disk_used_percent`
-* アラーム名: `tasklink-disk-usage-80`
-* 通知条件: ディスク使用率 80%以上
-
-#### メモリ使用率監視
-
-* メトリクス: `mem_used_percent`
-* アラーム名: `tasklink-memory-usage-80`
-* 通知条件: メモリ使用率 80%以上
-
-#### CPU使用率監視
-
-* メトリクス: `cpu_usage_idle`
-* アラーム名: `tasklink-cpu-usage-90`
-* 通知条件: CPU使用率 90%以上相当（cpu_usage_idle <= 10）
-
-### 通知構成
-
-CloudWatch Alarm発生時はAmazon SNSを経由してメール通知を送信します。
+### 構成
 
 ```text
-EC2
- ↓
-CloudWatch Agent
- ↓
-CloudWatch Metrics
+EC2 (Rails / Puma / PostgreSQL)
+            ↓
+     CloudWatch Agent
+            ↓
+ ┌───────────────┬───────────────┐
+ ↓               ↓
+CloudWatch    CloudWatch Logs
+Metrics
  ↓
 CloudWatch Alarm
  ↓
@@ -321,7 +296,17 @@ Amazon SNS
 Email Notification
 ```
 
-### 現在の監視アラーム
+### 監視目的
+
+* ディスク容量不足による障害の予防
+* メモリ不足によるアプリケーション停止の予防
+* CPU高負荷によるレスポンス低下の早期検知
+* 本番環境のログ収集と障害調査の迅速化
+* 不正アクセスや異常リクエストの検知
+
+---
+
+### CloudWatchアラーム
 
 | アラーム名                    | 監視内容    | 閾値  |
 | ------------------------ | ------- | --- |
@@ -329,20 +314,23 @@ Email Notification
 | tasklink-memory-usage-80 | メモリ使用率  | 80% |
 | tasklink-cpu-usage-90    | CPU使用率  | 90% |
 
-### 運用上の工夫
+#### 収集メトリクス
 
-CloudWatch AgentとAmazon SNSを組み合わせることで、サーバーリソースの異常をリアルタイムでメール通知できる構成としています。
+| メトリクス             | 用途        |
+| ----------------- | --------- |
+| disk_used_percent | ディスク使用率監視 |
+| mem_used_percent  | メモリ使用率監視  |
+| cpu_usage_idle    | CPU使用率監視  |
 
-運用中に発生したディスク容量不足の障害をきっかけに監視体制を整備し、障害の早期発見と再発防止を実現しました。
+CloudWatch Alarm発生時はAmazon SNSを経由してメール通知を送信し、異常をリアルタイムで検知できる構成としています。
 
+---
 
-  
+### CloudWatch Logs
 
-### CloudWatch Logs監視
+Rails本番環境ではSTDOUTへ出力されたログをsystemd経由でsyslogへ集約し、CloudWatch Logsへ転送しています。
 
-TaskLinkではCloudWatch Logsを利用してサーバーログの集中管理を行っています。
-
-#### 監視構成
+#### ログ収集フロー
 
 ```text
 Rails / Puma
@@ -358,7 +346,9 @@ CloudWatch Logs
 
 #### ロググループ
 
-* `/tasklink/syslog`
+```text
+/tasklink/syslog
+```
 
 #### 収集対象
 
@@ -367,26 +357,31 @@ CloudWatch Logs
 * Puma起動ログ
 * systemdログ
 
-#### 導入目的
+---
 
-* 本番環境のエラー調査迅速化
-* 不正アクセスの検知
-* 障害発生時の原因特定
-* CloudWatch Alarmとの連携基盤構築
+### 運用上の工夫
 
-#### 工夫した点
+運用中に発生したディスク容量不足の障害をきっかけに監視体制を整備しました。
 
-Rails本番環境ではSTDOUTへ出力されたログをsystemd経由でsyslogへ集約し、CloudWatch Logsへ転送する構成を採用しました。
+CloudWatch Metricsによるリソース監視とCloudWatch Logsによるログ管理を組み合わせることで、
 
-これによりEC2へSSH接続しなくてもAWSコンソール上からログ確認が可能となり、運用性を向上させています。
+* 障害の早期発見
+* 原因調査の迅速化
+* サーバー状態の可視化
 
+を実現しています。
 
+また、ログをCloudWatch Logsへ集約することで、EC2へSSH接続しなくてもAWSコンソール上からログ確認が可能な構成としています。
+
+---
 
 ### 今後の改善予定
 
-* アプリケーションエラー通知の自動化
+* CloudWatch Logsのメトリクスフィルターによる500エラー通知
 * CloudWatch Dashboardによる可視化
 * 障害対応手順（Runbook）の整備
+* アプリケーション監視の強化
+
 
 
 
