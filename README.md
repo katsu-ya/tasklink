@@ -273,40 +273,46 @@ Rails consoleを利用して原因を特定し、
 
 
 
-## 監視・ログ管理
+# 監視・ログ管理
 
-TaskLinkの本番環境では、AWS CloudWatch Agent・CloudWatch Logs・Amazon SNSを利用し、サーバー監視およびログ管理を行っています。
+TaskLinkの本番環境では、AWS CloudWatch Agent、CloudWatch Logs、Amazon SNSを利用し、サーバー監視・ログ管理・障害通知を実装しています。
 
-### 構成
+## 構成
 
 ```text
 EC2 (Rails / Puma / PostgreSQL)
             ↓
      CloudWatch Agent
             ↓
- ┌───────────────┬───────────────┐
- ↓               ↓
-CloudWatch    CloudWatch Logs
-Metrics
- ↓
-CloudWatch Alarm
- ↓
-Amazon SNS
- ↓
-Email Notification
+ ┌───────────────┬────────────────┐
+ ↓                                ↓
+CloudWatch Metrics        CloudWatch Logs
+ ↓                                ↓
+CloudWatch Alarm      Metric Filter
+ ↓                                ↓
+Amazon SNS         Custom Metric
+ ↓                                ↓
+Email Notification   CloudWatch Alarm
+                               ↓
+                         Amazon SNS
+                               ↓
+                       Email Notification
 ```
 
-### 監視目的
+## 監視目的
 
 * ディスク容量不足による障害の予防
 * メモリ不足によるアプリケーション停止の予防
 * CPU高負荷によるレスポンス低下の早期検知
 * 本番環境のログ収集と障害調査の迅速化
 * 不正アクセスや異常リクエストの検知
+* アプリケーションエラーの早期発見
 
 ---
 
-### CloudWatchアラーム
+## CloudWatch Metrics監視
+
+### 監視アラーム
 
 | アラーム名                    | 監視内容    | 閾値  |
 | ------------------------ | ------- | --- |
@@ -314,7 +320,7 @@ Email Notification
 | tasklink-memory-usage-80 | メモリ使用率  | 80% |
 | tasklink-cpu-usage-90    | CPU使用率  | 90% |
 
-#### 収集メトリクス
+### 収集メトリクス
 
 | メトリクス             | 用途        |
 | ----------------- | --------- |
@@ -326,11 +332,11 @@ CloudWatch Alarm発生時はAmazon SNSを経由してメール通知を送信し
 
 ---
 
-### CloudWatch Logs
+## CloudWatch Logs
 
 Rails本番環境ではSTDOUTへ出力されたログをsystemd経由でsyslogへ集約し、CloudWatch Logsへ転送しています。
 
-#### ログ収集フロー
+### ログ収集フロー
 
 ```text
 Rails / Puma
@@ -344,13 +350,13 @@ CloudWatch Agent
 CloudWatch Logs
 ```
 
-#### ロググループ
+### ロググループ
 
 ```text
 /tasklink/syslog
 ```
 
-#### 収集対象
+### 収集対象
 
 * Railsアクセスログ
 * Railsエラーログ
@@ -359,7 +365,41 @@ CloudWatch Logs
 
 ---
 
-### 運用上の工夫
+## Rails 500エラー監視
+
+CloudWatch LogsのMetric Filterを利用し、Railsアプリケーションで発生したHTTP 500エラーを監視しています。
+
+### 監視構成
+
+```text
+CloudWatch Logs
+      ↓
+Metric Filter (Completed 500)
+      ↓
+Custom Metric (rails_500_errors)
+      ↓
+CloudWatch Alarm
+      ↓
+Amazon SNS
+      ↓
+Email Notification
+```
+
+### アラーム
+
+| アラーム名                           | 条件             |
+| ------------------------------- | -------------- |
+| tasklink-rails-500-errors-alarm | HTTP 500エラー発生時 |
+
+### 導入目的
+
+* 本番障害の早期検知
+* エラー発生時の即時通知
+* MTTR（平均復旧時間）の短縮
+
+---
+
+## 運用上の工夫
 
 運用中に発生したディスク容量不足の障害をきっかけに監視体制を整備しました。
 
@@ -371,46 +411,17 @@ CloudWatch Metricsによるリソース監視とCloudWatch Logsによるログ�
 
 を実現しています。
 
-また、ログをCloudWatch Logsへ集約することで、EC2へSSH接続しなくてもAWSコンソール上からログ確認が可能な構成としています。
-
-#### Rails 500エラー監視
-
-CloudWatch LogsのMetric Filterを利用し、
-Railsアプリケーションで発生したHTTP 500エラーを監視しています。
-
-##### 監視構成
-
-CloudWatch Logs
-↓
-Metric Filter (Completed 500)
-↓
-Custom Metric (rails_500_errors)
-↓
-CloudWatch Alarm
-↓
-Amazon SNS
-↓
-Email Notification
-
-##### アラーム
-
-| アラーム名 | 条件 |
-|-----------|------|
-| tasklink-rails-500-errors-alarm | 500エラー発生時 |
-
-##### 導入目的
-
-* 本番障害の早期検知
-* エラー発生時の即時通知
-* MTTR（復旧時間）の短縮
+また、ログをCloudWatch Logsへ集約することで、EC2へSSH接続せずにAWSコンソール上からログ確認が可能な構成としています。
 
 ---
 
-### 今後の改善予定
+## 今後の改善予定
 
 * CloudWatch Dashboardによる可視化
 * 障害対応手順（Runbook）の整備
 * アプリケーション監視の強化
+* CloudWatch Logs Insightsを利用したログ分析
+* 監視ダッシュボードの運用改善
 
 
 
