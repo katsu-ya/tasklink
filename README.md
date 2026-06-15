@@ -209,6 +209,8 @@ GitHub Actionsを利用し、mainブランチへのPush時に以下を自動実�
 * assets:precompile
 * Puma restart
 
+
+
 ---
 
 ## テスト
@@ -227,6 +229,8 @@ RSpecを用いてテストを実装しています。
 ### Coverage
 
 約75%
+
+
 
 ---
 
