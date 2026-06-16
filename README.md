@@ -440,6 +440,25 @@ CloudWatch Dashboardを作成し、
 
 ---
 
+### Pumaプロセス監視
+
+CloudWatch Agentのprocstat機能を利用し、
+Pumaプロセスの死活監視を実施しています。
+
+#### 監視項目
+
+- メトリクス: procstat_lookup_pid_count
+- アラーム名: tasklink-puma-down
+- 通知条件: pid_count < 1
+
+#### 目的
+
+- Puma停止の即時検知
+- 502 Bad Gatewayの早期発見
+- サービス停止時間の最小化
+
+---
+
 ## 今後の改善予定
 
 * 障害対応手順（Runbook）の整備
