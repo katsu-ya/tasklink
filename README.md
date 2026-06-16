@@ -415,9 +415,33 @@ CloudWatch Metricsによるリソース監視とCloudWatch Logsによるログ�
 
 ---
 
+### CloudWatch Dashboard
+
+CloudWatch Dashboardを作成し、
+サーバーおよびアプリケーションの監視状況を
+一画面で可視化しています。
+
+#### 可視化項目
+
+- Disk Usage (%)
+- Memory Usage (%)
+- CPU Idle (%)
+- Rails 500 Errors
+
+#### ダッシュボード活用
+
+障害発生時にはCloudWatch Dashboardを確認することで、
+
+- サーバーリソース状況の把握
+- エラー発生状況の確認
+- 異常発生箇所の切り分け
+
+を迅速に実施できる構成としています。
+
+---
+
 ## 今後の改善予定
 
-* CloudWatch Dashboardによる可視化
 * 障害対応手順（Runbook）の整備
 * アプリケーション監視の強化
 * CloudWatch Logs Insightsを利用したログ分析
