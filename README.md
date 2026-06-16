@@ -667,6 +667,53 @@ curl localhost:3000
 - Dashboard可視化
 - Runbook整備
 
+---
+
+# CloudWatch Logs Insights
+
+CloudWatch Logs Insightsを利用し、本番環境ログの分析基盤を構築しています。
+
+## 主な分析内容
+
+* Rails 500エラー分析
+* アクセスログ分析
+* 不正アクセス検知
+* IPアドレス別アクセス集計
+* 障害発生時の原因調査
+
+## 活用例
+
+### 500エラー分析
+
+```sql
+fields @timestamp, @message
+| filter @message like /Completed 500/
+| sort @timestamp desc
+```
+
+### 不正アクセス分析
+
+```sql
+fields @timestamp, @message
+| filter @message like /wp-admin/
+```
+
+### アクセス元IP分析
+
+```sql
+fields @message
+| parse @message /for (?<ip>[0-9\.]+) at/
+| stats count() as requests by ip
+```
+
+## 導入効果
+
+* 障害原因調査の迅速化
+* 不正アクセスの可視化
+* 本番環境の運用性向上
+* MTTR（平均復旧時間）の短縮
+
+
 
 
 ---
