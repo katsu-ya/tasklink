@@ -275,9 +275,9 @@ Rails consoleを利用して原因を特定し、
 
 # 監視・ログ管理
 
-TaskLinkの本番環境では、AWS CloudWatch Agent、CloudWatch Logs、Amazon SNSを利用し、サーバー監視・ログ管理・障害通知を実装しています。
+TaskLinkでは AWS CloudWatch Agent、CloudWatch Metrics、CloudWatch Logs、CloudWatch Alarm、Amazon SNS を利用し、本番環境の監視・ログ管理・障害通知を実装しています。
 
-## 構成
+## システム構成
 
 ```text
 EC2 (Rails / Puma / PostgreSQL)
@@ -299,14 +299,17 @@ Email Notification   CloudWatch Alarm
                        Email Notification
 ```
 
+---
+
 ## 監視目的
 
 * ディスク容量不足による障害の予防
 * メモリ不足によるアプリケーション停止の予防
 * CPU高負荷によるレスポンス低下の早期検知
+* Pumaプロセス停止の即時検知
 * 本番環境のログ収集と障害調査の迅速化
+* Railsアプリケーションエラーの早期発見
 * 不正アクセスや異常リクエストの検知
-* アプリケーションエラーの早期発見
 
 ---
 
@@ -314,19 +317,21 @@ Email Notification   CloudWatch Alarm
 
 ### 監視アラーム
 
-| アラーム名                    | 監視内容    | 閾値  |
-| ------------------------ | ------- | --- |
-| tasklink-disk-usage-80   | ディスク使用率 | 80% |
-| tasklink-memory-usage-80 | メモリ使用率  | 80% |
-| tasklink-cpu-usage-90    | CPU使用率  | 90% |
+| アラーム名                    | 監視内容       | 条件             |
+| ------------------------ | ---------- | -------------- |
+| tasklink-disk-usage-80   | ディスク使用率    | 80%以上          |
+| tasklink-memory-usage-80 | メモリ使用率     | 80%以上          |
+| tasklink-cpu-usage-90    | CPU使用率     | CPU Idle ≤ 10% |
+| tasklink-puma-down       | Pumaプロセス停止 | pid_count < 1  |
 
 ### 収集メトリクス
 
-| メトリクス             | 用途        |
-| ----------------- | --------- |
-| disk_used_percent | ディスク使用率監視 |
-| mem_used_percent  | メモリ使用率監視  |
-| cpu_usage_idle    | CPU使用率監視  |
+| メトリクス                     | 用途       |
+| ------------------------- | -------- |
+| disk_used_percent         | ディスク監視   |
+| mem_used_percent          | メモリ監視    |
+| cpu_usage_idle            | CPU監視    |
+| procstat_lookup_pid_count | Puma死活監視 |
 
 CloudWatch Alarm発生時はAmazon SNSを経由してメール通知を送信し、異常をリアルタイムで検知できる構成としています。
 
@@ -399,6 +404,29 @@ Email Notification
 
 ---
 
+## CloudWatch Dashboard
+
+CloudWatch Dashboardを作成し、サーバーおよびアプリケーションの状態を一画面で可視化しています。
+
+### 可視化項目
+
+* Disk Usage (%)
+* Memory Usage (%)
+* CPU Idle (%)
+* Rails 500 Errors
+
+### 活用方法
+
+障害発生時にはDashboardを確認することで、
+
+* サーバーリソース状況の把握
+* エラー発生状況の確認
+* 異常発生箇所の切り分け
+
+を迅速に実施できる構成としています。
+
+---
+
 ## 運用上の工夫
 
 運用中に発生したディスク容量不足の障害をきっかけに監視体制を整備しました。
@@ -415,66 +443,17 @@ CloudWatch Metricsによるリソース監視とCloudWatch Logsによるログ�
 
 ---
 
-### CloudWatch Dashboard
-
-CloudWatch Dashboardを作成し、
-サーバーおよびアプリケーションの監視状況を
-一画面で可視化しています。
-
-#### 可視化項目
-
-- Disk Usage (%)
-- Memory Usage (%)
-- CPU Idle (%)
-- Rails 500 Errors
-
-#### ダッシュボード活用
-
-障害発生時にはCloudWatch Dashboardを確認することで、
-
-- サーバーリソース状況の把握
-- エラー発生状況の確認
-- 異常発生箇所の切り分け
-
-を迅速に実施できる構成としています。
-
----
-
-### Pumaプロセス監視
-
-CloudWatch Agentのprocstat機能を利用し、
-Pumaプロセスの死活監視を実施しています。
-
-#### 監視項目
-
-- メトリクス: procstat_lookup_pid_count
-- アラーム名: tasklink-puma-down
-- 通知条件: pid_count < 1
-
-#### 目的
-
-- Puma停止の即時検知
-- 502 Bad Gatewayの早期発見
-- サービス停止時間の最小化
-
----
-
 ## 今後の改善予定
 
+* CloudWatch Logs Insightsによるログ分析
 * 障害対応手順（Runbook）の整備
 * アプリケーション監視の強化
-* CloudWatch Logs Insightsを利用したログ分析
-* 監視ダッシュボードの運用改善
-
-
-
+* ALB導入による可用性向上
+* 監視ダッシュボードの継続改善
 
 
 ```
 ```
-
-
-
 
 
 ---
