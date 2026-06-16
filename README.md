@@ -299,17 +299,15 @@ Email Notification   CloudWatch Alarm
                        Email Notification
 ```
 
----
-
 ## 監視目的
 
 * ディスク容量不足による障害の予防
 * メモリ不足によるアプリケーション停止の予防
 * CPU高負荷によるレスポンス低下の早期検知
 * Pumaプロセス停止の即時検知
-* 本番環境のログ収集と障害調査の迅速化
+* 本番環境ログの集中管理
 * Railsアプリケーションエラーの早期発見
-* 不正アクセスや異常リクエストの検知
+* 障害発生時の迅速な原因調査
 
 ---
 
@@ -333,7 +331,7 @@ Email Notification   CloudWatch Alarm
 | cpu_usage_idle            | CPU監視    |
 | procstat_lookup_pid_count | Puma死活監視 |
 
-CloudWatch Alarm発生時はAmazon SNSを経由してメール通知を送信し、異常をリアルタイムで検知できる構成としています。
+CloudWatch Alarm発生時は Amazon SNS を経由してメール通知を送信し、異常をリアルタイムで検知できる構成としています。
 
 ---
 
@@ -396,7 +394,7 @@ Email Notification
 | ------------------------------- | -------------- |
 | tasklink-rails-500-errors-alarm | HTTP 500エラー発生時 |
 
-### 導入目的
+### 導入効果
 
 * 本番障害の早期検知
 * エラー発生時の即時通知
@@ -427,6 +425,45 @@ CloudWatch Dashboardを作成し、サーバーおよびアプリケーション
 
 ---
 
+## CloudWatch Logs Insights
+
+CloudWatch Logs Insightsを利用し、本番環境ログの分析基盤を構築しています。
+
+### 主な分析内容
+
+* Rails 500エラー分析
+* アクセスログ分析
+* 不正アクセス検知
+* IPアドレス別アクセス集計
+* 障害発生時の原因調査
+
+### 活用例
+
+#### 500エラー分析
+
+```sql
+fields @timestamp, @message
+| filter @message like /Completed 500/
+| sort @timestamp desc
+```
+
+#### 不正アクセス分析
+
+```sql
+fields @timestamp, @message
+| filter @message like /wp-admin/
+```
+
+#### アクセス元IP分析
+
+```sql
+fields @message
+| parse @message /for (?<ip>[0-9\.]+) at/
+| stats count() as requests by ip
+```
+
+---
+
 ## 運用上の工夫
 
 運用中に発生したディスク容量不足の障害をきっかけに監視体制を整備しました。
@@ -445,273 +482,27 @@ CloudWatch Metricsによるリソース監視とCloudWatch Logsによるログ�
 
 ## 今後の改善予定
 
-* CloudWatch Logs Insightsによるログ分析
-* 障害対応手順（Runbook）の整備
-* アプリケーション監視の強化
+* CloudWatch Logs Insightsを活用したログ分析強化
+* Runbook（障害対応手順書）の整備
+* アプリケーション監視の高度化
 * ALB導入による可用性向上
 * 監視ダッシュボードの継続改善
 
-
-```
-```
-
 ---
-
-# Runbook（障害対応手順）
-
-TaskLinkでは障害発生時に迅速な復旧対応を行うため、主要な障害パターンごとの対応手順を整備しています。
-
----
-
-## 1. Puma停止アラート発生
-
-### 検知
-
-CloudWatch Alarm
-
-```text
-tasklink-puma-down
-```
-
-### 確認
-
-```bash
-sudo systemctl status tasklink
-```
-
-### 再起動
-
-```bash
-sudo systemctl restart tasklink
-```
-
-### ログ確認
-
-```bash
-journalctl -u tasklink -n 100
-```
-
-### 復旧確認
-
-```bash
-curl https://tasklink-app.com
-```
-
----
-
-## 2. Rails 500エラー発生
-
-### 検知
-
-CloudWatch Alarm
-
-```text
-tasklink-rails-500-errors-alarm
-```
-
-### CloudWatch Logs確認
-
-```text
-/tasklink/syslog
-```
-
-### エラーログ検索
-
-```text
-Completed 500
-```
-
-### サーバーログ確認
-
-```bash
-journalctl -u tasklink -n 200
-```
-
-### 原因切り分け
-
-* DB接続エラー
-* ActiveRecord例外
-* バリデーションエラー
-* 外部APIエラー
-
----
-
-## 3. CPU高負荷
-
-### 検知
-
-```text
-tasklink-cpu-usage-90
-```
-
-### プロセス確認
-
-```bash
-top
-```
-
-または
-
-```bash
-htop
-```
-
-### Rails確認
-
-```bash
-journalctl -u tasklink -n 100
-```
-
-### 対応
-
-* 大量アクセス有無確認
-* 無限ループ調査
-* N+1クエリ調査
-
----
-
-## 4. メモリ不足
-
-### 検知
-
-```text
-tasklink-memory-usage-80
-```
-
-### 使用量確認
-
-```bash
-free -h
-```
-
-### プロセス確認
-
-```bash
-ps aux --sort=-%mem | head
-```
-
-### 対応
-
-* メモリリーク調査
-* Puma再起動
-* 不要プロセス停止
-
----
-
-## 5. ディスク容量不足
-
-### 検知
-
-```text
-tasklink-disk-usage-80
-```
-
-### 使用量確認
-
-```bash
-df -h
-```
-
-### 容量確認
-
-```bash
-du -sh /var/log/*
-```
-
-### 対応
-
-* ログ削除
-* 不要ファイル削除
-* ローテーション設定確認
-
----
-
-## 6. サービス全体障害
-
-### 確認項目
-
-```bash
-sudo systemctl status nginx
-```
-
-```bash
-sudo systemctl status tasklink
-```
-
-```bash
-sudo systemctl status postgresql
-```
-
-### 通信確認
-
-```bash
-curl localhost:3000
-```
-
-### 原因切り分け
-
-1. nginx
-2. Puma
-3. PostgreSQL
-4. ネットワーク
-5. AWSインフラ
-
 
 ## SRE / 運用改善
 
-- CloudWatch監視構築
-- CloudWatch Logs集約
-- SNS通知
-- Rails 500エラー監視
-- Puma死活監視
-- Dashboard可視化
-- Runbook整備
+本プロジェクトでは以下の運用改善を実施しました。
 
----
+* CloudWatch Agent導入
+* CloudWatch Logs集約
+* SNS通知構築
+* Rails 500エラー監視
+* Puma死活監視
+* CloudWatch Dashboard作成
+* Runbook整備
+* CloudWatch Logs Insightsによるログ分析基盤構築
 
-# CloudWatch Logs Insights
-
-CloudWatch Logs Insightsを利用し、本番環境ログの分析基盤を構築しています。
-
-## 主な分析内容
-
-* Rails 500エラー分析
-* アクセスログ分析
-* 不正アクセス検知
-* IPアドレス別アクセス集計
-* 障害発生時の原因調査
-
-## 活用例
-
-### 500エラー分析
-
-```sql
-fields @timestamp, @message
-| filter @message like /Completed 500/
-| sort @timestamp desc
-```
-
-### 不正アクセス分析
-
-```sql
-fields @timestamp, @message
-| filter @message like /wp-admin/
-```
-
-### アクセス元IP分析
-
-```sql
-fields @message
-| parse @message /for (?<ip>[0-9\.]+) at/
-| stats count() as requests by ip
-```
-
-## 導入効果
-
-* 障害原因調査の迅速化
-* 不正アクセスの可視化
-* 本番環境の運用性向上
-* MTTR（平均復旧時間）の短縮
 
 
 
