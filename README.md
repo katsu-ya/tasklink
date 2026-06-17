@@ -24,7 +24,11 @@ https://tasklink-1iv9.onrender.com
 
 https://github.com/katsu-ya/tasklink
 
+
+
 ---
+
+
 
 ## 使用技術
 
@@ -42,6 +46,8 @@ https://github.com/katsu-ya/tasklink
 
 ---
 
+
+
 ## アプリ概要
 
 TaskLinkは個人・チームで利用できるタスク管理アプリです。
@@ -55,6 +61,8 @@ TaskLinkは個人・チームで利用できるタスク管理アプリです。
 といった課題を解決するために開発しました。
 
 ---
+
+
 
 ## 📷 画面イメージ
 
@@ -111,6 +119,8 @@ TaskLinkは個人・チームで利用できるタスク管理アプリです。
 * 他チームのタスクへのアクセス制御
 
 ---
+
+
 
 ## 工夫した点
 
