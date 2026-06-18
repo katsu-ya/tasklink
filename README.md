@@ -539,6 +539,110 @@ Rails
 
 ---
 
+## ALB（Application Load Balancer）構築
+
+可用性向上およびHTTPS終端のため、Application Load Balancer（ALB）を構築しました。
+
+### 構成
+
+Internet
+
+↓
+
+ALB
+
+↓
+
+Target Group
+
+↓
+
+EC2 (Nginx / Puma / Rails)
+
+### 実施内容
+
+* ALB作成
+* Target Group作成
+* EC2インスタンス登録
+* ヘルスチェック設定
+* HTTPS(443)リスナー設定
+* ACM証明書連携
+
+### ヘルスチェック
+
+| 項目            | 設定   |
+| ------------- | ---- |
+| Protocol      | HTTP |
+| Port          | 3000 |
+| Path          | /    |
+| Success Codes | 200  |
+
+### 動作確認
+
+* Target GroupがHealthy状態であることを確認
+* ALB経由でRailsアプリケーションへアクセスできることを確認
+
+---
+
+## ACM（AWS Certificate Manager）
+
+SSL/TLS証明書の運用自動化を目的として、AWS Certificate Manager (ACM) を利用しています。
+
+### 発行ドメイン
+
+* tasklink-app.com
+* [www.tasklink-app.com](http://www.tasklink-app.com)
+
+### 認証方式
+
+DNS Validation（Route53）
+
+### 証明書情報
+
+| 項目   | 内容                      |
+| ---- | ----------------------- |
+| 発行元  | AWS Certificate Manager |
+| 方式   | RSA 2048                |
+| 検証方法 | DNS Validation          |
+| 更新   | 自動更新                    |
+
+### 導入目的
+
+* SSL証明書管理の自動化
+* 証明書更新作業の削減
+* ALBでのHTTPS終端
+
+---
+
+## 直近の改善予定
+
+現在、本番環境では Nginx + Let's Encrypt によりHTTPS通信を提供しています。
+
+今後は以下の構成へ移行し、ALBでSSL終端を行う予定です。
+
+Internet
+
+↓
+
+ALB (HTTPS / ACM)
+
+↓
+
+EC2 (HTTP)
+
+↓
+
+Puma
+
+↓
+
+Rails
+
+これにより、証明書管理をAWSへ集約し、運用負荷の軽減と可用性向上を実現します。
+
+
+---
+
 
 ## 今後の改善予定
 
