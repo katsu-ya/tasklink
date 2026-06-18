@@ -490,16 +490,6 @@ CloudWatch Metricsによるリソース監視とCloudWatch Logsによるログ�
 
 ---
 
-## 今後の改善予定
-
-* CloudWatch Logs Insightsを活用したログ分析強化
-* Runbook（障害対応手順書）の整備
-* アプリケーション監視の高度化
-* ALB導入による可用性向上
-* 監視ダッシュボードの継続改善
-
----
-
 ## SRE / 運用改善
 
 本プロジェクトでは以下の運用改善を実施しました。
@@ -513,7 +503,49 @@ CloudWatch Metricsによるリソース監視とCloudWatch Logsによるログ�
 * Runbook整備
 * CloudWatch Logs Insightsによるログ分析基盤構築
 
+---
 
+### Application Load Balancer
+
+AWS Application Load Balancer（ALB）を導入し、
+インターネットからのリクエストをEC2へルーティングしています。
+
+#### 構成
+
+Internet
+↓
+Application Load Balancer
+↓
+EC2 (Nginx)
+↓
+Puma
+↓
+Rails
+
+#### 導入目的
+
+- 可用性向上
+- HTTPS終端への対応
+- 将来的なAuto Scaling対応
+- インフラ構成の本番運用化
+
+#### 実装内容
+
+- Target Group作成
+- Health Check設定
+- EC2登録
+- Security Group設定
+- ALB経由でRailsアプリへ接続
+
+---
+
+
+## 今後の改善予定
+
+* CloudWatch Logs Insightsを活用したログ分析強化
+* Runbook（障害対応手順書）の整備
+* アプリケーション監視の高度化
+* 監視ダッシュボードの継続改善
 
 
 
