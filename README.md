@@ -283,216 +283,111 @@ Rails consoleを利用して原因を特定し、
 
 
 
-# 監視・ログ管理
 
-TaskLinkでは AWS CloudWatch Agent、CloudWatch Metrics、CloudWatch Logs、CloudWatch Alarm、Amazon SNS を利用し、本番環境の監視・ログ管理・障害通知を実装しています。
 
-## システム構成
+# インフラ・監視運用
 
-```text
-EC2 (Rails / Puma / PostgreSQL)
-            ↓
-     CloudWatch Agent
-            ↓
- ┌───────────────┬────────────────┐
- ↓                                ↓
-CloudWatch Metrics        CloudWatch Logs
- ↓                                ↓
-CloudWatch Alarm      Metric Filter
- ↓                                ↓
-Amazon SNS         Custom Metric
- ↓                                ↓
-Email Notification   CloudWatch Alarm
-                               ↓
-                         Amazon SNS
-                               ↓
-                       Email Notification
-```
+TaskLinkでは AWS を利用し、本番環境の監視・ログ管理・障害通知・HTTPS化を実装しています。
 
-## 監視目的
-
-* ディスク容量不足による障害の予防
-* メモリ不足によるアプリケーション停止の予防
-* CPU高負荷によるレスポンス低下の早期検知
-* Pumaプロセス停止の即時検知
-* 本番環境ログの集中管理
-* Railsアプリケーションエラーの早期発見
-* 障害発生時の迅速な原因調査
-
----
-
-## CloudWatch Metrics監視
-
-### 監視アラーム
-
-| アラーム名                    | 監視内容       | 条件             |
-| ------------------------ | ---------- | -------------- |
-| tasklink-disk-usage-80   | ディスク使用率    | 80%以上          |
-| tasklink-memory-usage-80 | メモリ使用率     | 80%以上          |
-| tasklink-cpu-usage-90    | CPU使用率     | CPU Idle ≤ 10% |
-| tasklink-puma-down       | Pumaプロセス停止 | pid_count < 1  |
-
-### 収集メトリクス
-
-| メトリクス                     | 用途       |
-| ------------------------- | -------- |
-| disk_used_percent         | ディスク監視   |
-| mem_used_percent          | メモリ監視    |
-| cpu_usage_idle            | CPU監視    |
-| procstat_lookup_pid_count | Puma死活監視 |
-
-CloudWatch Alarm発生時は Amazon SNS を経由してメール通知を送信し、異常をリアルタイムで検知できる構成としています。
-
----
-
-## CloudWatch Logs
-
-Rails本番環境ではSTDOUTへ出力されたログをsystemd経由でsyslogへ集約し、CloudWatch Logsへ転送しています。
-
-### ログ収集フロー
+## 構成
 
 ```text
-Rails / Puma
-     ↓
-systemd journal
-     ↓
-/var/log/syslog
-     ↓
-CloudWatch Agent
-     ↓
-CloudWatch Logs
+Internet
+    ↓
+Route53
+    ↓
+ALB (HTTPS / ACM)
+    ↓
+EC2 (Nginx)
+    ↓
+Puma
+    ↓
+Rails
+    ↓
+PostgreSQL
+
+          ┌────────────────────┐
+          │ CloudWatch Agent   │
+          └─────────┬──────────┘
+                    ↓
+      CloudWatch Metrics / Logs
+                    ↓
+            CloudWatch Alarm
+                    ↓
+               Amazon SNS
+                    ↓
+           Email Notification
 ```
 
-### ロググループ
+## 監視・ログ管理
 
-```text
-/tasklink/syslog
-```
+CloudWatch Agent を利用してサーバーメトリクスおよびログを収集しています。
 
-### 収集対象
+### 監視対象
 
-* Railsアクセスログ
-* Railsエラーログ
-* Puma起動ログ
-* systemdログ
+* ディスク使用率
+* メモリ使用率
+* CPU使用率
+* Pumaプロセス死活監視
+* Rails 500エラー
 
----
+### 通知
 
-## Rails 500エラー監視
+CloudWatch Alarm と Amazon SNS を連携し、異常検知時にメール通知を送信しています。
 
-CloudWatch LogsのMetric Filterを利用し、Railsアプリケーションで発生したHTTP 500エラーを監視しています。
+### ログ管理
 
-### 監視構成
+Rails / Puma ログを CloudWatch Logs に集約し、CloudWatch Logs Insights によるログ分析を可能にしています。
 
-```text
-CloudWatch Logs
-      ↓
-Metric Filter (Completed 500)
-      ↓
-Custom Metric (rails_500_errors)
-      ↓
-CloudWatch Alarm
-      ↓
-Amazon SNS
-      ↓
-Email Notification
-```
-
-### アラーム
-
-| アラーム名                           | 条件             |
-| ------------------------------- | -------------- |
-| tasklink-rails-500-errors-alarm | HTTP 500エラー発生時 |
-
-### 導入効果
-
-* 本番障害の早期検知
-* エラー発生時の即時通知
-* MTTR（平均復旧時間）の短縮
-
----
-
-## CloudWatch Dashboard
-
-CloudWatch Dashboardを作成し、サーバーおよびアプリケーションの状態を一画面で可視化しています。
-
-### 可視化項目
-
-* Disk Usage (%)
-* Memory Usage (%)
-* CPU Idle (%)
-* Rails 500 Errors
-
-### 活用方法
-
-障害発生時にはDashboardを確認することで、
-
-* サーバーリソース状況の把握
-* エラー発生状況の確認
-* 異常発生箇所の切り分け
-
-を迅速に実施できる構成としています。
-
----
-
-## CloudWatch Logs Insights
-
-CloudWatch Logs Insightsを利用し、本番環境ログの分析基盤を構築しています。
-
-### 主な分析内容
+主な分析内容
 
 * Rails 500エラー分析
 * アクセスログ分析
-* 不正アクセス検知
 * IPアドレス別アクセス集計
-* 障害発生時の原因調査
+* 不正アクセス検知
 
-### 活用例
+## 可視化
 
-#### 500エラー分析
+CloudWatch Dashboard を利用し、以下を一画面で監視しています。
 
-```sql
-fields @timestamp, @message
-| filter @message like /Completed 500/
-| sort @timestamp desc
-```
+* Disk Usage
+* Memory Usage
+* CPU Usage
+* Rails 500 Errors
 
-#### 不正アクセス分析
+障害発生時の状況把握と原因調査を迅速に行える構成としています。
 
-```sql
-fields @timestamp, @message
-| filter @message like /wp-admin/
-```
+## HTTPS対応
 
-#### アクセス元IP分析
+Application Load Balancer（ALB）および AWS Certificate Manager（ACM）を利用し HTTPS 化を実施しています。
 
-```sql
-fields @message
-| parse @message /for (?<ip>[0-9\.]+) at/
-| stats count() as requests by ip
-```
+### 実装内容
 
----
+* ALB構築
+* Target Group作成
+* Health Check設定
+* ACM証明書発行
+* Route53連携
+* HTTPSリスナー設定
 
-## 運用上の工夫
+### 利用サービス
+
+* Application Load Balancer (ALB)
+* AWS Certificate Manager (ACM)
+* Route53
+
+### 導入効果
+
+* SSL証明書の自動更新
+* HTTPS通信の実現
+* 可用性向上
+* 将来的なAuto Scalingへの対応
+
+## 運用改善
 
 運用中に発生したディスク容量不足の障害をきっかけに監視体制を整備しました。
 
-CloudWatch Metricsによるリソース監視とCloudWatch Logsによるログ管理を組み合わせることで、
-
-* 障害の早期発見
-* 原因調査の迅速化
-* サーバー状態の可視化
-
-を実現しています。
-
-また、ログをCloudWatch Logsへ集約することで、EC2へSSH接続せずにAWSコンソール上からログ確認が可能な構成としています。
-
----
-
-## SRE / 運用改善
-
-本プロジェクトでは以下の運用改善を実施しました。
+実施内容
 
 * CloudWatch Agent導入
 * CloudWatch Logs集約
@@ -501,155 +396,26 @@ CloudWatch Metricsによるリソース監視とCloudWatch Logsによるログ�
 * Puma死活監視
 * CloudWatch Dashboard作成
 * Runbook整備
-* CloudWatch Logs Insightsによるログ分析基盤構築
+* CloudWatch Logs Insightsによるログ分析
 
----
+これにより、
 
-### Application Load Balancer
+* 障害の早期発見
+* 原因調査の迅速化
+* サーバー状態の可視化
 
-AWS Application Load Balancer（ALB）を導入し、
-インターネットからのリクエストをEC2へルーティングしています。
+を実現しています。
 
-#### 構成
+## 今後の改善
 
-Internet
-↓
-Application Load Balancer
-↓
-EC2 (Nginx)
-↓
-Puma
-↓
-Rails
-
-#### 導入目的
-
-- 可用性向上
-- HTTPS終端への対応
-- 将来的なAuto Scaling対応
-- インフラ構成の本番運用化
-
-#### 実装内容
-
-- Target Group作成
-- Health Check設定
-- EC2登録
-- Security Group設定
-- ALB経由でRailsアプリへ接続
-
----
-
-## ALB（Application Load Balancer）構築
-
-可用性向上およびHTTPS終端のため、Application Load Balancer（ALB）を構築しました。
-
-### 構成
-
-Internet
-
-↓
-
-ALB
-
-↓
-
-Target Group
-
-↓
-
-EC2 (Nginx / Puma / Rails)
-
-### 実施内容
-
-* ALB作成
-* Target Group作成
-* EC2インスタンス登録
-* ヘルスチェック設定
-* HTTPS(443)リスナー設定
-* ACM証明書連携
-
-### ヘルスチェック
-
-| 項目            | 設定   |
-| ------------- | ---- |
-| Protocol      | HTTP |
-| Port          | 3000 |
-| Path          | /    |
-| Success Codes | 200  |
-
-### 動作確認
-
-* Target GroupがHealthy状態であることを確認
-* ALB経由でRailsアプリケーションへアクセスできることを確認
-
----
-
-## ACM（AWS Certificate Manager）
-
-SSL/TLS証明書の運用自動化を目的として、AWS Certificate Manager (ACM) を利用しています。
-
-### 発行ドメイン
-
-* tasklink-app.com
-* [www.tasklink-app.com](http://www.tasklink-app.com)
-
-### 認証方式
-
-DNS Validation（Route53）
-
-### 証明書情報
-
-| 項目   | 内容                      |
-| ---- | ----------------------- |
-| 発行元  | AWS Certificate Manager |
-| 方式   | RSA 2048                |
-| 検証方法 | DNS Validation          |
-| 更新   | 自動更新                    |
-
-### 導入目的
-
-* SSL証明書管理の自動化
-* 証明書更新作業の削減
-* ALBでのHTTPS終端
-
----
-
-## 直近の改善予定
-
-現在、本番環境では Nginx + Let's Encrypt によりHTTPS通信を提供しています。
-
-今後は以下の構成へ移行し、ALBでSSL終端を行う予定です。
-
-Internet
-
-↓
-
-ALB (HTTPS / ACM)
-
-↓
-
-EC2 (HTTP)
-
-↓
-
-Puma
-
-↓
-
-Rails
-
-これにより、証明書管理をAWSへ集約し、運用負荷の軽減と可用性向上を実現します。
-
-
----
-
-
-## 今後の改善予定
-
-* CloudWatch Logs Insightsを活用したログ分析強化
-* Runbook（障害対応手順書）の整備
+* CloudWatch Logs Insightsによる分析強化
 * アプリケーション監視の高度化
-* 監視ダッシュボードの継続改善
+* Auto Scaling対応
+* 監視ダッシュボード改善
+
+```
+```
+
 
 
 
