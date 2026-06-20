@@ -416,19 +416,27 @@ Application Load Balancer（ALB）および AWS Certificate Manager（ACM）を�
 ```
 ```
 
-### ストレージ運用
+### EBS容量拡張による運用改善
 
-CloudWatchによるディスク監視を導入し、
-使用率80%超過時にSNS経由でメール通知を送信する構成を実装。
+CloudWatchによるディスク使用率監視でアラームが発報したため、
+Linuxコマンド（df / du）を用いて容量調査を実施。
 
-運用中にアラームが発報したため、
-Linuxコマンド（df、du）を用いて容量調査を実施し、
-原因分析およびEBS容量拡張を行った。
+調査結果をもとに、AWS EBSボリュームを8GBから20GBへ拡張し、
+growpart・resize2fsを利用してオンラインでファイルシステムを拡張した。
 
-- CloudWatch Alarm
-- Amazon SNS
-- EBS運用
-- Linuxログ調査
+#### 対応内容
+
+- CloudWatch Alarmによる検知
+- Linux容量調査（df, du）
+- EBSオンライン拡張
+- パーティション拡張（growpart）
+- ファイルシステム拡張（resize2fs）
+
+#### 結果
+
+- ディスク使用率: 81% → 30%
+- 空き容量: 1.4GB → 13GB
+- アラーム解消
 
 
 
