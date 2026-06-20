@@ -416,6 +416,20 @@ Application Load Balancer（ALB）および AWS Certificate Manager（ACM）を�
 ```
 ```
 
+### ストレージ運用
+
+CloudWatchによるディスク監視を導入し、
+使用率80%超過時にSNS経由でメール通知を送信する構成を実装。
+
+運用中にアラームが発報したため、
+Linuxコマンド（df、du）を用いて容量調査を実施し、
+原因分析およびEBS容量拡張を行った。
+
+- CloudWatch Alarm
+- Amazon SNS
+- EBS運用
+- Linuxログ調査
+
 
 
 
