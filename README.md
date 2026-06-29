@@ -153,36 +153,36 @@ PostgreSQL
 
 CI:
 
-RSpec
-RuboCop
-bundler-audit
+* RSpec
+* RuboCop
+* bundler-audit
 
 CD:
 
-migrate
-assets precompile
-Puma restart
+* migrate
+* assets precompile
+* Puma restart
 🧪 Testing
-RSpec（Model / Request / Policy）
-認証・認可テストあり
-カバレッジ：約75%
-bundle exec rspec
+* RSpec（Model / Request / Policy）
+* 認証・認可テストあり
+* カバレッジ：約75%
+* bundle exec rspec
 🧱 Development Setup
-docker compose build
-docker compose up
+* docker compose build
+* docker compose up
 
 DB:
 
-docker compose run web rails db:create db:migrate
+* docker compose run web rails db:create db:migrate
 🧠 Challenges & Solutions
 チーム機能導入時の問題
 
 本番環境で team_id が存在しないデータが発生
 
 対応
-Rails consoleで調査
-マイグレーション修正
-データ移行
+* Rails consoleで調査
+* マイグレーション修正
+* データ移行
 
 👉 DB変更の影響範囲を学習
 
@@ -191,25 +191,25 @@ Rails consoleで調査
 ディスク容量不足が発生
 
 対応
-CloudWatchで検知
-EBS拡張（8GB → 20GB）
-growpart / resize2fs実行
+* CloudWatchで検知
+* EBS拡張（8GB → 20GB）
+* growpart / resize2fs実行
 
 👉 監視・運用の重要性を理解
 
 🗺 Roadmap
-High Priority
-コメント機能強化
-通知機能
-Medium
-カレンダー表示
-優先順位機能
-Low
-ダークモード
+* High Priority
+* コメント機能強化
+* 通知機能
+* Medium
+* カレンダー表示
+* 優先順位機能
+* Low
+* ダークモード
 👤 Author
 新城 克哉
-GitHub: https://github.com/katsu-ya
-Qiita: https://qiita.com/katsu-ya
+* GitHub: https://github.com/katsu-ya
+* Qiita: https://qiita.com/katsu-ya
 
 
 ---
