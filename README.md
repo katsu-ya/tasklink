@@ -36,16 +36,31 @@ https://github.com/katsu-ya/tasklink
 
 
 ⚙️ Tech Stack
-Category	Tech
-Backend	Ruby 3.3 / Rails 8
-Frontend	Turbo / Stimulus / Tailwind CSS
-DB	PostgreSQL
-Auth	Devise
-Authorization	Pundit
-Test	RSpec
-CI/CD	GitHub Actions
-Infra	AWS EC2 / Nginx / Puma / systemd
-Dev	Docker / Docker Compose
+Backend
+* Ruby 3.3
+* Rails 8
+Frontend
+* Turbo
+* Stimulus
+* Tailwind CSS
+Database
+* PostgreSQL
+Authentication
+* Devise
+Authorization
+* Pundit
+Testing
+* RSpec
+CI / CD
+* GitHub Actions
+Infrastructure
+* AWS EC2
+* Nginx
+* Puma
+* systemd
+Development
+* Docker
+* Docker Compose
 
 ---
 
