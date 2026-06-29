@@ -93,25 +93,25 @@ Docker / Docker Compose
 
 
 
-## 📷 画面イメージ
+📷 画面イメージ
 
-### タスク一覧画面
+タスク一覧画面
 
 ![タスク一覧画面](images/index.png)
 
-### タスク作成モーダル
+タスク作成モーダル
 
 ![タスク作成モーダル](images/new.png)
 
-### 検索結果画面（キーワード）
+検索結果画面（キーワード）
 
 ![検索結果画面（キーワード）](images/search1.png)
 
-### 検索結果画面（完了タスク）
+検索結果画面（完了タスク）
 
 ![検索結果画面（完了タスク）](images/search2.png)
 
-### スマホ表示
+スマホ表示
 
 ![スマホ表示](images/smartphone.png)
 
@@ -128,6 +128,8 @@ Docker / Docker Compose
 * 進捗バー
 * フィルター件数
 
+---
+
 👉 ページリロードなしで状態同期
 
 🔐 Authorization (Pundit)
@@ -139,19 +141,24 @@ Docker / Docker Compose
 * ユーザーはチーム単位で管理され、
 * タスクもチーム単位で共有される設計
 
-🏗 Infrastructure
-AWS Architecture
+---
+
+🏗 Infrastructure / AWS Architecture
+🌐 AWS Architecture
+
 Route53
-  ↓
-ALB (HTTPS / ACM)
-  ↓
-EC2 (Nginx)
-  ↓
+↓
+ALB（HTTPS / ACM）
+↓
+EC2（Nginx）
+↓
 Puma
-  ↓
+↓
 Rails
-  ↓
+↓
 PostgreSQL
+
+---
 
 📊 Monitoring / Observability
 * CloudWatch Metrics
@@ -227,6 +234,8 @@ DB:
 * 優先順位機能
 * Low
 * ダークモード
+
+---
 
 👤 Author
 新城 克哉
