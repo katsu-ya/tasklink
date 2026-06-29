@@ -174,6 +174,7 @@ CD:
 DB:
 
 * docker compose run web rails db:create db:migrate
+
 🧠 Challenges & Solutions
 チーム機能導入時の問題
 
@@ -186,9 +187,9 @@ DB:
 
 👉 DB変更の影響範囲を学習
 
-インフラ障害対応
+* インフラ障害対応
 
-ディスク容量不足が発生
+* ディスク容量不足が発生
 
 対応
 * CloudWatchで検知
@@ -206,6 +207,7 @@ DB:
 * 優先順位機能
 * Low
 * ダークモード
+
 👤 Author
 新城 克哉
 * GitHub: https://github.com/katsu-ya
