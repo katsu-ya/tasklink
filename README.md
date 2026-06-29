@@ -58,14 +58,17 @@ Dev	Docker / Docker Compose
 * ステータス管理（Todo / Doing / Done）
 * 期限管理
 * 達成率表示
+  
 🔍 Search / Filter
 * キーワード検索
 * ステータスフィルタ
 * 件数リアルタイム更新
+
 💬 Collaboration
 * コメント機能（※予定 or 実装状況に合わせて調整）
 * いいね機能
-* ⚡ Real-time UX
+
+⚡ Real-time UX 
 * Turbo Streamによる非同期更新
 * Turbo FrameモーダルUI
 * SortableJSによる並び替え
