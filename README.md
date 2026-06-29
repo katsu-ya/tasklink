@@ -4,61 +4,70 @@
 ![CI / RSpec](https://github.com/katsu-ya/tasklink/actions/workflows/ci.yml/badge.svg)
 
 
-Rails + Turbo Streamで構築した、チーム向けリアルタイムタスク管理アプリです。
+📌 TaskLink
 
-Rails標準技術である Turbo Stream を活用し、SPA化せずに快適なユーザー体験を実現しました。
+Rails + Turbo Streamで構築した、チーム向けタスク管理アプリです。
+SPAを使わずにリアルタイムUI更新を実現し、実務レベルの開発・運用（CI/CD・AWS・監視）まで一貫して構築しています。
 
-また、認可・テスト・CI/CD・AWSデプロイまで含め、実務を意識した開発を行いました。
+---
 
-## URL
-
-### Production（AWS EC2）
-
+🚀 Demo / Links
+* 🌐 Production（AWS）
 https://tasklink-app.com
-
-### Demo（Render）
-
+* 🧪 Demo（Render）
 https://tasklink-1iv9.onrender.com
-
-### GitHub
-
+* 💻 GitHub
 https://github.com/katsu-ya/tasklink
 
-
-
 ---
 
+🧠 Why I Built This
 
+従来のToDoアプリの課題：
 
-## 使用技術
-
-| Category       | Tech                             |
-| -------------- | -------------------------------- |
-| Backend        | Ruby 3.3 / Rails 8               |
-| Frontend       | Turbo / Stimulus / Tailwind CSS  |
-| Database       | PostgreSQL                       |
-| Authentication | Devise                           |
-| Authorization  | Pundit                           |
-| Testing        | RSpec                            |
-| CI/CD          | GitHub Actions                   |
-| Infrastructure | AWS EC2 / Nginx / Puma / systemd |
-| Development    | Docker / Docker Compose          |
-
----
-
-
-
-## アプリ概要
-
-TaskLinkは個人・チームで利用できるタスク管理アプリです。
-
-既存のToDoアプリで感じていた、
-
-* ページ更新が多い
+* ページ更新が多くUXが悪い
 * チーム利用を想定していない
-* 進捗状況が分かりにくい
+* 進捗が直感的に分からない
 
-といった課題を解決するために開発しました。
+👉 これらを解決するために開発
+
+---
+
+
+
+⚙️ Tech Stack
+Category	Tech
+Backend	Ruby 3.3 / Rails 8
+Frontend	Turbo / Stimulus / Tailwind CSS
+DB	PostgreSQL
+Auth	Devise
+Authorization	Pundit
+Test	RSpec
+CI/CD	GitHub Actions
+Infra	AWS EC2 / Nginx / Puma / systemd
+Dev	Docker / Docker Compose
+
+---
+
+
+
+📌 Features
+📋 Task Management
+* タスク作成 / 編集 / 削除
+* ステータス管理（Todo / Doing / Done）
+* 期限管理
+* 達成率表示
+🔍 Search / Filter
+* キーワード検索
+* ステータスフィルタ
+* 件数リアルタイム更新
+💬 Collaboration
+* コメント機能（※予定 or 実装状況に合わせて調整）
+* いいね機能
+* ⚡ Real-time UX
+* Turbo Streamによる非同期更新
+* Turbo FrameモーダルUI
+* SortableJSによる並び替え
 
 ---
 
