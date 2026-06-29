@@ -144,19 +144,31 @@ Docker / Docker Compose
 ---
 
 🏗 Infrastructure / AWS Architecture
+
 🌐 AWS Architecture
 
 Route53
+
 ↓
+
 ALB（HTTPS / ACM）
+
 ↓
+
 EC2（Nginx）
+
 ↓
+
 Puma
+
 ↓
+
 Rails
+
 ↓
+
 PostgreSQL
+
 
 ---
 
@@ -224,6 +236,8 @@ DB:
 * growpart / resize2fs実行
 
 👉 監視・運用の重要性を理解
+
+---
 
 🗺 Roadmap
 * High Priority
