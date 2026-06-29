@@ -103,388 +103,113 @@ Dev	Docker / Docker Compose
 
 
 
-## 主な機能
+🧩 Architecture / Design Highlights
+⚡ Turbo StreamでSPA不要のUX
 
-### タスク管理
-
-* タスク作成・編集・削除
-* ステータス管理（Todo / Doing / Done）
-* 期限管理
-* 達成率表示
-
-### 検索・フィルター
-
-* キーワード検索
-* ステータス別フィルター
-* 件数のリアルタイム更新
-
-### UI / UX
-
-* Turbo Streamによるリアルタイム更新
-* Turbo Frameを利用したモーダルUI
-* SortableJSによるドラッグ＆ドロップ並び替え
-* レスポンシブ対応
-
-### セキュリティ
-
-* Deviseによる認証
-* Punditによるチーム単位の認可
-* 他チームのタスクへのアクセス制御
-
----
-
-
-
-## 工夫した点
-
-### 1. Turbo Streamによるリアルタイム更新
-
-タスクの作成・更新・削除時に、
+タスク操作時に以下を即時更新：
 
 * タスク一覧
-* 達成率バー
+* 進捗バー
 * フィルター件数
 
-をページリロードなしで更新しています。
+👉 ページリロードなしで状態同期
 
-SPAを導入せずにユーザー体験を向上させることを意識しました。
+🔐 Authorization (Pundit)
+* policy_scopeで取得制御
+* チーム単位でアクセス制御
+* URL直打ち対策
+🏢 Team-based Design
 
-### 2. Punditによる認可
+* ユーザーはチーム単位で管理され、
+* タスクもチーム単位で共有される設計
 
-認証だけではURL直接アクセスを防げないため、Punditを導入しました。
-
-* policy_scopeによる取得制御
-* TaskPolicyによる閲覧・編集・削除制御
-
-を実装し、チーム単位で安全にデータを管理できるようにしています。
-
-### 3. 実運用を意識したインフラ構築
-
-本番環境をAWS EC2上に構築しました。
-
-* Nginx
-* Puma
-* systemd
-* PostgreSQL
-
-を利用し、HTTPS化および独自ドメイン運用に対応しています。
-
----
-
-
-
-## ER Diagram
-
-将来的なチーム共有機能・コメント機能まで見据えて設計しています。
-
-![ER Diagram](images/er_diagram.png)
-
-
----
-
-## インフラ構成
-
-GitHub Actions
-
-↓
-
-AWS EC2
-
-↓
-
-Nginx
-
-↓
-
+🏗 Infrastructure
+AWS Architecture
+Route53
+  ↓
+ALB (HTTPS / ACM)
+  ↓
+EC2 (Nginx)
+  ↓
 Puma
-
-↓
-
+  ↓
 Rails
-
-↓
-
+  ↓
 PostgreSQL
+📊 Monitoring / Observability
+* CloudWatch Metrics
+* CloudWatch Logs
+* CloudWatch Alarm
+* SNS通知
 
-### 構成ポイント
+監視対象：
 
-* GitHub Actionsによる自動デプロイ
-* systemdによるPumaプロセス管理
-* Let's EncryptによるHTTPS対応
-* Elastic IPによる固定IP運用
+* CPU / Memory / Disk
+* Puma死活監視
+* Rails 500エラー
+📦 Deployment
+* GitHub ActionsでCI/CD
+* main pushで自動デプロイ
 
----
+CI:
 
-## CI/CD
+RSpec
+RuboCop
+bundler-audit
 
-GitHub Actionsを利用し、mainブランチへのPush時に以下を自動実行しています。
+CD:
 
-### CI
-
-* RSpec
-* RuboCop
-* bundler-audit
-
-### CD
-
-* bundle install
-* rails db:migrate
-* assets:precompile
-* Puma restart
-
-
-
----
-
-## テスト
-
-RSpecを用いてテストを実装しています。
-
-### テスト対象
-
-* Model Spec
-* Request Spec
-* 認証
-* 認可
-* CRUD処理
-* 検索・フィルター
-
-### Coverage
-
-約75%
-
-
-
----
-
-## 開発環境
-
-Docker Composeを利用し、RailsとPostgreSQLの開発環境を構築しています。
-
-### 起動
-
-```bash
+migrate
+assets precompile
+Puma restart
+🧪 Testing
+RSpec（Model / Request / Policy）
+認証・認可テストあり
+カバレッジ：約75%
+bundle exec rspec
+🧱 Development Setup
 docker compose build
 docker compose up
-```
 
-### DB作成
+DB:
 
-```bash
-docker compose run web rails db:create
-docker compose run web rails db:migrate
-```
+docker compose run web rails db:create db:migrate
+🧠 Challenges & Solutions
+チーム機能導入時の問題
 
----
+本番環境で team_id が存在しないデータが発生
 
-## 苦労した点
+対応
+Rails consoleで調査
+マイグレーション修正
+データ移行
 
-チーム機能追加時に、本番環境の既存データに team_id が存在しない問題が発生しました。
+👉 DB変更の影響範囲を学習
 
-Rails consoleを利用して原因を特定し、
+インフラ障害対応
 
-* マイグレーション修正
-* データ移行
+ディスク容量不足が発生
 
-を行うことで解決しました。
+対応
+CloudWatchで検知
+EBS拡張（8GB → 20GB）
+growpart / resize2fs実行
 
-データベース変更時の既存データへの影響について学ぶことができました。
+👉 監視・運用の重要性を理解
 
-
-
----
-
-
-
-
-
-# インフラ・監視運用
-
-TaskLinkでは AWS を利用し、本番環境の監視・ログ管理・障害通知・HTTPS化を実装しています。
-
-## 構成
-
-```text
-Internet
-    ↓
-Route53
-    ↓
-ALB (HTTPS / ACM)
-    ↓
-EC2 (Nginx)
-    ↓
-Puma
-    ↓
-Rails
-    ↓
-PostgreSQL
-
-          ┌────────────────────┐
-          │ CloudWatch Agent   │
-          └─────────┬──────────┘
-                    ↓
-      CloudWatch Metrics / Logs
-                    ↓
-            CloudWatch Alarm
-                    ↓
-               Amazon SNS
-                    ↓
-           Email Notification
-```
-
-## 監視・ログ管理
-
-CloudWatch Agent を利用してサーバーメトリクスおよびログを収集しています。
-
-### 監視対象
-
-* ディスク使用率
-* メモリ使用率
-* CPU使用率
-* Pumaプロセス死活監視
-* Rails 500エラー
-
-### 通知
-
-CloudWatch Alarm と Amazon SNS を連携し、異常検知時にメール通知を送信しています。
-
-### ログ管理
-
-Rails / Puma ログを CloudWatch Logs に集約し、CloudWatch Logs Insights によるログ分析を可能にしています。
-
-主な分析内容
-
-* Rails 500エラー分析
-* アクセスログ分析
-* IPアドレス別アクセス集計
-* 不正アクセス検知
-
-## 可視化
-
-CloudWatch Dashboard を利用し、以下を一画面で監視しています。
-
-* Disk Usage
-* Memory Usage
-* CPU Usage
-* Rails 500 Errors
-
-障害発生時の状況把握と原因調査を迅速に行える構成としています。
-
-## HTTPS対応
-
-Application Load Balancer（ALB）および AWS Certificate Manager（ACM）を利用し HTTPS 化を実施しています。
-
-### 実装内容
-
-* ALB構築
-* Target Group作成
-* Health Check設定
-* ACM証明書発行
-* Route53連携
-* HTTPSリスナー設定
-
-### 利用サービス
-
-* Application Load Balancer (ALB)
-* AWS Certificate Manager (ACM)
-* Route53
-
-### 導入効果
-
-* SSL証明書の自動更新
-* HTTPS通信の実現
-* 可用性向上
-* 将来的なAuto Scalingへの対応
-
-## 運用改善
-
-運用中に発生したディスク容量不足の障害をきっかけに監視体制を整備しました。
-
-実施内容
-
-* CloudWatch Agent導入
-* CloudWatch Logs集約
-* SNS通知構築
-* Rails 500エラー監視
-* Puma死活監視
-* CloudWatch Dashboard作成
-* Runbook整備
-* CloudWatch Logs Insightsによるログ分析
-
-これにより、
-
-* 障害の早期発見
-* 原因調査の迅速化
-* サーバー状態の可視化
-
-を実現しています。
-
-## 今後の改善
-
-* CloudWatch Logs Insightsによる分析強化
-* アプリケーション監視の高度化
-* Auto Scaling対応
-* 監視ダッシュボード改善
-
-```
-```
-
-### EBS容量拡張による運用改善
-
-CloudWatchによるディスク使用率監視でアラームが発報したため、
-Linuxコマンド（df / du）を用いて容量調査を実施。
-
-調査結果をもとに、AWS EBSボリュームを8GBから20GBへ拡張し、
-growpart・resize2fsを利用してオンラインでファイルシステムを拡張した。
-
-#### 対応内容
-
-- CloudWatch Alarmによる検知
-- Linux容量調査（df, du）
-- EBSオンライン拡張
-- パーティション拡張（growpart）
-- ファイルシステム拡張（resize2fs）
-
-#### 結果
-
-- ディスク使用率: 81% → 30%
-- 空き容量: 1.4GB → 13GB
-- アラーム解消
-
-
-
-
----
-
-
-
-## 今後の追加機能予定
-
-### 優先度高
-
-* コメント機能
-* 通知機能
-
-### 優先度中
-
-* カレンダー表示
-* 優先順位
-
-### 優先度低
-
-* ダークモード
-
----
-
-## 作者
-
+🗺 Roadmap
+High Priority
+コメント機能強化
+通知機能
+Medium
+カレンダー表示
+優先順位機能
+Low
+ダークモード
+👤 Author
 新城 克哉
-
-GitHub
-https://github.com/katsu-ya
-
-Qiita
-https://qiita.com/katsu-ya
+GitHub: https://github.com/katsu-ya
+Qiita: https://qiita.com/katsu-ya
 
 
 ---
