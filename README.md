@@ -118,8 +118,8 @@ Dev	Docker / Docker Compose
 * policy_scopeで取得制御
 * チーム単位でアクセス制御
 * URL直打ち対策
+  
 🏢 Team-based Design
-
 * ユーザーはチーム単位で管理され、
 * タスクもチーム単位で共有される設計
 
@@ -136,6 +136,7 @@ Puma
 Rails
   ↓
 PostgreSQL
+
 📊 Monitoring / Observability
 * CloudWatch Metrics
 * CloudWatch Logs
@@ -147,6 +148,7 @@ PostgreSQL
 * CPU / Memory / Disk
 * Puma死活監視
 * Rails 500エラー
+
 📦 Deployment
 * GitHub ActionsでCI/CD
 * main pushで自動デプロイ
@@ -162,11 +164,13 @@ CD:
 * migrate
 * assets precompile
 * Puma restart
+  
 🧪 Testing
 * RSpec（Model / Request / Policy）
 * 認証・認可テストあり
-* カバレッジ：約75%
+* カバレッジ：約85%
 * bundle exec rspec
+
 🧱 Development Setup
 * docker compose build
 * docker compose up
@@ -176,9 +180,9 @@ DB:
 * docker compose run web rails db:create db:migrate
 
 🧠 Challenges & Solutions
-チーム機能導入時の問題
+* チーム機能導入時の問題
 
-本番環境で team_id が存在しないデータが発生
+* 本番環境で team_id が存在しないデータが発生
 
 対応
 * Rails consoleで調査
